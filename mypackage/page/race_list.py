@@ -12,7 +12,7 @@ class RaceListPage(BasePage):
         return "race_list.html" in cur_url
 
     def get_race_id(self):
-        race_id_elements = self.driver.find_elements_by_css_selector(self.race_id_locator)
+        race_id_elements = self.soup.select(self.race_id_locator)
         pattern = "result.html\?race_id=(\d*)"
         race_id_list = []
         for element in race_id_elements:
@@ -22,3 +22,4 @@ class RaceListPage(BasePage):
                 race_id = match[0]
                 race_id_list.append(race_id)
         return race_id_list
+    

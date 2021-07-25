@@ -27,11 +27,10 @@ class TestShutubaPage(unittest.TestCase):
         #Verifies that the horse_list is not empty
         assert race_list, "No race found."
         features = page.get_features()
-        features_params = features.params
-        df_features = pd.DataFrame([features_params])
+        df_features = pd.DataFrame([features])
         df_features.to_csv("features.csv")
         #Verifies that the horse_list is not empty
-        assert features_params, "No features found."
+        assert features, "No features found."
 
     def tearDown(self):
         self.driver.close()
