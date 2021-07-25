@@ -9,7 +9,9 @@ class TestResultPage(unittest.TestCase):
 
     def setUp(self):
         self.driver = webdriver.Chrome()
-        self.driver.get("https://db.netkeiba.com/race/201005030504")
+        self.driver.get("https://db.netkeiba.com/race/202101010101/")
+        #https://db.netkeiba.com/race/201005030504
+        #https://db.netkeiba.com/race/202101010101/
         current_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(current_path)
 

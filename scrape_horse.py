@@ -5,6 +5,7 @@ import pandas as pd
 import os
 from selenium.webdriver.chrome.options import Options
 import glob
+import time
 
 def main():
     root_path = "./data/horse/race_history"
@@ -33,6 +34,7 @@ def main():
                 race_history = horse_page.get_race_history()
                 df = pd.DataFrame(race_history)
                 df.to_csv(file_path)
+                time.sleep(1)
 
     finally:
         driver.close()
