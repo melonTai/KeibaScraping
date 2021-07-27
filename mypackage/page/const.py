@@ -1,6 +1,7 @@
 import re
+from enum import Enum
 
-class Place():
+class Place(Enum):
     Sapporo = 1
     Hakodate = 2
     Fukushima = 3
