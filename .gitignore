@@ -1,1 +1,6 @@
 *.csv
+data
+pyvenv.cfg
+Lib
+Scripts
+Include
