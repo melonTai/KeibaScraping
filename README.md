@@ -7,18 +7,18 @@
 
 同スクリプトで取得済みcsvのアップデートも可能
 
-'''
+```
 python scrape_results.py [レース場id] [開始年] [終了年]
-'''
+```
 
 [レース場id](#race_id)
 
 ## scrape_horse.py
 scrape_results.pyで取得したレース結果csvを読み取り、出場している馬の戦績を取得する
 
-'''
+```
 python scrape_horse.py
-'''
+```
 
 # レース場id
 <a id=race_id><a>
