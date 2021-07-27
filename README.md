@@ -13,7 +13,7 @@ pip install -r requirements.txt
 同スクリプトで取得済みcsvのアップデートも可能
 
 ```
-python scrape_results.py [レース場id] [開始年] [終了年]
+python scrape_results.py [開始年] [終了年] [レース場id]
 ```
 
 [レース場id](#race_id)
