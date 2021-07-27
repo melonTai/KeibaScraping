@@ -1,6 +1,11 @@
 # KeibaScraping
 スクレイピングによりレースや馬データを収集する
 
+# 環境設定
+```
+pip install -r requirements.txt
+```
+
 # 使用方法
 ## scrape_results.py
 過去のレース結果を取得し、年ごとにcsvで取得
