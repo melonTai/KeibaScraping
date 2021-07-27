@@ -26,14 +26,22 @@ def main():
         # options.add_argument('--headless')
         driver = webdriver.Chrome()
         for horse_id in horse_id_list:
-            file_path = f"{root_path}/{horse_id}.csv"
+            year = str(horse_id)[0:4]
+            file_path = f"{root_path}/{year}.csv"
             print(horse_id)
             if not os.path.exists(file_path):
                 driver.get(f"https://db.netkeiba.com/horse/{horse_id}")
                 horse_page = horse.HorsePage(driver)
                 race_history = horse_page.get_race_history()
                 df = pd.DataFrame(race_history)
-                df.to_csv(file_path)
+                df["horse_id"] = horse_id
+                if os.path.exists(file_path):
+                    df_b = pd.read_csv(file_path, index_col=0)
+                    df_b.append(df, inplace=True)
+                    df_b.drop_duplicates(inplace=True)
+                    df_b.to_csv(file_path)
+                else:
+                    df.to_csv(file_path)
                 time.sleep(1)
 
     finally:
