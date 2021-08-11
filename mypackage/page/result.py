@@ -81,19 +81,22 @@ class ResultPage(BasePage):
         course_elements = self.soup.select(self.race_info_course_locator)
         if course_elements:
             course_element = course_elements[0]
-            header = ["corse", "turn", "dist", "weather", "condition", "start_time"]
+            header = ["corse", "turn", "in_out", "dist", "weather", "condition", "start_time"]
             text = course_element.get_text().replace("\n", "")
-            pattern1 = "(芝|ダ)(左|右)(\d{4})m / 天候 : (.*?) / .*? : (.*?) / 発走 : (\d{2}:\d{2})"
+            pattern1 = "(芝|ダ)(.{1,2})(.*?)(\d{4})m / 天候 : (.*?) / .*? : (.*?) / 発走 : (\d{2}:\d{2})"
             pattern2 = "(.*?)(\d{4})m / 天候 : (.*?) / (.*?) / 発走 : (\d{2}:\d{2})"
             if "障" in text:
                 match = re.findall(pattern2, text)
+                #print(match)
                 if match:
                     data = list(match[0])
-                    data.insert(1, None)
+                    data.insert(1, "")
+                    data.insert(2, "")
                     info = dict(zip(header, data))
                     return info
             else:
                 match = re.findall(pattern1, text)
+                #print(match)
                 if match:
                     data = match[0]
                     info = dict(zip(header, data))
@@ -126,13 +129,14 @@ class ResultPage(BasePage):
         return_row_elements = self.soup.select(
             self.return_row_locator)
         return_list = []
+        header = ["how", "num", "return", "popularity"]
         for element in return_row_elements:
             head_element = element.select(
                 self.return_row_head_locator)[0]
             value_elements = element.select(
                 self.return_row_value_locator)
             head = head_element.get_text()
-            value_list = [element.get_text().replace(
-                "\n", "") for element in value_elements]
-            return_list.append([head] + value_list)
+            value_list = [element.get_text("br").replace(",", "") for element in value_elements]
+            value_list = [head] + value_list
+            return_list.append(dict(zip(header, value_list)))
         return return_list

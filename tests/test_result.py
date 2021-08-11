@@ -1,6 +1,7 @@
 import unittest
 from selenium import webdriver
 from mypackage.page import result
+from mypackage import utils
 from pprint import pprint
 import pandas as pd
 import os
@@ -9,7 +10,7 @@ class TestResultPage(unittest.TestCase):
 
     def setUp(self):
         self.driver = webdriver.Chrome()
-        self.driver.get("https://db.netkeiba.com/race/202101010101/")
+        self.driver.get("https://db.netkeiba.com/race/201804010104/")
         #https://db.netkeiba.com/race/201005030504
         #https://db.netkeiba.com/race/202101010101/
         current_path = os.path.dirname(os.path.abspath(__file__))
@@ -27,6 +28,7 @@ class TestResultPage(unittest.TestCase):
         corse_info = page.get_course_info()
         date_info = page.get_date()
         title = page.get_title()
+        print(corse_info, date_info, title)
         df_result = pd.DataFrame(result_list)
         for key, value in corse_info.items():
             df_result[key] = value
@@ -34,6 +36,7 @@ class TestResultPage(unittest.TestCase):
             df_result[key] = value
         for key, value in date_info.items():
             df_result[key] = value
+        df_result["ref_time"] = utils.get_ref_time(self.driver, 202101010101)
         df_result.to_csv("result.csv")
         
         #Verifies that the horse_list is not empty

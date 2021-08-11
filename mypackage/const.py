@@ -35,6 +35,7 @@ class Race():
             self.r = r
         else:
             raise Exception("invalid race_id")
+
 if __name__ == '__main__':
     id = "202005061012"
     race = Race(id)
