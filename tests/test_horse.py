@@ -29,6 +29,8 @@ class TestShutubaPage(unittest.TestCase):
         features = page.get_features()
         df_features = pd.DataFrame([features])
         df_features.to_csv("features.csv")
+        horse_title = page.get_horse_title()
+        print(horse_title)
         #Verifies that the horse_list is not empty
         assert features, "No features found."
 

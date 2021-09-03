@@ -34,6 +34,8 @@ class HorsePage(BasePage):
     features_head_locator = ".tekisei_table th"
     features_table_locator = ".tekisei_table"
 
+    horse_title_locator = ".horse_title h1"
+
     def is_url_matches(self):
         cur_url = self.driver.current_url
         return "horse" in cur_url
@@ -68,7 +70,7 @@ class HorsePage(BasePage):
             self.race_history_head_locator)
         # 見出しWeb要素を文字列に変換
         race_history_heads = [
-            element.get_text().replace("\n", "") for element in race_history_head_elements]
+            re.sub(r"\s", "", element.get_text()) for element in race_history_head_elements]
         race_history_heads.append("race_id")
         race_history_heads.append("jockey_id")
         # 競争成績の行リストを取得
@@ -82,7 +84,7 @@ class HorsePage(BasePage):
             data_elements = element.select(self.race_history_data_locator)
             race_id = self.__get_race_id(data_elements[4])
             jockey_id = self.__get_jockey_id(data_elements[12])
-            race_data = [element.get_text().replace("\n", "") for element in data_elements]
+            race_data = [re.sub(r"\s", "", element.get_text()) for element in data_elements]
             race_data.append(race_id)
             race_data.append(jockey_id)
             race_result = dict(zip(race_history_heads, race_data))
@@ -94,10 +96,21 @@ class HorsePage(BasePage):
         features_head_elements = self.soup.select(
             self.features_head_locator)
         # 見出しWeb要素を文字列に変換
-        features_heads = [element.get_text().replace("\n", "") for element in features_head_elements]
+        features_heads = [re.sub(r"\s", "", element.get_text()) for element in features_head_elements]
         # 適正の行リストを取得
         features_table_element = self.soup.select(
             self.features_table_locator)[0]
         # 行リストをフォーマット
         features = Features(features_table_element, features_heads)
         return features.params
+    
+    def get_horse_title(self):
+        horse_title_elements = self.soup.select(self.horse_title_locator)
+        if not horse_title_elements:
+            return None
+        horse_title_element = horse_title_elements[0]
+        text = horse_title_element.get_text()
+        horse_title = re.sub(r"\s", "", text)
+        return horse_title
+
+

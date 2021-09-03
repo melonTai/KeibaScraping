@@ -10,7 +10,7 @@ class TestShutubaPage(unittest.TestCase):
 
     def setUp(self):
         self.driver = webdriver.Chrome()
-        self.driver.get("https://race.netkeiba.com/race/shutuba.html?race_id=202103010411")
+        self.driver.get("https://race.netkeiba.com/race/shutuba.html?race_id=202110040111")
         current_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(current_path)
 
@@ -23,11 +23,10 @@ class TestShutubaPage(unittest.TestCase):
         assert page.is_url_matches(), "is not race result page."
         #gets horse information list
         horse_list = page.get_horse_list()
-        horse_dict_list = [horse.params for horse in horse_list]
-        df_shutuba = pd.DataFrame(horse_dict_list)
+        df_shutuba = pd.DataFrame(horse_list)
         df_shutuba.to_csv("shutuba.csv")
         #Verifies that the horse_list is not empty
-        assert horse_dict_list, "No results found."
+        assert horse_list, "No results found."
 
     def tearDown(self):
         self.driver.close()
