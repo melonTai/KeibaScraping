@@ -57,7 +57,7 @@ class HorsePage(BasePage):
         if atag_elements:
             atag_element = atag_elements[0]
             url = atag_element.attrs["href"]
-            pattern = "race/(\d*)"
+            pattern = "race/(.*?)/"
             match = re.findall(pattern, url)
             if match:
                 race_id = match[0]

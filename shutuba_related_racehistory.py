@@ -31,7 +31,7 @@ def main():
         df.to_csv(path)
         # 馬の戦歴をスクレイピング
         horse_id_list = df["horse_id"].unique()
-        for res in scrape.scrape_racehistories(horse_id_list):
+        for res in scrape.scrape_racehistories(horse_id_list[3::]):
             if res["status"]:
                 horse_id = res["horse_id"]
                 print(horse_id)

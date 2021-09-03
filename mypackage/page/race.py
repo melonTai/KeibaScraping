@@ -16,7 +16,7 @@ class RacePage(BasePage):
 
     race_info_title_locator = ".racedata dd h1"
     race_info_course_locator = ".racedata dd diary_snap_cut span"
-    race_info_date_locator = ".data_intro > p"
+    race_info_locator = ".data_intro > p"
 
     def is_url_matches(self):
         cur_url = self.url
@@ -104,13 +104,12 @@ class RacePage(BasePage):
         return None
     # 2018年4月28日 1回新潟1日目 障害4歳以上未勝利  (混)(定量)
     def get_race_info(self):
-        date_elements = self.soup.select(self.race_info_date_locator)
-        if date_elements:
-            date_element = date_elements[0]
-            text = date_element.get_text()
+        race_info_elements = self.soup.select(self.race_info_locator)
+        if race_info_elements:
+            race_info_element = race_info_elements[0]
+            text = race_info_element.get_text()
             pattern = re.compile(r'\s')
             res = pattern.split(text)
-            # print(res)
             date = res[0]
             kai_place_day = res[1]
             class_ = res[2]
