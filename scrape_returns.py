@@ -46,8 +46,7 @@ def main():
                         race_id_list.append(race_id)
 
     # スクレイピング
-    for res in scrape.scrape_returns(race_id_list):
-        race_id = res["race_id"]
+    for race_id in race_id_list:
         print(race_id)
         # フォルダ生成
         race = const.Race(race_id)
@@ -61,7 +60,7 @@ def main():
             df_b = pd.read_csv(file_path, index_col=0)
             if df_b["race_id"].isin([int(race_id)]).any():
                 continue
-        
+        res = scrape.scrape_return(race_id)
         if res["status"]:
             df = res["data"]
             # 重複を避けて保存
