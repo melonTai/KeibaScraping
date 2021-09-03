@@ -19,7 +19,7 @@ class RacePage(BasePage):
     race_info_date_locator = ".data_intro > p"
 
     def is_url_matches(self):
-        cur_url = self.driver.current_url
+        cur_url = self.url
         return "race/" in cur_url
 
     def __get_horse_id(self, element: bs4.element):

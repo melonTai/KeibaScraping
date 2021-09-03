@@ -1,8 +1,8 @@
-from .base import BasePage
+from .base import BasePageSelenium
 from selenium.webdriver.remote.webelement import WebElement
 import re
 
-class ResultPage(BasePage):
+class RaceListPage(BasePageSelenium):
     """RaceResultPage action methods come here.
     """
     race_id_locator = ".RaceList_DataItem a"
@@ -22,4 +22,3 @@ class ResultPage(BasePage):
                 race_id = match[0]
                 race_id_list.append(race_id)
         return race_id_list
-    

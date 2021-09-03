@@ -10,7 +10,7 @@ class ShutubaPage(BasePage):
     horse_locator = ".HorseList"
     title_locator = ".RaceName"
     def is_url_matches(self):
-        cur_url = self.driver.current_url
+        cur_url = self.url
         return "race/shutuba.html" in cur_url
 
     def __get_horse_id(self, element: bs4.element):

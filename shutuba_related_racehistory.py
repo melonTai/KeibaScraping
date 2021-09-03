@@ -31,23 +31,21 @@ def main():
         df.to_csv(path)
         # 馬の戦歴をスクレイピング
         horse_id_list = df["horse_id"].unique()
-        race_driver = webdriver.Chrome()
-        for res in scrape.scrape_horse_racehistories(horse_id_list):
+        for res in scrape.scrape_racehistories(horse_id_list):
             if res["status"]:
+                horse_id = res["horse_id"]
+                print(horse_id)
                 df = res["data"]
                 race_info_list = []
                 for race_id in df["race_id"].tolist():
-                    race_driver.get(f"https://db.netkeiba.com/race/{race_id}/")
-                    race_page = race.RacePage(race_driver)
+                    race_page = race.RacePage(f"https://db.netkeiba.com/race/{race_id}/")
                     race_info = race_page.get_race_info()
                     race_info_list.append(race_info)
                 df_race_info = pd.DataFrame(race_info_list)
                 df = pd.concat([df, df_race_info], axis = 1)
-                horse_id = res["horse_id"]
                 path = f"{sub_folder}/{horse_id}.csv"
                 df.to_csv(path)
             time.sleep(1)
-        race_driver.close()
 
 if __name__ == '__main__':
     main()

@@ -8,15 +8,13 @@ class TestRaceListPage(unittest.TestCase):
     """A sample test class to show how page object works"""
 
     def setUp(self):
-        self.driver = webdriver.Chrome()
-        self.driver.get("https://race.netkeiba.com/top/race_list.html?kaisai_date=20200105")
         current_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(current_path)
     def test_get_race_id_list(self):
         """test get race list"""
 
         #Load the main page. In this case the home page of Python.org.
-        page = race_list.RaceListPage(self.driver)
+        page = race_list.RaceListPage("https://race.netkeiba.com/top/race_list.html?kaisai_date=20200105")
         #Checks if the word "Python" is in title
         assert page.is_url_matches(), "is not race id page."
         #gets horse information list
@@ -27,7 +25,8 @@ class TestRaceListPage(unittest.TestCase):
         assert race_id_list, "No race_id_list found."
 
     def tearDown(self):
-        self.driver.close()
+        pass
+        #self.driver.close()
 
 if __name__ == "__main__":
     unittest.main()

@@ -37,7 +37,7 @@ class HorsePage(BasePage):
     horse_title_locator = ".horse_title h1"
 
     def is_url_matches(self):
-        cur_url = self.driver.current_url
+        cur_url = self.url
         return "horse" in cur_url
     
     def __get_jockey_id(self, element:bs4.element):

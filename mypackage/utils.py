@@ -4,14 +4,13 @@ from .page import race
 import pandas as pd
 import numpy as np
 import re
-def get_ref_time(driver:WebDriver, race_id):
+def get_ref_time(race_id):
     race_const = const.Race(race_id)
     ref_result_list = []
     for i in range(1,4):
         year = int(race_const.year) - i
         past_race_id = f"{year}{race_const.place}{race_const.kai}{race_const.day}{race_const.r}"
-        driver.get(f"https://db.netkeiba.com/race/{past_race_id}/")
-        race_page = race.RacePage(driver)
+        race_page = race.RacePage(f"https://db.netkeiba.com/race/{past_race_id}/")
         result_list = race_page.get_result_list()
         ref_result_list.extend(result_list)
     df = pd.DataFrame(ref_result_list)
