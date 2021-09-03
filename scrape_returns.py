@@ -33,7 +33,7 @@ def main():
     try:
         race_id_list = []
         driver = webdriver.Chrome()
-        for place in [e.value for e in const.Place]:
+        for place in [e.value for e in const.PlaceChuo]:
             for year in range(year_start, year_end + 1):
                 for kai in range(1, 11):
                     for day in range(1, 13):

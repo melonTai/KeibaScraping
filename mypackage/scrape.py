@@ -1,6 +1,6 @@
 from selenium import webdriver
 import selenium
-from .page import horse, result, shutuba
+from .page import horse, race, shutuba
 from . import const
 from pprint import pprint
 import pandas as pd
@@ -39,7 +39,7 @@ def scrape_horse_racehistories(horse_id_list):
     finally:
         driver.close()
 
-def scrape_results(race_id_list:list):
+def scrape_races(race_id_list:list):
     """race_id_list中のrace_idに該当する
     レース情報をスクレイピングしてpd.DataFrame型で返す
 
@@ -55,16 +55,16 @@ def scrape_results(race_id_list:list):
             try:
                 print(race_id)
                 driver.get(f"https://db.netkeiba.com/race/{race_id}/")
-                result_page = result.ResultPage(driver)
-                result_list = result_page.get_result_list()
+                race_page = race.RacePage(driver)
+                race_list = race_page.get_result_list()
 
-                if result_list:
-                    course_info = result_page.get_course_info()
-                    title = result_page.get_title()
-                    date = result_page.get_date()
+                if race_list:
+                    course_info = race_page.get_course_info()
+                    title = race_page.get_title()
+                    race_info = race_page.get_date()
                     info = {}
-                    info.update(**title, **date, **course_info)
-                    df = pd.DataFrame(result_list)
+                    info.update(**title, **race_info, **course_info)
+                    df = pd.DataFrame(race_list)
                     df["race_id"] = race_id
                     for key, value in info.items():
                         df[key] = value
@@ -86,16 +86,16 @@ def scrape_shutuba(race_id):
         driver.get(f"https://race.netkeiba.com/race/shutuba.html?race_id={race_id}")
         shutuba_page = shutuba.ShutubaPage(driver)
         horse_list = shutuba_page.get_horse_list()
-
+        title = shutuba_page.get_title()
         if horse_list:
             df = pd.DataFrame(horse_list)
             df["race_id"] = race_id
-            return {"race_id":race_id, "data":df, "status":True}
+            return {"race_id":race_id, "title":title["title"], "data":df, "status":True}
         else:
-            return {"race_id":race_id, "data":pd.DataFrame(), "status":False}
+            return {"race_id":race_id, "title":None, "data":pd.DataFrame(), "status":False}
 
     except selenium.common.exceptions.TimeoutException:
-        return {"race_id":race_id, "data":pd.DataFrame(), "status":False}
+        return {"race_id":race_id, "title":None, "data":pd.DataFrame(), "status":False}
 
     finally:
         driver.close()

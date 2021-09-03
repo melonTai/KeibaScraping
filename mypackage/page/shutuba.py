@@ -8,6 +8,7 @@ class ShutubaPage(BasePage):
     """
     heads_locator = ".Header th"
     horse_locator = ".HorseList"
+    title_locator = ".RaceName"
     def is_url_matches(self):
         cur_url = self.driver.current_url
         return "race/shutuba.html" in cur_url
@@ -60,4 +61,12 @@ class ShutubaPage(BasePage):
             values.append(jockey_id)
             horse_list.append(dict(zip(heads, values)))
         return horse_list
+
+    def get_title(self):
+        title_elements = self.soup.select(self.title_locator)
+        if title_elements:
+            title_element = title_elements[0]
+            title = re.sub(r"\s", "", title_element.get_text())
+            return {"title": title}
+        return None
     

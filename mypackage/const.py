@@ -1,7 +1,7 @@
 import re
 from enum import Enum
 
-class Place(Enum):
+class PlaceChuo(Enum):
     Sapporo = 1
     Hakodate = 2
     Fukushima = 3
@@ -12,6 +12,23 @@ class Place(Enum):
     Kyoto = 8
     Hanshin = 9
     Ogura = 10
+
+class PlaceChiho(Enum):
+    URAWA = 42
+    FUNABASHI = 43
+    OI = 44
+    KAWASAKI = 45
+    MONBETSU = 46
+    MORIOKA = 47
+    MIZUZAWA = 48
+    KANAZAWA = 49
+    KASAMATSU = 50
+    NAGOYA = 51
+    SONODA = 52
+    HIMEJI = 53
+    KOUCHI = 54
+    SAGA = 55
+    OBIHIROBA = 56
 
 class Race():
     def __init__(self, id : int or str):
