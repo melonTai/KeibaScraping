@@ -81,10 +81,11 @@ class RacePage(BasePage):
         course_elements = self.soup.select(self.race_info_course_locator)
         if course_elements:
             course_element = course_elements[0]
-            header = ["corse", "turn", "in_out", "dist", "weather", "condition", "start_time"]
+            header = ["field", "turn", "in_out", "dist", "weather", "condition", "start_time"]
             text = course_element.get_text().replace("\n", "")
             pattern1 = "(芝|ダ)(.{1,2})(.*?)(\d{4})m / 天候 : (.*?) / .*? : (.*?) / 発走 : (\d{2}:\d{2})"
             pattern2 = "(.*?)(\d{4})m / 天候 : (.*?) / (.*?) / 発走 : (\d{2}:\d{2})"
+            pattern3 = "(芝|ダ)(.{1,2})(.*?)(\d{4})m / 天候 : (.*?) / .*? : (.*?) /"
             if "障" in text:
                 match = re.findall(pattern2, text)
                 #print(match)
@@ -94,11 +95,19 @@ class RacePage(BasePage):
                     data.insert(2, "")
                     info = dict(zip(header, data))
                     return info
-            else:
+            elif "発走" in text:
                 match = re.findall(pattern1, text)
                 #print(match)
                 if match:
                     data = match[0]
+                    info = dict(zip(header, data))
+                    return info
+            else:
+                match = re.findall(pattern3, text)
+                #print(match)
+                if match:
+                    data = list(match[0])
+                    data.append("")
                     info = dict(zip(header, data))
                     return info
         return None

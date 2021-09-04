@@ -53,6 +53,7 @@ def scrape_race(race_id:int):
         title = race_page.get_title()
         race_info = race_page.get_race_info()
         info = {}
+        # print(title, race_info, course_info)
         info.update(**title, **race_info, **course_info)
         df = pd.DataFrame(race_list)
         df["race_id"] = race_id

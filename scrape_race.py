@@ -7,6 +7,7 @@ import time
 import datetime
 import sys
 import pathlib
+import signal
 
 def main():
     # 入力チェック
@@ -30,7 +31,7 @@ def main():
         raise Exception("有効なレース場idではありません")
     
     # フォルダ生成
-    root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\returns')
+    root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\race')
     if not os.path.exists(root_path):
         os.makedirs(root_path)
     
@@ -76,4 +77,5 @@ def main():
 
 
 if __name__ == "__main__":
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
     main()
