@@ -22,7 +22,7 @@ def scrape_related_racehistory(race_id):
     file_path = f"{folder}/{race_const.year}_all.csv"
     if os.path.exists(file_path):
         df_b = pd.read_csv(file_path, index_col=0)
-        if df_b["race_id"].isin([int(race_id)]).any():
+        if df_b["race_id"].astype(str).isin([race_id]).any():
             return None
     res = scrape.scrape_race(race_id)
     if res["status"]:
@@ -40,13 +40,14 @@ def main():
         print("引数が足りません")
         print("raceid")
         sys.exit()
-    shutuba_id = int(sys.argv[1])
+    shutuba_id = sys.argv[1]
     shutuba_res = scrape.scrape_shutuba(shutuba_id)
     if shutuba_res["status"]:
         # フォルダ生成
         title = shutuba_res["title"]
+        date = shutuba_res["date"]
         shutuba_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\shutuba')
-        root = f"{shutuba_path}/{title}"
+        root = f"{shutuba_path}/{shutuba_id[0:4]}/{shutuba_id[0:4]}年{date}{title}"
         if not os.path.exists(root):
             os.makedirs(root)
         sub_folder = f"{root}/related_histories"

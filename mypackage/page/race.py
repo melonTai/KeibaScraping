@@ -85,7 +85,7 @@ class RacePage(BasePage):
             text = course_element.get_text().replace("\n", "")
             pattern1 = "(芝|ダ)(.{1,2})(.*?)(\d{4})m / 天候 : (.*?) / .*? : (.*?) / 発走 : (\d{2}:\d{2})"
             pattern2 = "(.*?)(\d{4})m / 天候 : (.*?) / (.*?) / 発走 : (\d{2}:\d{2})"
-            pattern3 = "(芝|ダ)(.{1,2})(.*?)(\d{4})m / 天候 : (.*?) / .*? : (.*?) /"
+            pattern3 = "(芝|ダ)(.{1,2})(.*?)(\d{4})m / 天候 : (.*?) / .*? :(.*?)/"
             if "障" in text:
                 match = re.findall(pattern2, text)
                 #print(match)
@@ -104,9 +104,11 @@ class RacePage(BasePage):
                     return info
             else:
                 match = re.findall(pattern3, text)
-                #print(match)
+                # print(text)
+                # print(match)
                 if match:
                     data = list(match[0])
+                    data[-1] = data[-1].replace(u'\xa0', '')
                     data.append("")
                     info = dict(zip(header, data))
                     return info

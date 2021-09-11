@@ -4,11 +4,11 @@ import pandas as pd
 from selenium.webdriver.chrome.options import Options
 import time
 
-def scrape_racehistory(horse_id:int):
+def scrape_racehistory(horse_id:str):
     """馬の戦歴を取得する関数
 
     Args:
-        horse_id (int): 馬のid
+        horse_id (str): 馬のid
 
     Returns:
         dict: {"horse_id":int 馬のid, "data":pd.DataFrame 取得データ, "status":bool 取得成功失敗}
@@ -41,7 +41,7 @@ def scrape_race(race_id:int):
     """race_idに該当するレースの結果を取得する関数
 
     Args:
-        race_id (int): レースのid
+        race_id (str): レースのid
 
     Returns:
         dict: {"race_id":int, "data":pd.DataFrame 取得したデータ, "status":bool 取得成功失敗}
@@ -80,26 +80,27 @@ def scrape_shutuba(race_id):
     """race_idに該当するレースの出場場を取得する関数
 
     Args:
-        race_id (int): レースのid
+        race_id (str): レースのid
 
     Returns:
-        dict: {"race_id":int, "data":pd.DataFrame 取得したデータ, "status":bool 取得成功失敗}
+        dict: {"race_id":str, "data":pd.DataFrame 取得したデータ, "status":bool 取得成功失敗}
     """
     shutuba_page = shutuba.ShutubaPage(f"https://race.netkeiba.com/race/shutuba.html?race_id={race_id}")
     horse_list = shutuba_page.get_horse_list()
     title = shutuba_page.get_title()
+    date = shutuba_page.get_date()
     if horse_list:
         df = pd.DataFrame(horse_list)
         df["race_id"] = race_id
-        return {"race_id":race_id, "title":title["title"], "data":df, "status":True}
+        return {"race_id":race_id, "title":title["title"], "date":date["date"], "data":df, "status":True}
     else:
-        return {"race_id":race_id, "title":None, "data":pd.DataFrame(), "status":False}
+        return {"race_id":race_id, "title":None, "date":None, "data":pd.DataFrame(), "status":False}
 
 def scrape_return(race_id):
     """race_idに該当するレースの配当を取得する関数
 
     Args:
-        race_id (int): レースのid
+        race_id (str): レースのid
 
     Returns:
         dict: {"race_id":int, "data":pd.DataFrame 取得したデータ, "status":bool 取得成功失敗}

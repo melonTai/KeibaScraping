@@ -16,11 +16,13 @@ class TestShutubaPage(unittest.TestCase):
         """test get horse info list"""
 
         #Load the main page. In this case the home page of Python.org.
-        page = shutuba.ShutubaPage("https://race.netkeiba.com/race/shutuba.html?race_id=2016104648")
+        page = shutuba.ShutubaPage("https://race.netkeiba.com/race/shutuba.html?race_id=202107050211")
         #Checks if the word "Python" is in title
         assert page.is_url_matches(), "is not race result page."
         #gets horse information list
         horse_list = page.get_horse_list()
+        date = page.get_date()
+        print(date)
         df_shutuba = pd.DataFrame(horse_list)
         df_shutuba.to_csv("shutuba.csv")
         #Verifies that the horse_list is not empty
