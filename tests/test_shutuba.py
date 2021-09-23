@@ -16,7 +16,7 @@ class TestShutubaPage(unittest.TestCase):
         """test get horse info list"""
 
         #Load the main page. In this case the home page of Python.org.
-        page = shutuba.ShutubaPage("https://race.netkeiba.com/race/shutuba.html?race_id=202107050211")
+        page = shutuba.ShutubaPage("https://race.netkeiba.com/race/shutuba.html?race_id=202107050411")
         #Checks if the word "Python" is in title
         assert page.is_url_matches(), "is not race result page."
         #gets horse information list

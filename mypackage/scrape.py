@@ -1,10 +1,30 @@
-from .page import horse, race, shutuba
+from .page import horse, race, shutuba, odds
 from pprint import pprint
 import pandas as pd
 from selenium.webdriver.chrome.options import Options
 import time
 
-def scrape_racehistory(horse_id:str):
+
+def scrape_odds(race_id: str):
+    odds_page = odds.OddsPage(
+        f"https://race.netkeiba.com/odds/index.html?race_id={race_id}")
+    try:
+        win = pd.DataFrame(odds_page.get_win())
+        place = pd.DataFrame(odds_page.get_place())
+        exacta = pd.DataFrame(odds_page.get_exacta())
+        quinella = pd.DataFrame(odds_page.get_quinella())
+        quinella_place = pd.DataFrame(odds_page.get_quinella())
+        trifecta = pd.DataFrame(odds_page.get_trifecta())
+        trio = pd.DataFrame(odds_page.get_trio())
+        data = {"馬単": win, "複勝": place, "馬単": exacta, "馬連": quinella,
+                "ワイド": quinella_place, "3連複": trifecta, "3連単": trio}
+        return {"race_id": race_id, "data": data, "status": True}
+    
+    finally:
+        odds_page.close()
+
+
+def scrape_racehistory(horse_id: str):
     """馬の戦歴を取得する関数
 
     Args:
@@ -19,9 +39,10 @@ def scrape_racehistory(horse_id:str):
         df = pd.DataFrame(race_history)
         df["horse_id"] = horse_id
         df["horse_title"] = horse_page.get_horse_title()
-        return {"horse_id":horse_id, "data":df, "status":True}
+        return {"horse_id": horse_id, "data": df, "status": True}
     else:
-        return {"horse_id":horse_id, "data":pd.DataFrame(), "status":False}
+        return {"horse_id": horse_id, "data": pd.DataFrame(), "status": False}
+
 
 def scrape_racehistories(horse_id_list):
     """horse_id_list中のhorse_idに該当する競走馬のデータを
@@ -37,7 +58,8 @@ def scrape_racehistories(horse_id_list):
         yield scrape_racehistory(horse_id)
         time.sleep(1)
 
-def scrape_race(race_id:int):
+
+def scrape_race(race_id: int):
     """race_idに該当するレースの結果を取得する関数
 
     Args:
@@ -59,11 +81,12 @@ def scrape_race(race_id:int):
         df["race_id"] = race_id
         for key, value in info.items():
             df[key] = value
-        return {"race_id":race_id, "data":df, "status":True}
+        return {"race_id": race_id, "data": df, "status": True}
     else:
-        return {"race_id":race_id, "data":pd.DataFrame(), "status":False}
+        return {"race_id": race_id, "data": pd.DataFrame(), "status": False}
 
-def scrape_races(race_id_list:list):
+
+def scrape_races(race_id_list: list):
     """race_id_list中のrace_idに該当する
     レース情報をスクレイピングしてpd.DataFrame型で返す
 
@@ -76,6 +99,7 @@ def scrape_races(race_id_list:list):
     for race_id in race_id_list:
         yield scrape_race(race_id)
 
+
 def scrape_shutuba(race_id):
     """race_idに該当するレースの出場場を取得する関数
 
@@ -85,16 +109,19 @@ def scrape_shutuba(race_id):
     Returns:
         dict: {"race_id":str, "data":pd.DataFrame 取得したデータ, "status":bool 取得成功失敗}
     """
-    shutuba_page = shutuba.ShutubaPage(f"https://race.netkeiba.com/race/shutuba.html?race_id={race_id}")
+    shutuba_page = shutuba.ShutubaPage(
+        f"https://race.netkeiba.com/race/shutuba.html?race_id={race_id}")
     horse_list = shutuba_page.get_horse_list()
     title = shutuba_page.get_title()
     date = shutuba_page.get_date()
+    shutuba_page.close()
     if horse_list:
         df = pd.DataFrame(horse_list)
         df["race_id"] = race_id
-        return {"race_id":race_id, "title":title["title"], "date":date["date"], "data":df, "status":True}
+        return {"race_id": race_id, "title": title["title"], "date": date["date"], "data": df, "status": True}
     else:
-        return {"race_id":race_id, "title":None, "date":None, "data":pd.DataFrame(), "status":False}
+        return {"race_id": race_id, "title": None, "date": None, "data": pd.DataFrame(), "status": False}
+
 
 def scrape_return(race_id):
     """race_idに該当するレースの配当を取得する関数
@@ -111,9 +138,10 @@ def scrape_return(race_id):
     if return_list:
         df = pd.DataFrame(return_list)
         df["race_id"] = race_id
-        return {"race_id":race_id, "data":df, "status":True}
+        return {"race_id": race_id, "data": df, "status": True}
     else:
-        return {"race_id":race_id, "data":pd.DataFrame(), "status":False}
+        return {"race_id": race_id, "data": pd.DataFrame(), "status": False}
+
 
 def scrape_returns(race_id_list):
     """race_id_list中の各race_idに該当するレースの配当を取得するジェネレータ
@@ -127,8 +155,8 @@ def scrape_returns(race_id_list):
     for race in race_id_list:
         yield scrape_return(race)
 
+
 if __name__ == "__main__":
     path = "./tests/shutuba.csv"
     df = pd.read_csv(path, index_col=0)
     horse_id_list = df["horse_id"].unique()
-    

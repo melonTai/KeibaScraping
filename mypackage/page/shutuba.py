@@ -1,9 +1,9 @@
-from .base import BasePage
+from .base import BasePageSelenium
 from selenium.webdriver.remote.webelement import WebElement
 import bs4
 import re
 
-class ShutubaPage(BasePage):
+class ShutubaPage(BasePageSelenium):
     """RaceResultPage action methods come here.
     """
     heads_locator = ".Header th"

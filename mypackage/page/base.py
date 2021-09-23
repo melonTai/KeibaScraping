@@ -11,7 +11,7 @@ class BasePage(object):
         self.url = url
         res = requests.get(self.url)
         res.encoding = res.apparent_encoding  
-        text = res.text
+        text = res.content
         self.soup = BeautifulSoup(text, 'html.parser')
 
 class BasePageSelenium(object):
@@ -21,4 +21,6 @@ class BasePageSelenium(object):
         self.driver.get(url)
         self.driver.implicitly_wait(20)
         self.soup = BeautifulSoup(self.driver.page_source, 'html.parser')
+    
+    def close(self):
         self.driver.close()

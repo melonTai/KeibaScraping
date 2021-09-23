@@ -9,6 +9,17 @@ import pandas as pd
 import pathlib
 import signal
 
+def scrape_odds_and_save(race_id):
+    root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\shutuba')
+    odds_path = f"{root_path}/odds"
+    if not os.path.exists(odds_path):
+        os.makedirs(odds_path)
+    res = scrape.scrape_odds(race_id)
+    data = res["data"]
+    for key, df in data.items():
+        path = f"{odds_path}/{key}.csv"
+        df.to_csv(path)
+
 def scrape_related_racehistory(race_id):
     root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\race')
     if not os.path.exists(root_path):
@@ -57,6 +68,8 @@ def main():
         df = shutuba_res["data"]
         path = f"{root}/shutuba.csv"
         df.to_csv(path)
+        # オッズ保存
+        scrape_odds_and_save(shutuba_id)
         # 馬の戦歴をスクレイピング
         horse_id_list = df["horse_id"].unique()
         for res in scrape.scrape_racehistories(horse_id_list):
@@ -65,7 +78,7 @@ def main():
                 print(horse_id)
                 df = res["data"]
                 race_info_list = []
-                for race_id in df["race_id"].tolist():
+                for race_id in df["race_id"].tolist()[0:3]:
                     print(f" {race_id}")
                     scrape_related_racehistory(race_id)
                     race_page = race.RacePage(f"https://db.netkeiba.com/race/{race_id}/")
