@@ -1,6 +1,6 @@
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium import webdriver
-from mypackage import scrape, const
+from mypackage import scrape, const, utils
 from mypackage.page import race
 import os
 import time
@@ -9,15 +9,11 @@ import pandas as pd
 import pathlib
 import signal
 
-def scrape_odds_and_save(race_id):
-    root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\shutuba')
-    odds_path = f"{root_path}/odds"
-    if not os.path.exists(odds_path):
-        os.makedirs(odds_path)
+def scrape_odds_and_save(race_id, folder):
     res = scrape.scrape_odds(race_id)
     data = res["data"]
     for key, df in data.items():
-        path = f"{odds_path}/{key}.csv"
+        path = f"{folder}/{key}.csv"
         df.to_csv(path)
 
 def scrape_related_racehistory(race_id):
@@ -56,20 +52,27 @@ def main():
     if shutuba_res["status"]:
         # フォルダ生成
         title = shutuba_res["title"]
+        race_const = const.Race(shutuba_id)
         date = shutuba_res["date"]
+        date = date.replace("/","月")
+        date = date + "" if "日" in date else date + "日"
         shutuba_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\shutuba')
-        root = f"{shutuba_path}/{shutuba_id[0:4]}/{shutuba_id[0:4]}年{date}{title}"
+        place = utils.place_decoder(race_const.place)
+        root = f"{shutuba_path}/{race_const.year}/{race_const.year}年{date}{place}{race_const.r}R{race_const.kai}回{race_const.day}日目{title}"
         if not os.path.exists(root):
             os.makedirs(root)
         sub_folder = f"{root}/related_histories"
         if not os.path.exists(sub_folder):
             os.makedirs(sub_folder)
+        odds_folder = f"{root}/odds"
+        if not os.path.exists(odds_folder):
+            os.makedirs(odds_folder)
         # 出馬データ保存
         df = shutuba_res["data"]
         path = f"{root}/shutuba.csv"
         df.to_csv(path)
         # オッズ保存
-        scrape_odds_and_save(shutuba_id)
+        scrape_odds_and_save(shutuba_id,odds_folder)
         # 馬の戦歴をスクレイピング
         horse_id_list = df["horse_id"].unique()
         for res in scrape.scrape_racehistories(horse_id_list):
@@ -78,6 +81,7 @@ def main():
                 print(horse_id)
                 df = res["data"]
                 race_info_list = []
+                #レース直前にスクレイプする場合は[0:3]つけたほうが効率よし
                 for race_id in df["race_id"].tolist()[0:3]:
                     print(f" {race_id}")
                     scrape_related_racehistory(race_id)

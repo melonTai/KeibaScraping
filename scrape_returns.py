@@ -37,7 +37,7 @@ def main():
     # レースid生成
     race_id_list = []
     place_list = [e.value for e in const.PlaceChuo] + [e.value for e in const.PlaceChiho] if place is None else [place]
-    for place in [e.value for e in const.PlaceChuo]:
+    for place in place_list:
         for year in range(year_start, year_end + 1):
             for kai in range(1, 11):
                 for day in range(1, 13):

@@ -13,11 +13,11 @@ def scrape_odds(race_id: str):
         place = pd.DataFrame(odds_page.get_place())
         exacta = pd.DataFrame(odds_page.get_exacta())
         quinella = pd.DataFrame(odds_page.get_quinella())
-        quinella_place = pd.DataFrame(odds_page.get_quinella())
+        quinella_place = pd.DataFrame(odds_page.get_quinella_place())
         trifecta = pd.DataFrame(odds_page.get_trifecta())
         trio = pd.DataFrame(odds_page.get_trio())
-        data = {"馬単": win, "複勝": place, "馬単": exacta, "馬連": quinella,
-                "ワイド": quinella_place, "3連複": trifecta, "3連単": trio}
+        data = {"単勝": win, "複勝": place, "馬単": exacta, "馬連": quinella,
+                "ワイド": quinella_place, "3連複": trio, "3連単": trifecta}
         return {"race_id": race_id, "data": data, "status": True}
     
     finally:
