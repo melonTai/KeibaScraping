@@ -82,13 +82,17 @@ def main():
                 df = res["data"]
                 race_info_list = []
                 #レース直前にスクレイプする場合は[0:3]つけたほうが効率よし
-                for race_id in df["race_id"].tolist()[0:3]:
+                for race_id in df["race_id"].tolist()[0:4]:
                     print(f" {race_id}")
-                    scrape_related_racehistory(race_id)
-                    race_page = race.RacePage(f"https://db.netkeiba.com/race/{race_id}/")
-                    race_info = race_page.get_race_info()
-                    race_info_list.append(race_info)
-                    time.sleep(1)
+                    for r in range(1, 13):
+                        race_const = const.Race(race_id)
+                        related_race_id = f"{race_const.year}{race_const.place}{race_const.kai}{race_const.day}{r:02}"
+                        print(f"  {related_race_id}")
+                        scrape_related_racehistory(related_race_id)
+                        race_page = race.RacePage(f"https://db.netkeiba.com/race/{race_id}/")
+                        race_info = race_page.get_race_info()
+                        race_info_list.append(race_info)
+                        time.sleep(1)
                 df_race_info = pd.DataFrame(race_info_list)
                 df = pd.concat([df, df_race_info], axis = 1)
                 path = f"{sub_folder}/{horse_id}.csv"

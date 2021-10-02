@@ -9,10 +9,8 @@ class BasePage(object):
     """                         
     def __init__(self,url:str):
         self.url = url
-        res = requests.get(self.url)
-        res.encoding = res.apparent_encoding  
-        text = res.content
-        self.soup = BeautifulSoup(text, 'html.parser')
+        res = requests.get(self.url)  
+        self.soup = BeautifulSoup(res.content.decode("euc-jp", "ignore"), 'html.parser')
 
 class BasePageSelenium(object):
     def __init__(self,url:str):

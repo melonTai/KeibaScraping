@@ -2,6 +2,8 @@ from .base import BasePage
 from selenium.webdriver.remote.webelement import WebElement
 import re
 import bs4
+import sys
+import io
 
 class RacePage(BasePage):
     """RaceResultPage action methods come here.
