@@ -21,6 +21,10 @@
 ```
 pip install -r requirements.txt
 ```
+
+下記サイトを参考にChromeDriverのダウンロード，および，設定をする．
+https://www.selenium.dev/documentation/getting_started/installing_browser_drivers/
+
 # 使用方法
 
 ## scrape_race.py
