@@ -8,8 +8,6 @@ class TestShutubaPage(unittest.TestCase):
     """A sample test class to show how page object works"""
 
     def setUp(self):
-        self.driver = webdriver.Chrome()
-        self.driver.get("https://db.netkeiba.com/horse/2014104386")
         current_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(current_path)
 
@@ -17,7 +15,7 @@ class TestShutubaPage(unittest.TestCase):
         """test get horse info list"""
 
         #Load the main page. In this case the home page of Python.org.
-        page = horse.HorsePage(self.driver)
+        page = horse.HorsePage("https://db.netkeiba.com/horse/2014104386")
         #Checks if the word "Python" is in title
         assert page.is_url_matches(), "is not race result page."
         #gets horse information list
@@ -35,7 +33,7 @@ class TestShutubaPage(unittest.TestCase):
         assert features, "No features found."
 
     def tearDown(self):
-        self.driver.close()
+        pass
 
 if __name__ == "__main__":
     unittest.main()

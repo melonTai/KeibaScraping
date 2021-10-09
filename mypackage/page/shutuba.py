@@ -1,16 +1,17 @@
-from .base import BasePage
+from .base import BasePageSelenium
 from selenium.webdriver.remote.webelement import WebElement
 import bs4
 import re
 
-class ShutubaPage(BasePage):
+class ShutubaPage(BasePageSelenium):
     """RaceResultPage action methods come here.
     """
     heads_locator = ".Header th"
     horse_locator = ".HorseList"
     title_locator = ".RaceName"
+    date_locator = "#RaceList_DateList .Active a"
     def is_url_matches(self):
-        cur_url = self.driver.current_url
+        cur_url = self.url
         return "race/shutuba.html" in cur_url
 
     def __get_horse_id(self, element: bs4.element):
@@ -70,3 +71,10 @@ class ShutubaPage(BasePage):
             return {"title": title}
         return None
     
+    def get_date(self):
+        date_elements = self.soup.select(self.date_locator)
+        if date_elements:
+            date_element = date_elements[0]
+            date = re.sub(r"\s", "", date_element.get_text())
+            return {"date": date}
+        return None

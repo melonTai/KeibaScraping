@@ -10,8 +10,8 @@ class TestResultPage(unittest.TestCase):
     """A sample test class to show how page object works"""
 
     def setUp(self):
-        self.driver = webdriver.Chrome()
-        self.driver.get("https://db.netkeiba.com/race/201804010104/")
+        # self.driver = webdriver.Chrome()
+        # self.driver.get("https://db.netkeiba.com/race/201804010104/")
         #https://db.netkeiba.com/race/201005030504
         #https://db.netkeiba.com/race/202101010101/
         current_path = os.path.dirname(os.path.abspath(__file__))
@@ -21,7 +21,7 @@ class TestResultPage(unittest.TestCase):
         """test get horse info list"""
 
         #Load the main page. In this case the home page of Python.org.
-        page = race.RacePage(self.driver)
+        page = race.RacePage("https://db.netkeiba.com/race/202105030603")
         #Checks if the word "Python" is in title
         assert page.is_url_matches(), "is not race result page."
         #gets horse information list
@@ -37,7 +37,7 @@ class TestResultPage(unittest.TestCase):
             df_race[key] = value
         for key, value in title.items():
             df_race[key] = value
-        df_race["ref_time"] = utils.get_ref_time(self.driver, 202101010101)
+        df_race["ref_time"] = utils.get_ref_time(202101010101)
         df_race.to_csv("race.csv")
         
         #Verifies that the horse_list is not empty
@@ -47,7 +47,8 @@ class TestResultPage(unittest.TestCase):
         df_return.to_csv("return.csv")
         
     def tearDown(self):
-        self.driver.close()
+        pass
+        # self.driver.close()
 
 if __name__ == "__main__":
     unittest.main()

@@ -8,19 +8,16 @@ class TestCalenderPage(unittest.TestCase):
     """A sample test class to show how page object works"""
 
     def setUp(self):
-        year = 2020
-        month = 7
-        self.driver = webdriver.Chrome()
-        url = f"https://race.netkeiba.com/top/calendar.html?year={year}&month={month}"
-        self.driver.get(url)
         current_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(current_path)
 
     def test_get_kaisai_date_list(self):
         """test get horse info list"""
-
+        year = 2020
+        month = 7
+        url = f"https://race.netkeiba.com/top/calendar.html?year={year}&month={month}"
         #Load the main page. In this case the home page of Python.org.
-        page = calender.CalenderPage(self.driver)
+        page = calender.CalenderPage(url)
         #Checks if the word "Python" is in title
         assert page.is_url_matches(), "is not calender page."
         #gets horse information list
@@ -31,7 +28,8 @@ class TestCalenderPage(unittest.TestCase):
         assert kaisai_date_list, "No kaisai_date found."
 
     def tearDown(self):
-        self.driver.close()
+        pass
+        #self.driver.close()
 
 if __name__ == "__main__":
     unittest.main()

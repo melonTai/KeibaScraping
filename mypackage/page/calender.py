@@ -1,13 +1,13 @@
-from .base import BasePage
+from .base import BasePageSelenium
 from selenium.webdriver.remote.webelement import WebElement
 import re
 
-class CalenderPage(BasePage):
+class CalenderPage(BasePageSelenium):
     """RaceResultPage action methods come here.
     """
     kaisai_date_locator = ".RaceCellBox a"
     def is_url_matches(self):
-        cur_url = self.driver.current_url
+        cur_url = self.url
         return "calendar.html" in cur_url
 
     def get_kaisai_date_list(self):

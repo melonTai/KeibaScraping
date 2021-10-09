@@ -31,7 +31,7 @@ def main():
         raise Exception("有効なレース場idではありません")
     
     # フォルダ生成
-    root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\race')
+    root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\odds')
     if not os.path.exists(root_path):
         os.makedirs(root_path)
     
@@ -48,33 +48,44 @@ def main():
 
     # スクレイピング
     for race_id in race_id_list:
-        print(race_id)
-        race_const = const.Race(race_id)
-        # フォルダ作成
-        folder = f"{root_path}/{race_const.place}"
-        if not os.path.exists(folder):
-            os.makedirs(folder)
-        # 過去に同様のデータを取得済みの場合はスキップ
-        file_path = f"{folder}/{race_const.year}_all.csv"
-        if os.path.exists(file_path):
-            df_b = pd.read_csv(file_path, index_col=0)
-            if df_b["race_id"].isin([int(race_id)]).any():
+        try:
+            print(race_id)
+            race_const = const.Race(race_id)
+            # フォルダ作成
+            folder = f"{root_path}/{race_const.place}"
+            if not os.path.exists(folder):
+                os.makedirs(folder)
+            # 過去に同様のデータを取得済みの場合はスキップ
+            ticket_list = ["単勝", "複勝", "馬単", "馬連", "ワイド", "3連複", "3連単"]
+            is_gotten = {}
+            for ticket in ticket_list:
+                file_path = f"{folder}/{race_const.year}_{ticket}.csv"
+                if os.path.exists(file_path):
+                    df_b = pd.read_csv(file_path, index_col=0)
+                    if df_b["race_id"].isin([int(race_id)]).any():
+                        is_gotten[ticket] = True
+                    else:
+                        is_gotten[ticket] = False
+                else:
+                    is_gotten[ticket] = False
+            if not False in is_gotten.values():
                 continue
-        res = scrape.scrape_race(race_id)
-        if res["status"]:
-            # 重複を避けて保存
-            df = res["data"]
-            if os.path.exists(file_path):
-                df_b = df_b.append(df)
-                df_b.drop_duplicates(inplace=True)
-                df_b.to_csv(file_path)
-            else:
-                df.to_csv(file_path)
-        time.sleep(1)
-            
-
-   
-
+            res = scrape.scrape_odds(race_id)
+            if res["status"]:
+                data = res["data"]
+                for ticket, df in data.items():
+                    file_path = f"{folder}/{race_const.year}_{ticket}.csv"
+                    df["race_id"] = race_id
+                    if os.path.exists(file_path):
+                        df_b = pd.read_csv(file_path, index_col=0)
+                        df_b = df_b.append(df)
+                        df_b.drop_duplicates(inplace=True)
+                        df_b.to_csv(file_path)
+                    else:
+                        df.to_csv(file_path)
+            time.sleep(1)
+        except Exception:
+            time.sleep(1)
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal.SIG_DFL)

@@ -2,6 +2,8 @@ from .base import BasePage
 from selenium.webdriver.remote.webelement import WebElement
 import re
 import bs4
+import sys
+import io
 
 class RacePage(BasePage):
     """RaceResultPage action methods come here.
@@ -16,10 +18,10 @@ class RacePage(BasePage):
 
     race_info_title_locator = ".racedata dd h1"
     race_info_course_locator = ".racedata dd diary_snap_cut span"
-    race_info_date_locator = ".data_intro > p"
+    race_info_locator = ".data_intro > p"
 
     def is_url_matches(self):
-        cur_url = self.driver.current_url
+        cur_url = self.url
         return "race/" in cur_url
 
     def __get_horse_id(self, element: bs4.element):
@@ -81,10 +83,11 @@ class RacePage(BasePage):
         course_elements = self.soup.select(self.race_info_course_locator)
         if course_elements:
             course_element = course_elements[0]
-            header = ["corse", "turn", "in_out", "dist", "weather", "condition", "start_time"]
+            header = ["field", "turn", "in_out", "dist", "weather", "condition", "start_time"]
             text = course_element.get_text().replace("\n", "")
             pattern1 = "(芝|ダ)(.{1,2})(.*?)(\d{4})m / 天候 : (.*?) / .*? : (.*?) / 発走 : (\d{2}:\d{2})"
             pattern2 = "(.*?)(\d{4})m / 天候 : (.*?) / (.*?) / 発走 : (\d{2}:\d{2})"
+            pattern3 = "(芝|ダ)(.{1,2})(.*?)(\d{4})m / 天候 : (.*?) / .*? :(.*?)/"
             if "障" in text:
                 match = re.findall(pattern2, text)
                 #print(match)
@@ -94,23 +97,32 @@ class RacePage(BasePage):
                     data.insert(2, "")
                     info = dict(zip(header, data))
                     return info
-            else:
+            elif "発走" in text:
                 match = re.findall(pattern1, text)
                 #print(match)
                 if match:
                     data = match[0]
                     info = dict(zip(header, data))
                     return info
+            else:
+                match = re.findall(pattern3, text)
+                # print(text)
+                # print(match)
+                if match:
+                    data = list(match[0])
+                    data[-1] = data[-1].replace(u'\xa0', '')
+                    data.append("")
+                    info = dict(zip(header, data))
+                    return info
         return None
     # 2018年4月28日 1回新潟1日目 障害4歳以上未勝利  (混)(定量)
     def get_race_info(self):
-        date_elements = self.soup.select(self.race_info_date_locator)
-        if date_elements:
-            date_element = date_elements[0]
-            text = date_element.get_text()
+        race_info_elements = self.soup.select(self.race_info_locator)
+        if race_info_elements:
+            race_info_element = race_info_elements[0]
+            text = race_info_element.get_text()
             pattern = re.compile(r'\s')
             res = pattern.split(text)
-            # print(res)
             date = res[0]
             kai_place_day = res[1]
             class_ = res[2]

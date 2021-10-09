@@ -37,7 +37,7 @@ class HorsePage(BasePage):
     horse_title_locator = ".horse_title h1"
 
     def is_url_matches(self):
-        cur_url = self.driver.current_url
+        cur_url = self.url
         return "horse" in cur_url
     
     def __get_jockey_id(self, element:bs4.element):
@@ -57,7 +57,7 @@ class HorsePage(BasePage):
         if atag_elements:
             atag_element = atag_elements[0]
             url = atag_element.attrs["href"]
-            pattern = "race/(\d*)"
+            pattern = "race/(.*?)/"
             match = re.findall(pattern, url)
             if match:
                 race_id = match[0]

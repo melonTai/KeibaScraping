@@ -1,69 +1,91 @@
 from selenium import webdriver
-from mypackage.page import horse, result
-from mypackage import const
-from pprint import pprint
+from mypackage.page import race
+from mypackage import const, scrape
 import pandas as pd
 import os
-from selenium.webdriver.chrome.options import Options
-import glob
 import time
-import sys
 import datetime
+import sys
+import pathlib
+import signal
 
-def scrape_horse(horse_id_list):
-    driver = webdriver.Chrome()
-    try:
-        root_path = "./data/horse/race_history"
-        if not os.path.exists(root_path):
-            os.makedirs(root_path)
-
-        for horse_id in horse_id_list:
-            print(horse_id)
-            year = str(horse_id)[0:4]
-            folder = f"{root_path}"
-            if not os.path.exists(folder):
-                os.makedirs(folder)
-            file_path = f"{folder}/{horse_id}.csv"
-            driver.get(f"https://db.netkeiba.com/horse/{horse_id}")
-            horse_page = horse.HorsePage(driver)
-            race_history = horse_page.get_race_history()
-            df = pd.DataFrame(race_history)
-            df["horse_id"] = horse_id
-            df["horse_title"] = horse_page.get_horse_title()
-            if os.path.exists(file_path):
-                df_b = pd.read_csv(file_path, index_col=0)
-                df_b = df_b.append(df)
-                df_b.drop_duplicates(inplace=True)
-                df_b.to_csv(file_path)
-            else:
-                df.to_csv(file_path)
-            time.sleep(1)
-    finally:
-        driver.close()
-
-def scrape_horse_in_year_place(year,place):
-    now = datetime.datetime.now()
-    if year < 2011:
-        raise Exception("2011年より前は対応していません")
-    elif year > now.year:
-        raise Exception("未来の年は入力できません")
+def main():
+    # 入力チェック
+    if len(sys.argv) < 3:
+        raise Exception("引数が足りません\nstart_year end_year [place]")
     
-    if not place in [e.value for e in const.Place]:
+    # 入力格納 
+    year_start = int(sys.argv[1])
+    year_end = int(sys.argv[2])
+    place = int(sys.argv[3]) if len(sys.argv) > 3 else None
+
+    # 入力チェック
+    now = datetime.datetime.now()
+    if year_start < 2008:
+        raise Exception("2008年より前は対応していません")
+    elif year_start > year_end:
+        raise Exception("終了年には開始年より大きな値を設定してください")
+    elif year_end > now.year:
+        raise Exception("未来の年は入力できません")
+    if place is not None and not place in [e.value for e in const.PlaceChuo]+[e.value for e in const.PlaceChiho]:
         raise Exception("有効なレース場idではありません")
-    driver = webdriver.Chrome()
-    try:
-        results_path = f"./data/results/{place:02}/{year}_all.csv"
-        df_results = pd.read_csv(results_path, index_col=0)
-        horse_id_list = df_results["horse_id"].unique()
-        scrape_horse(driver, horse_id_list)
+    
+    # フォルダ生成
+    root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data')
+    if not os.path.exists(root_path):
+        os.makedirs(root_path)
+    
+    # レースid生成
+    race_path_list = []
+    place_list = [e.value for e in const.PlaceChuo] + [e.value for e in const.PlaceChiho] if place is None else [place]
+    for place in place_list:
+        for year in range(year_start, year_end + 1):
+            race_path = f"{root_path}/race/{place:02}/{year}_all.csv"
+            race_path_list.append(race_path)
 
-    finally:
-        driver.close()
+    # 過去レース取得
+    df_race = pd.DataFrame()
+    for race_path in race_path_list:
+        df = pd.read_csv(race_path, index_col=0)
+        df_race = df_race.append(df)
+    
+    # 過去レースから馬のidリストを取得
+    horse_id_list = df_race["horse_id"].unique()
 
+    # 各馬の過去戦歴をスクレイピング
+    for horse_id in horse_id_list:
+        print(horse_id)
+        # フォルダ作成
+        folder = f"{root_path}/horse/race_history"
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        # 過去に同様のデータを取得済みの場合はスキップ
+        file_path = f"{folder}/{str(horse_id)[0:4]}_all.csv"
+        time.sleep(1)
+        print(file_path)
+        res = scrape.scrape_racehistory(horse_id)
+        if res["status"]:
+            df = res["data"]
+            if not os.path.exists(file_path):
+                df.to_csv(file_path)
+                continue
+
+            # 重複を避けて保存
+            for index, row in df.iterrows():
+                df_b = pd.read_csv(file_path, index_col=0,dtype={"race_id":str, "horse_id":str})
+                print(f" {row['race_id']}")
+                is_same_race_and_horse_with_df_b = (df_b["horse_id"] == str(row["horse_id"])) & (df_b["race_id"] == str(row["race_id"]))
+                if not is_same_race_and_horse_with_df_b.any():
+                    print(" append")
+                    df_b = df_b.append(row)
+                df_b.to_csv(file_path)
+                
+        
+            
+
+   
 
 
 if __name__ == "__main__":
-    path = "./tests/shutuba.csv"
-    df = pd.read_csv(path, index_col=0)
-    horse_id_list = df["horse_id"].unique()
-    scrape_horse(horse_id_list)
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    main()

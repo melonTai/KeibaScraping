@@ -38,10 +38,9 @@ class Race():
             pass
         else:
             raise Exception(f"invalid argument of type type:{type(id)}")
-        if len(id) != 12 or not id.isdecimal():
-            raise Exception(f"invalid race_id: {id}")
+        
         self.id = id
-        pattern = "(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})"
+        pattern = "(\d{4})(\w{2})(\w{2})(\d{2})(\d{2})"
         match = re.findall(pattern, id)
         if match:
             year, place, kai, day, r = match[0]
