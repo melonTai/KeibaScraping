@@ -70,7 +70,7 @@ def main():
                     is_gotten[ticket] = False
             if not False in is_gotten.values():
                 continue
-            res = scrape.scrape_odds(race_id)
+            res = scrape.scrape_odds(race_id, "headless")
             if res["status"]:
                 data = res["data"]
                 for ticket, df in data.items():

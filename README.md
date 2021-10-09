@@ -25,6 +25,25 @@ pip install -r requirements.txt
 下記サイトを参考にChromeDriverのダウンロード，および，設定をする．
 https://www.selenium.dev/documentation/getting_started/installing_browser_drivers/
 
+うまくいかない場合，パソコン内に既にinstallされているパッケージと干渉を起こしている可能性があるため，
+venvコマンドで仮想環境を作成し，その環境内でinstallする．
+```
+cd KeibaScraping
+py -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+仮想環境を終了する場合は
+```
+venv\Scripts\deactivate
+```
+
+以降，以下コマンドで再度同環境を再現できる．
+```
+venv\Scripts\activate
+```
+
 # 使用方法
 
 ## scrape_race.py

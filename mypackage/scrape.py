@@ -5,9 +5,9 @@ from selenium.webdriver.chrome.options import Options
 import time
 
 
-def scrape_odds(race_id: str):
+def scrape_odds(race_id: str, option = None):
     odds_page = odds.OddsPage(
-        f"https://race.netkeiba.com/odds/index.html?race_id={race_id}")
+        f"https://race.netkeiba.com/odds/index.html?race_id={race_id}", option)
     try:
         win = pd.DataFrame(odds_page.get_win())
         place = pd.DataFrame(odds_page.get_place())
