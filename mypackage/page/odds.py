@@ -72,6 +72,7 @@ class OddsPage(BasePageSelenium):
         select = Select(ninki_select_element)
         select_len = len(select.options)
         for index in range(1, select_len-1):
+            time.sleep(0.3)
             # selectエレメント更新
             try:
                 ninki_select_element = self.driver.find_element_by_css_selector(self.ninki_select_locator)
