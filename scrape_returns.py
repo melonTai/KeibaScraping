@@ -57,8 +57,8 @@ def main():
         # 取得済みならスキップ
         file_path = f"{folder}/{race.year}_all.csv"
         if os.path.exists(file_path):
-            df_b = pd.read_csv(file_path, index_col=0)
-            if df_b["race_id"].isin([int(race_id)]).any():
+            df_b = pd.read_csv(file_path, index_col=0, dtype=str)
+            if df_b["race_id"].isin([race_id]).any():
                 continue
         res = scrape.scrape_return(race_id)
         if res["status"]:
@@ -66,12 +66,12 @@ def main():
             # 重複を避けて保存
             if os.path.exists(file_path):
                 if not race_id in df["race_id"]:
-                    df_b = pd.read_csv(file_path, index_col=0)
+                    df_b = pd.read_csv(file_path, index_col=0, dtype=str)
                     df_b = df_b.append(df)
                     df_b.drop_duplicates(inplace=True)
-                    df_b.to_csv(file_path)
+                    df_b.to_csv(file_path, encoding="utf_8_sig")
             else:
-                df.to_csv(file_path)
+                df.to_csv(file_path, encoding="utf_8_sig")
         time.sleep(1)
 
 if __name__ == "__main__":

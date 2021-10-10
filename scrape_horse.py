@@ -46,7 +46,7 @@ def main():
     # 過去レース取得
     df_race = pd.DataFrame()
     for race_path in race_path_list:
-        df = pd.read_csv(race_path, index_col=0)
+        df = pd.read_csv(race_path, index_col=0, dtype=str)
         df_race = df_race.append(df)
     
     # 過去レースから馬のidリストを取得
@@ -67,18 +67,18 @@ def main():
         if res["status"]:
             df = res["data"]
             if not os.path.exists(file_path):
-                df.to_csv(file_path)
+                df.to_csv(file_path, encoding="utf_8_sig")
                 continue
 
+            df_b = pd.read_csv(file_path, index_col=0, dtype=str, encoding='utf_8')
             # 重複を避けて保存
             for index, row in df.iterrows():
-                df_b = pd.read_csv(file_path, index_col=0,dtype={"race_id":str, "horse_id":str})
                 print(f" {row['race_id']}")
                 is_same_race_and_horse_with_df_b = (df_b["horse_id"] == str(row["horse_id"])) & (df_b["race_id"] == str(row["race_id"]))
                 if not is_same_race_and_horse_with_df_b.any():
                     print(" append")
                     df_b = df_b.append(row)
-                df_b.to_csv(file_path)
+                df_b.to_csv(file_path,encoding="utf_8_sig")
                 
         
             

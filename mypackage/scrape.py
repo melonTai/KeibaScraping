@@ -9,13 +9,13 @@ def scrape_odds(race_id: str, option = None):
     odds_page = odds.OddsPage(
         f"https://race.netkeiba.com/odds/index.html?race_id={race_id}", option)
     try:
-        win = pd.DataFrame(odds_page.get_win())
-        place = pd.DataFrame(odds_page.get_place())
-        exacta = pd.DataFrame(odds_page.get_exacta())
-        quinella = pd.DataFrame(odds_page.get_quinella())
-        quinella_place = pd.DataFrame(odds_page.get_quinella_place())
-        trifecta = pd.DataFrame(odds_page.get_trifecta())
-        trio = pd.DataFrame(odds_page.get_trio())
+        win = pd.DataFrame(odds_page.get_win(), dtype=str)
+        place = pd.DataFrame(odds_page.get_place(), dtype=str)
+        exacta = pd.DataFrame(odds_page.get_exacta(), dtype=str)
+        quinella = pd.DataFrame(odds_page.get_quinella(), dtype=str)
+        quinella_place = pd.DataFrame(odds_page.get_quinella_place(), dtype=str)
+        trifecta = pd.DataFrame(odds_page.get_trifecta(), dtype=str)
+        trio = pd.DataFrame(odds_page.get_trio(), dtype=str)
         data = {"単勝": win, "複勝": place, "馬単": exacta, "馬連": quinella,
                 "ワイド": quinella_place, "3連複": trio, "3連単": trifecta}
         return {"race_id": race_id, "data": data, "status": True}
@@ -36,9 +36,9 @@ def scrape_racehistory(horse_id: str):
     horse_page = horse.HorsePage(f"https://db.netkeiba.com/horse/{horse_id}")
     race_history = horse_page.get_race_history()
     if race_history:
-        df = pd.DataFrame(race_history)
-        df["horse_id"] = horse_id
-        df["horse_title"] = horse_page.get_horse_title()
+        df = pd.DataFrame(race_history, dtype=str)
+        df["horse_id"] = str(horse_id)
+        df["horse_title"] = str(horse_page.get_horse_title())
         return {"horse_id": horse_id, "data": df, "status": True}
     else:
         return {"horse_id": horse_id, "data": pd.DataFrame(), "status": False}
@@ -59,14 +59,14 @@ def scrape_racehistories(horse_id_list):
         time.sleep(1)
 
 
-def scrape_race(race_id: int):
+def scrape_race(race_id: str):
     """race_idに該当するレースの結果を取得する関数
 
     Args:
         race_id (str): レースのid
 
     Returns:
-        dict: {"race_id":int, "data":pd.DataFrame 取得したデータ, "status":bool 取得成功失敗}
+        dict: {"race_id":str, "data":pd.DataFrame 取得したデータ, "status":bool 取得成功失敗}
     """
     race_page = race.RacePage(f"https://db.netkeiba.com/race/{race_id}/")
     race_list = race_page.get_result_list()
@@ -77,10 +77,10 @@ def scrape_race(race_id: int):
         info = {}
         # print(title, race_info, course_info)
         info.update(**title, **race_info, **course_info)
-        df = pd.DataFrame(race_list)
-        df["race_id"] = race_id
+        df = pd.DataFrame(race_list, dtype=str)
+        df["race_id"] = str(race_id)
         for key, value in info.items():
-            df[key] = value
+            df[key] = str(value)
         return {"race_id": race_id, "data": df, "status": True}
     else:
         return {"race_id": race_id, "data": pd.DataFrame(), "status": False}
@@ -116,8 +116,8 @@ def scrape_shutuba(race_id):
     date = shutuba_page.get_date()
     shutuba_page.close()
     if horse_list:
-        df = pd.DataFrame(horse_list)
-        df["race_id"] = race_id
+        df = pd.DataFrame(horse_list, dtype=str)
+        df["race_id"] = str(race_id)
         return {"race_id": race_id, "title": title["title"], "date": date["date"], "data": df, "status": True}
     else:
         return {"race_id": race_id, "title": None, "date": None, "data": pd.DataFrame(), "status": False}
@@ -136,8 +136,8 @@ def scrape_return(race_id):
     return_list = result_page.get_return_list()
 
     if return_list:
-        df = pd.DataFrame(return_list)
-        df["race_id"] = race_id
+        df = pd.DataFrame(return_list, dtype=str)
+        df["race_id"] = str(race_id)
         return {"race_id": race_id, "data": df, "status": True}
     else:
         return {"race_id": race_id, "data": pd.DataFrame(), "status": False}

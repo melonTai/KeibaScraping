@@ -61,8 +61,8 @@ def main():
             for ticket in ticket_list:
                 file_path = f"{folder}/{race_const.year}_{ticket}.csv"
                 if os.path.exists(file_path):
-                    df_b = pd.read_csv(file_path, index_col=0)
-                    if df_b["race_id"].isin([int(race_id)]).any():
+                    df_b = pd.read_csv(file_path, index_col=0, dtype=str)
+                    if df_b["race_id"].isin([race_id]).any():
                         is_gotten[ticket] = True
                     else:
                         is_gotten[ticket] = False
@@ -77,12 +77,12 @@ def main():
                     file_path = f"{folder}/{race_const.year}_{ticket}.csv"
                     df["race_id"] = race_id
                     if os.path.exists(file_path):
-                        df_b = pd.read_csv(file_path, index_col=0)
+                        df_b = pd.read_csv(file_path, index_col=0, dtype=str)
                         df_b = df_b.append(df)
                         df_b.drop_duplicates(inplace=True)
-                        df_b.to_csv(file_path)
+                        df_b.to_csv(file_path, encoding="utf_8_sig")
                     else:
-                        df.to_csv(file_path)
+                        df.to_csv(file_path, encoding="utf_8_sig")
             time.sleep(1)
         except Exception:
             time.sleep(1)
