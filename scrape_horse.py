@@ -46,8 +46,9 @@ def main():
     # 過去レース取得
     df_race = pd.DataFrame()
     for race_path in race_path_list:
-        df = pd.read_csv(race_path, index_col=0, dtype=str)
-        df_race = df_race.append(df)
+        if os.path.exists(race_path):
+            df = pd.read_csv(race_path, index_col=0, dtype=str)
+            df_race = df_race.append(df)
     
     # 過去レースから馬のidリストを取得
     horse_id_list = df_race["horse_id"].unique()
