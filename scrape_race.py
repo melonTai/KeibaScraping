@@ -71,8 +71,6 @@ def main():
             else:
                 df.to_csv(file_path, encoding="utf_8_sig")
         time.sleep(1)
-            
-
    
 
 

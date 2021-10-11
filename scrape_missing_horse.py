@@ -10,48 +10,14 @@ import pathlib
 import signal
 
 def main():
-    # 入力チェック
-    if len(sys.argv) < 3:
-        raise Exception("引数が足りません\nstart_year end_year [place]")
-    
-    # 入力格納 
-    year_start = int(sys.argv[1])
-    year_end = int(sys.argv[2])
-    place = int(sys.argv[3]) if len(sys.argv) > 3 else None
-
-    # 入力チェック
-    now = datetime.datetime.now()
-    if year_start < 2008:
-        raise Exception("2008年より前は対応していません")
-    elif year_start > year_end:
-        raise Exception("終了年には開始年より大きな値を設定してください")
-    elif year_end > now.year:
-        raise Exception("未来の年は入力できません")
-    if place is not None and not place in [e.value for e in const.PlaceChuo]+[e.value for e in const.PlaceChiho]:
-        raise Exception("有効なレース場idではありません")
-    
     # フォルダ生成
     root_path = pathlib.WindowsPath(r'D:\マイドライブ\Keiba\data')
     if not os.path.exists(root_path):
         os.makedirs(root_path)
-    
-    # レースid生成
-    race_path_list = []
-    place_list = [e.value for e in const.PlaceChuo] + [e.value for e in const.PlaceChiho] if place is None else [place]
-    for place in place_list:
-        for year in range(year_start, year_end + 1):
-            race_path = f"{root_path}/race/{place:02}/{year}_all.csv"
-            race_path_list.append(race_path)
 
-    # 過去レース取得
-    df_race = pd.DataFrame()
-    for race_path in race_path_list:
-        if os.path.exists(race_path):
-            df = pd.read_csv(race_path, index_col=0, dtype=str)
-            df_race = df_race.append(df)
-    
+    df_missing_horse = pd.read_csv(f"{root_path}/horse/race_history/missing_horse.csv")
     # 過去レースから馬のidリストを取得
-    horse_id_list = df_race["horse_id"].unique()
+    horse_id_list = df_missing_horse["horse_id"].unique()
 
     # 各馬の過去戦歴をスクレイピング
     for horse_id in horse_id_list:
