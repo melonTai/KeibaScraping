@@ -85,9 +85,9 @@ class RacePage(BasePage):
             course_element = course_elements[0]
             header = ["field", "turn", "in_out", "dist", "weather", "condition", "start_time"]
             text = course_element.get_text().replace("\n", "")
-            pattern1 = "(芝|ダ)(.{1,2})(.*?)(\d{4})m / 天候 : (.*?) / .*? : (.*?) / 発走 : (\d{2}:\d{2})"
+            pattern1 = "(芝|ダ)(.{1,2})(.*?)(\d{3,4})m / 天候 : (.*?) / .*? : (.*?) / 発走 : (\d{2}:\d{2})"
             pattern2 = "(.*?)(\d{4})m / 天候 : (.*?) / (.*?) / 発走 : (\d{2}:\d{2})"
-            pattern3 = "(芝|ダ)(.{1,2})(.*?)(\d{4})m / 天候 : (.*?) / .*? :(.*?)/"
+            pattern3 = "(芝|ダ)(.{1,2})(.*?)(\d{3,4})m / 天候 : (.*?) / .*? :(.*?)/"
             if "障" in text:
                 match = re.findall(pattern2, text)
                 #print(match)

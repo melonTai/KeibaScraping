@@ -14,7 +14,7 @@ class TestRaceListPage(unittest.TestCase):
         """test get race list"""
 
         #Load the main page. In this case the home page of Python.org.
-        page = race_list.RaceListPage("https://race.netkeiba.com/top/race_list.html?kaisai_date=20200105")
+        page = race_list.RaceListPage("https://race.netkeiba.com/top/race_list.html?kaisai_date=20211024")
         #Checks if the word "Python" is in title
         assert page.is_url_matches(), "is not race id page."
         #gets horse information list

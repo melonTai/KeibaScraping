@@ -72,7 +72,7 @@ def get_ref_time(race_id):
         race_page = race.RacePage(f"https://db.netkeiba.com/race/{past_race_id}/")
         result_list = race_page.get_result_list()
         ref_result_list.extend(result_list)
-    df = pd.DataFrame(ref_result_list)
+    df = pd.DataFrame(ref_result_list, dtype=str)
     def convert_time(x:str):
         pattern = "(\d*):(\d{2}.\d{1})"
         match = re.findall(pattern, x)

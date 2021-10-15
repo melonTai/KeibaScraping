@@ -18,6 +18,7 @@ class TestCalenderPage(unittest.TestCase):
         url = f"https://race.netkeiba.com/top/calendar.html?year={year}&month={month}"
         #Load the main page. In this case the home page of Python.org.
         page = calender.CalenderPage(url)
+        self.page = page
         #Checks if the word "Python" is in title
         assert page.is_url_matches(), "is not calender page."
         #gets horse information list
@@ -28,7 +29,7 @@ class TestCalenderPage(unittest.TestCase):
         assert kaisai_date_list, "No kaisai_date found."
 
     def tearDown(self):
-        pass
+        self.page.close()
         #self.driver.close()
 
 if __name__ == "__main__":

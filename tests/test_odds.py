@@ -14,7 +14,7 @@ class TestOddsPage(unittest.TestCase):
         if not os.path.exists(folder):
             os.makedirs(folder)
         os.chdir(folder)
-        self.page = odds.OddsPage("https://race.netkeiba.com/odds/index.html?race_id=202005010107")
+        self.page = odds.OddsPage("https://race.netkeiba.com/odds/index.html?race_id=202105040211")
     def test_get_horse_list(self):
         """test get horse info list"""
         #Checks if the word "Python" is in title

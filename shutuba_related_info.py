@@ -14,7 +14,7 @@ def scrape_odds_and_save(race_id, folder):
     data = res["data"]
     for key, df in data.items():
         path = f"{folder}/{key}.csv"
-        df.to_csv(path)
+        df.to_csv(path, encoding="utf_8_sig")
 
 def scrape_related_racehistory(race_id):
     root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\race')
@@ -28,8 +28,8 @@ def scrape_related_racehistory(race_id):
     # 過去に同様のデータを取得済みの場合はスキップ
     file_path = f"{folder}/{race_const.year}_all.csv"
     if os.path.exists(file_path):
-        df_b = pd.read_csv(file_path, index_col=0)
-        if df_b["race_id"].astype(str).isin([race_id]).any():
+        df_b = pd.read_csv(file_path, index_col=0, dtype=str)
+        if df_b["race_id"].isin([race_id]).any():
             return None
     res = scrape.scrape_race(race_id)
     if res["status"]:
@@ -38,9 +38,9 @@ def scrape_related_racehistory(race_id):
         if os.path.exists(file_path):
             df_b = df_b.append(df)
             df_b.drop_duplicates(inplace=True)
-            df_b.to_csv(file_path)
+            df_b.to_csv(file_path, encoding="utf_8_sig")
         else:
-            df.to_csv(file_path)
+            df.to_csv(file_path, encoding="utf_8_sig")
 
 def main():
     if len(sys.argv) < 2:
@@ -70,7 +70,7 @@ def main():
         # 出馬データ保存
         df = shutuba_res["data"]
         path = f"{root}/shutuba.csv"
-        df.to_csv(path)
+        df.to_csv(path, encoding="utf_8_sig")
         # オッズ保存
         scrape_odds_and_save(shutuba_id,odds_folder)
         # 馬の戦歴をスクレイピング
@@ -93,10 +93,10 @@ def main():
                         race_info = race_page.get_race_info()
                         race_info_list.append(race_info)
                         time.sleep(1)
-                df_race_info = pd.DataFrame(race_info_list)
+                df_race_info = pd.DataFrame(race_info_list, dtype=str)
                 df = pd.concat([df, df_race_info], axis = 1)
                 path = f"{sub_folder}/{horse_id}.csv"
-                df.to_csv(path)
+                df.to_csv(path, encoding="utf_8_sig")
             time.sleep(1)
 
 if __name__ == '__main__':
