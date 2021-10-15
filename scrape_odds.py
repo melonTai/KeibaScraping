@@ -1,5 +1,6 @@
+from numpy import dtype
 from selenium import webdriver
-from mypackage.page import race
+from mypackage.page import race, race_list, calender
 from mypackage import const, scrape
 import pandas as pd
 import os
@@ -8,6 +9,7 @@ import datetime
 import sys
 import pathlib
 import signal
+from tqdm import tqdm
 
 def main():
     # 入力チェック
@@ -27,29 +29,55 @@ def main():
         raise Exception("終了年には開始年より大きな値を設定してください")
     elif year_end > now.year:
         raise Exception("未来の年は入力できません")
-    if place is not None and not place in [e.value for e in const.PlaceChuo]+[e.value for e in const.PlaceChiho]:
+    if place is not None and not place in [e.value for e in const.PlaceChuo]:
         raise Exception("有効なレース場idではありません")
-    
+
+    place_list = [e.value for e in const.PlaceChuo] if place is None else [f"{place:02}"]
+
     # フォルダ生成
     root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\odds')
     if not os.path.exists(root_path):
         os.makedirs(root_path)
     
+    race_id_folder = "./race_id"
+    if not os.path.exists(race_id_folder):
+        os.makedirs(race_id_folder)
+
+    year_list = list(range(int(year_start), int(year_end+1), 1))
+
     # レースid生成
     race_id_list = []
-    place_list = [e.value for e in const.PlaceChuo] + [e.value for e in const.PlaceChiho] if place is None else [place]
-    for place in place_list:
-        for year in range(year_start, year_end + 1):
-            for kai in range(1, 11):
-                for day in range(1, 13):
-                    for r in range(1, 13):         
-                        race_id = f"{year}{place:02}{kai:02}{day:02}{r:02}"
-                        race_id_list.append(race_id)
+    for year in year_list:
+        path = f"{race_id_folder}/race_id_{year}.csv"
+        if os.path.exists(path):
+            df = pd.read_csv(path, index_col=0, dtype=str)
+            race_id_list.extend(df["race_id"].values.tolist())
+        else:
+            race_list_page = race_list.RaceListPage(f"https://race.netkeiba.com/top/race_list.html", option="headless")
+            for month in range(1, 13):
+                calender_page = calender.CalenderPage(f"https://race.netkeiba.com/top/calendar.html?year={year}&month={month}", option="headless")
+                kaisai_dates = calender_page.get_kaisai_date_list()
+                calender_page.close()
+                for kaisai_date in kaisai_dates:
+                    race_list_page.update_url(f"https://race.netkeiba.com/top/race_list.html?kaisai_date={kaisai_date}")
+                    _race_id_list = race_list_page.get_race_id()
+                    if os.path.exists(path):
+                        df_race_id = pd.read_csv(path, index_col=0)
+                        df = pd.DataFrame(_race_id_list, columns=["race_id"], dtype=str)
+                        df_race_id = df_race_id.append(df)
+                        df_race_id.to_csv(path)
+                    else:
+                        df_race_id = pd.DataFrame(_race_id_list, columns=["race_id"], dtype=str)
+                        df_race_id.to_csv(path)
+                    race_id_list.extend(_race_id_list)
+                    time.sleep(1)
+            race_list_page.close()
 
+    race_id_list = list(filter(lambda race_id : const.Race(race_id).place in place_list, race_id_list))
     # スクレイピング
-    for race_id in race_id_list:
+    for race_id in tqdm(race_id_list):
         try:
-            print(race_id)
+            print(race_id, type(race_id))
             race_const = const.Race(race_id)
             # フォルダ作成
             folder = f"{root_path}/{race_const.place}"
@@ -77,10 +105,10 @@ def main():
                     file_path = f"{folder}/{race_const.year}_{ticket}.csv"
                     df["race_id"] = race_id
                     if os.path.exists(file_path):
-                        df_b = pd.read_csv(file_path, index_col=0, dtype=str)
-                        df_b = df_b.append(df)
-                        df_b.drop_duplicates(inplace=True)
-                        df_b.to_csv(file_path, encoding="utf_8_sig")
+                        df_b = pd.read_csv(file_path, index_col=0, dtype=str, encoding='utf_8')
+                        df_old = df_b[~df_b["race_id"].isin(df["race_id"])]
+                        df_b = pd.concat([df_old, df])
+                        df_b.to_csv(file_path,encoding="utf_8_sig")
                     else:
                         df.to_csv(file_path, encoding="utf_8_sig")
             time.sleep(1)

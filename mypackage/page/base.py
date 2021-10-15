@@ -33,5 +33,10 @@ class BasePageSelenium(object):
         self.driver.implicitly_wait(20)
         self.soup = BeautifulSoup(self.driver.page_source, 'html.parser')
     
+    def update_url(self, url:str):
+        self.driver.get(url)
+        self.driver.implicitly_wait(20)
+        self.soup = BeautifulSoup(self.driver.page_source, 'html.parser')
+
     def close(self):
         self.driver.close()

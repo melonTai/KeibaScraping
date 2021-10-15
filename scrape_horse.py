@@ -8,6 +8,7 @@ import datetime
 import sys
 import pathlib
 import signal
+from tqdm import tqdm
 
 def main():
     # 入力チェック
@@ -31,13 +32,13 @@ def main():
         raise Exception("有効なレース場idではありません")
     
     # フォルダ生成
-    root_path = pathlib.WindowsPath(r'D:\マイドライブ\Keiba\data')
+    root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data')
     if not os.path.exists(root_path):
         os.makedirs(root_path)
     
     # レースid生成
     race_path_list = []
-    place_list = [e.value for e in const.PlaceChuo] + [e.value for e in const.PlaceChiho] if place is None else [place]
+    place_list = [e.value for e in const.PlaceChuo] + [e.value for e in const.PlaceChiho] if place is None else [f"{place:02}"]
     for place in place_list:
         for year in range(year_start, year_end + 1):
             race_path = f"{root_path}/race/{place:02}/{year}_all.csv"
@@ -54,14 +55,14 @@ def main():
     horse_id_list = df_race["horse_id"].unique()
 
     # 各馬の過去戦歴をスクレイピング
-    for horse_id in horse_id_list:
+    for horse_id in tqdm(horse_id_list):
         print(horse_id)
         # フォルダ作成
-        folder = f"{root_path}/horse/race_history"
+        folder = f"{root_path}/horse/race_history2"
         if not os.path.exists(folder):
             os.makedirs(folder)
         # 過去に同様のデータを取得済みの場合はスキップ
-        file_path = f"{folder}/{str(horse_id)[0:4]}_all.csv"
+        file_path = f"{folder}/{horse_id}.csv"
         time.sleep(1)
         print(file_path)
         res = scrape.scrape_racehistory(horse_id)
@@ -71,15 +72,12 @@ def main():
                 df.to_csv(file_path, encoding="utf_8_sig")
                 continue
 
-            df_b = pd.read_csv(file_path, index_col=0, dtype=str, encoding='utf_8')
             # 重複を避けて保存
-            for index, row in df.iterrows():
-                print(f" {row['race_id']}")
-                is_same_race_and_horse_with_df_b = (df_b["horse_id"] == str(row["horse_id"])) & (df_b["race_id"] == str(row["race_id"]))
-                if not is_same_race_and_horse_with_df_b.any():
-                    print(" append")
-                    df_b = df_b.append(row)
-                df_b.to_csv(file_path,encoding="utf_8_sig")
+            df_b = pd.read_csv(file_path, index_col=0, dtype=str, encoding='utf_8')
+            df_old = df_b[~df_b["race_id"].isin(df["race_id"])]
+            df_b = pd.concat([df_old, df])
+            df_b.to_csv(file_path,encoding="utf_8_sig")
+            
                 
         
             

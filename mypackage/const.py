@@ -37,7 +37,7 @@ class Race():
         elif isinstance(id, str):
             pass
         else:
-            raise Exception(f"invalid argument of type type:{type(id)}")
+            raise Exception(f"invalid argument of type type:{type(id)},  id = {id}")
         
         self.id = id
         pattern = "(\d{4})(\w{2})(\w{2})(\d{2})(\d{2})"
