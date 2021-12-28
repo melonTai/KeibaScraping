@@ -1,27 +1,40 @@
-from .page import horse, race, shutuba, odds
+from .page import HorsePage, RacePage, ShutubaPage, OddsPage
 from pprint import pprint
 import pandas as pd
 from selenium.webdriver.chrome.options import Options
 import time
+from selenium import webdriver
 
 
-def scrape_odds(race_id: str, option = None):
-    odds_page = odds.OddsPage(
-        f"https://race.netkeiba.com/odds/index.html?race_id={race_id}", option)
+def scrape_odds(race_id: str):
+    options = Options()
+    options.add_argument('--headless')
+    options.add_argument('log-level=2')
+    driver = webdriver.Chrome(options=options)
+    driver.implicitly_wait(20)
+    driver.get(f"https://race.netkeiba.com/odds/index.html?race_id={race_id}")
+    odds_page = OddsPage(driver)
     try:
+        print("win")
         win = pd.DataFrame(odds_page.get_win(), dtype=str)
+        print("place")
         place = pd.DataFrame(odds_page.get_place(), dtype=str)
+        print("exacta")
         exacta = pd.DataFrame(odds_page.get_exacta(), dtype=str)
+        print("quinella")
         quinella = pd.DataFrame(odds_page.get_quinella(), dtype=str)
+        print("quinella_place")
         quinella_place = pd.DataFrame(odds_page.get_quinella_place(), dtype=str)
+        print("trifecta")
         trifecta = pd.DataFrame(odds_page.get_trifecta(), dtype=str)
+        print("trio")
         trio = pd.DataFrame(odds_page.get_trio(), dtype=str)
         data = {"単勝": win, "複勝": place, "馬単": exacta, "馬連": quinella,
                 "ワイド": quinella_place, "3連複": trio, "3連単": trifecta}
         return {"race_id": race_id, "data": data, "status": True}
     
     finally:
-        odds_page.close()
+        driver.close()
 
 
 def scrape_racehistory(horse_id: str):
@@ -33,7 +46,7 @@ def scrape_racehistory(horse_id: str):
     Returns:
         dict: {"horse_id":int 馬のid, "data":pd.DataFrame 取得データ, "status":bool 取得成功失敗}
     """
-    horse_page = horse.HorsePage(f"https://db.netkeiba.com/horse/{horse_id}")
+    horse_page = HorsePage(f"https://db.netkeiba.com/horse/{horse_id}")
     race_history = horse_page.get_race_history()
     if race_history:
         df = pd.DataFrame(race_history, dtype=str)
@@ -68,7 +81,7 @@ def scrape_race(race_id: str):
     Returns:
         dict: {"race_id":str, "data":pd.DataFrame 取得したデータ, "status":bool 取得成功失敗}
     """
-    race_page = race.RacePage(f"https://db.netkeiba.com/race/{race_id}/")
+    race_page = RacePage(f"https://db.netkeiba.com/race/{race_id}/")
     race_list = race_page.get_result_list()
     if race_list:
         course_info = race_page.get_course_info()
@@ -109,19 +122,24 @@ def scrape_shutuba(race_id):
     Returns:
         dict: {"race_id":str, "data":pd.DataFrame 取得したデータ, "status":bool 取得成功失敗}
     """
-    shutuba_page = shutuba.ShutubaPage(
-        f"https://race.netkeiba.com/race/shutuba.html?race_id={race_id}")
-    horse_list = shutuba_page.get_horse_list()
-    title = shutuba_page.get_title()
-    date = shutuba_page.get_date()
-    shutuba_page.close()
-    if horse_list:
-        df = pd.DataFrame(horse_list, dtype=str)
-        df["race_id"] = str(race_id)
-        return {"race_id": race_id, "title": title["title"], "date": date["date"], "data": df, "status": True}
-    else:
-        return {"race_id": race_id, "title": None, "date": None, "data": pd.DataFrame(), "status": False}
-
+    options = Options()
+    options.add_argument('--headless')
+    options.add_argument('log-level=2')
+    driver = webdriver.Chrome(options=options)
+    try:
+        driver.get(f"https://race.netkeiba.com/race/shutuba.html?race_id={race_id}")
+        shutuba_page = ShutubaPage(driver)
+        horse_list = shutuba_page.get_horse_list()
+        title = shutuba_page.get_title()
+        date = shutuba_page.get_date()
+        if horse_list:
+            df = pd.DataFrame(horse_list, dtype=str)
+            df["race_id"] = str(race_id)
+            return {"race_id": race_id, "title": title["title"], "date": date["date"], "data": df, "status": True}
+        else:
+            return {"race_id": race_id, "title": None, "date": None, "data": pd.DataFrame(), "status": False}
+    finally:
+        driver.close()
 
 def scrape_return(race_id):
     """race_idに該当するレースの配当を取得する関数
@@ -132,7 +150,7 @@ def scrape_return(race_id):
     Returns:
         dict: {"race_id":int, "data":pd.DataFrame 取得したデータ, "status":bool 取得成功失敗}
     """
-    result_page = race.RacePage(f"https://db.netkeiba.com/race/{race_id}/")
+    result_page = RacePage(f"https://db.netkeiba.com/race/{race_id}/")
     return_list = result_page.get_return_list()
 
     if return_list:

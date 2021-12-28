@@ -1,3 +1,4 @@
+# selenium
 import selenium
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.remote.webdriver import WebDriver
@@ -7,24 +8,37 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 
+# beautifulsoup
 from bs4 import BeautifulSoup
 import bs4
+
+# request
 import requests
 
+# 標準モジュール
 import time
 import re
 
+# 各ページの各要素にアクセスするためのロケーター(xpathやcssセレクタ等)の定義
 from .locators import CalenderPageLocators
 from .locators import HorsePageLocators
 from .locators import OddsPageLocators
 from .locators import RaceListPageLocators
 from .locators import RacePageLocators
+from .locators import ResultPageLocators
+from .locators import ShutubaPageLocators
 
 class BasePageRequest(object):
-    """Base class to initialize the base page 
-    that will be called from all pages
+    """
+    各ページクラスのベース
+    特に，UI操作を必要としない(seleniumを使わない)，値を取得するだけのページのベースとして用いる
     """                         
     def __init__(self,url:str):
+        """request用のベースクラス
+
+        Args:
+            url (str): url
+        """
         self.url = url
         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36"
         header = {
@@ -38,22 +52,35 @@ class BasePageRequest(object):
         self.soup = BeautifulSoup(res.content.decode("euc-jp", "ignore"), 'html.parser')
 
 class BasePageSelenium(object):
-    def __init__(self, driver):
+    """
+    各ページクラスのベース
+    特に，UI操作を必要とする(seleniumを使う)，ページのベースとして用いる
+
+    Args:
+        object ([type]): [description]
+    """
+    def __init__(self, driver:WebDriver):
+        """selenium用ベースクラスのコンストラクタ
+
+        Args:
+            driver (WebDriver): webDriver
+        """
         self.driver = driver
+        self.url = driver.current_url
         self.soup = BeautifulSoup(self.driver.page_source, 'html.parser')
     
     def update_url(self, url:str):
         self.driver.implicitly_wait(20)
         self.driver.get(url)
+        self.url = self.driver.current_url
         self.soup = BeautifulSoup(self.driver.page_source, 'html.parser')
 
     def close(self):
         self.driver.close()
 
 class CalenderPage(BasePageSelenium):
-    """RaceResultPage action methods come here.
+    """ページ例：https://race.netkeiba.com/top/calendar.html?year=2020&month=7
     """
-    kaisai_date_locator = ".RaceCellBox a"
     def is_url_matches(self):
         cur_url = self.url
         return "calendar.html" in cur_url
@@ -71,7 +98,8 @@ class CalenderPage(BasePageSelenium):
         return kaisai_dates
 
 class HorsePage(BasePageRequest):
-    """https://db.netkeiba.com/horse/2019105283/"""
+    """ページ例：https://db.netkeiba.com/horse/2019105283/
+    """
 
     def is_url_matches(self):
         cur_url = self.url
@@ -132,7 +160,7 @@ class HorsePage(BasePageRequest):
         # 見出しWeb要素を文字列に変換
         features_heads = [re.sub(r"\s", "", element.get_text()) for element in features_head_elements]
         # 適正の行リストを取得
-        features_table_element = self.soup.select(HorsePageLocators.FEATURES_TABLE)[0]
+        features_table_element = self.soup.select(HorsePageLocators.FEATURES_TABLE[1])[0]
         # 行リストをフォーマット
         param_elements = features_table_element.select("td")
         param_values = [self.get_left_width(element) for element in param_elements]
@@ -162,7 +190,8 @@ class HorsePage(BasePageRequest):
         return horse_title
 
 class OddsPage(BasePageSelenium):
-    """https://race.netkeiba.com/odds/index.html?race_id=202105040211"""
+    """ページ例：https://race.netkeiba.com/odds/index.html?race_id=202105040211
+    """
     def is_url_matches(self):
         cur_url = self.url
         return "odds/index.html?race_id=" in cur_url
@@ -304,7 +333,7 @@ class OddsPage(BasePageSelenium):
         return res
 
 class RaceListPage(BasePageSelenium):
-    """RaceResultPage action methods come here.
+    """ページ例：https://race.netkeiba.com/top/race_list.html?kaisai_date=20211024
     """
 
     def is_url_matches(self):
@@ -332,19 +361,6 @@ class RacePage(BasePageRequest):
     """
     ページ例："https://race.netkeiba.com/top/race_list.html?kaisai_date=20211024"
     """
-    
-    header_locator = ".race_table_01 th"
-    result_row_locator = ".race_table_01 tr"
-    result_data_locator = "td"
-
-    return_row_locator = ".pay_table_01 tr"
-    return_row_head_locator = "th"
-    return_row_value_locator = "td"
-
-    race_info_title_locator = ".racedata dd h1"
-    race_info_course_locator = ".racedata dd diary_snap_cut span"
-    race_info_locator = ".data_intro > p"
-
     def is_url_matches(self):
         cur_url = self.url
         return "race/" in cur_url
@@ -476,14 +492,12 @@ class RacePage(BasePageRequest):
 class ResultPage(BasePageRequest):
     """RaceResultPage action methods come here.
     """
-    race_id_locator = ".RaceList_DataItem a"
-
     def is_url_matches(self):
         cur_url = self.url
         return "race_list.html" in cur_url
 
     def get_race_id(self):
-        race_id_elements = self.soup.select(self.race_id_locator)
+        race_id_elements = self.soup.select(ResultPageLocators.RACE_ID[1])
         pattern = "result.html\?race_id=(\d*)"
         race_id_list = []
         for element in race_id_elements:
@@ -497,10 +511,6 @@ class ResultPage(BasePageRequest):
 class ShutubaPage(BasePageSelenium):
     """RaceResultPage action methods come here.
     """
-    heads_locator = ".Header th"
-    horse_locator = ".HorseList"
-    title_locator = ".RaceName"
-    date_locator = "#RaceList_DateList .Active a"
     def is_url_matches(self):
         cur_url = self.url
         return "race/shutuba.html" in cur_url
@@ -536,12 +546,12 @@ class ShutubaPage(BasePageSelenium):
         return None
 
     def get_horse_list(self):
-        head_elements = self.soup.select(self.heads_locator)
+        head_elements = self.soup.select(ShutubaPageLocators.HEADS[1])
         heads = [re.sub(r"\s", "", element.get_text()) for element in head_elements]
         del heads[11]
         heads.append("horse_id")
         heads.append("jockey_id")
-        horse_elements = self.soup.select(self.horse_locator)
+        horse_elements = self.soup.select(ShutubaPageLocators.HORSE[1])
         horse_list = []
         for horse_element in horse_elements:
             # .HorseList tr からtdを検索
@@ -555,7 +565,7 @@ class ShutubaPage(BasePageSelenium):
         return horse_list
 
     def get_title(self):
-        title_elements = self.soup.select(self.title_locator)
+        title_elements = self.soup.select(ShutubaPageLocators.TITLE[1])
         if title_elements:
             title_element = title_elements[0]
             title = re.sub(r"\s", "", title_element.get_text())
@@ -563,7 +573,7 @@ class ShutubaPage(BasePageSelenium):
         return None
     
     def get_date(self):
-        date_elements = self.soup.select(self.date_locator)
+        date_elements = self.soup.select(ShutubaPageLocators.DATE[1])
         if date_elements:
             date_element = date_elements[0]
             date = re.sub(r"\s", "", date_element.get_text())

@@ -1,6 +1,4 @@
-from selenium import webdriver
-from mypackage.page import race
-from mypackage import const, scrape
+from package import const, scrape
 import pandas as pd
 import os
 import time
@@ -17,7 +15,7 @@ def main():
     # 入力格納 
     year_start = int(sys.argv[1])
     year_end = int(sys.argv[2])
-    place = sys.argv[3] if len(sys.argv) > 3 else None
+    place = int(sys.argv[3]) if len(sys.argv) > 3 else None
 
     # 入力チェック
     now = datetime.datetime.now()
@@ -45,11 +43,10 @@ def main():
         elif place == "chiho":
             place_list = [e.value for e in const.PlaceChiho]
         else:
-            place_list =[f"{int(place):02}"]
+            place_list =[place]
     
     # レースid生成
     race_id_list = []
-    place_list = [e.value for e in const.PlaceChuo] + [e.value for e in const.PlaceChiho] if place is None else [f"{place:02}"]
     for place in place_list:
         for year in range(year_start, year_end + 1):
             for kai in range(1, 11):

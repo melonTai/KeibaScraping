@@ -1,13 +1,13 @@
-from selenium.webdriver.remote.webdriver import WebDriver
+from package import scrape, const, utils
+from package.page import RacePage
 from selenium import webdriver
-from mypackage import scrape, const, utils
-from mypackage.page import race
 import os
 import time
 import sys
 import pandas as pd
 import pathlib
 import signal
+from selenium.webdriver.chrome.options import Options
 
 def scrape_odds_and_save(race_id, folder):
     res = scrape.scrape_odds(race_id)
@@ -49,6 +49,7 @@ def main():
         print("raceid")
         sys.exit()
     shutuba_id = sys.argv[1]
+    print("scrape shutuba")
     shutuba_res = scrape.scrape_shutuba(shutuba_id)
     if shutuba_res["status"]:
         # フォルダ生成
@@ -73,11 +74,16 @@ def main():
         path = f"{root}/shutuba.csv"
         df.to_csv(path, encoding="utf_8_sig")
         # オッズ保存
+        print("scrape odds")
         scrape_odds_and_save(shutuba_id,odds_folder)
         # 馬の戦歴をスクレイピング
         horse_id_list = df["horse_id"].unique()
+
+        print("scrape race histories")
         for res in scrape.scrape_racehistories(horse_id_list):
-            if res["status"]:
+            if not res["status"]:
+                print("race_histories_error")
+            else:
                 horse_id = res["horse_id"]
                 print(horse_id)
                 df = res["data"]
@@ -89,8 +95,8 @@ def main():
                         race_const = const.Race(race_id)
                         related_race_id = f"{race_const.year}{race_const.place}{race_const.kai}{race_const.day}{r:02}"
                         print(f"  {related_race_id}")
-                        scrape_related_racehistory(related_race_id)
-                        race_page = race.RacePage(f"https://db.netkeiba.com/race/{race_id}/")
+                        scrape_related_racehistory(related_race_id) 
+                        race_page = RacePage(f"https://db.netkeiba.com/race/{race_id}/")
                         race_info = race_page.get_race_info()
                         race_info_list.append(race_info)
                         time.sleep(1)

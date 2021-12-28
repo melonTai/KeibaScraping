@@ -1,6 +1,4 @@
-from selenium import webdriver
-from mypackage.page import race
-from mypackage import const, scrape
+from package import const, scrape
 import pandas as pd
 import os
 import time
@@ -38,7 +36,7 @@ def main():
     
     # レースid生成
     race_path_list = []
-    place_list = [e.value for e in const.PlaceChuo] + [e.value for e in const.PlaceChiho] if place is None else [f"{place:02}"]
+    place_list = [e.value for e in const.PlaceChuo] + [e.value for e in const.PlaceChiho] if place is None else [place]
     for place in place_list:
         for year in range(year_start, year_end + 1):
             race_path = f"{root_path}/race/{place:02}/{year}_all.csv"
