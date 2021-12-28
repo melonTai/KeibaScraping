@@ -29,11 +29,11 @@ class TestResultPage(unittest.TestCase):
         for key, value in title.items():
             df_race[key] = value
         df_race["ref_time"] = utils.get_ref_time(202101010101)
-        df_race.to_csv("race.csv")
+        df_race.to_csv("race.csv", encoding="utf_8_sig")
         
         return_list = page.get_return_list()
         df_return = pd.DataFrame(return_list)
-        df_return.to_csv("return.csv")
+        df_return.to_csv("return.csv", encoding="utf_8_sig")
         
     def tearDown(self):
         pass

@@ -16,19 +16,19 @@ def scrape_odds(race_id: str):
     odds_page = OddsPage(driver)
     try:
         print("win")
-        win = pd.DataFrame(odds_page.get_win(), dtype=str)
+        win = odds_page.get_win()
         print("place")
-        place = pd.DataFrame(odds_page.get_place(), dtype=str)
+        place = odds_page.get_place()
         print("exacta")
-        exacta = pd.DataFrame(odds_page.get_exacta(), dtype=str)
+        exacta = odds_page.get_exacta()
         print("quinella")
-        quinella = pd.DataFrame(odds_page.get_quinella(), dtype=str)
+        quinella = odds_page.get_quinella()
         print("quinella_place")
-        quinella_place = pd.DataFrame(odds_page.get_quinella_place(), dtype=str)
+        quinella_place = odds_page.get_quinella_place()
         print("trifecta")
-        trifecta = pd.DataFrame(odds_page.get_trifecta(), dtype=str)
+        trifecta = odds_page.get_trifecta()
         print("trio")
-        trio = pd.DataFrame(odds_page.get_trio(), dtype=str)
+        trio = odds_page.get_trio()
         data = {"単勝": win, "複勝": place, "馬単": exacta, "馬連": quinella,
                 "ワイド": quinella_place, "3連複": trio, "3連単": trifecta}
         return {"race_id": race_id, "data": data, "status": True}
@@ -49,7 +49,7 @@ def scrape_racehistory(horse_id: str):
     horse_page = HorsePage(f"https://db.netkeiba.com/horse/{horse_id}")
     race_history = horse_page.get_race_history()
     if race_history:
-        df = pd.DataFrame(race_history, dtype=str)
+        df = race_history
         df["horse_id"] = str(horse_id)
         df["horse_title"] = str(horse_page.get_horse_title())
         return {"horse_id": horse_id, "data": df, "status": True}

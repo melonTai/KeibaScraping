@@ -16,14 +16,16 @@ class TestShutubaPage(unittest.TestCase):
 
         #Load the main page. In this case the home page of Python.org.
         page = HorsePage("https://db.netkeiba.com/horse/2014104386")
-        race_list = page.get_race_history()
-        df_race = pd.DataFrame(race_list)
-        df_race.to_csv("race.csv")
-        features = page.get_features()
-        df_features = pd.DataFrame([features])
-        df_features.to_csv("features.csv")
+        df_race = page.get_race_history()
+        df_race.to_csv("race.csv", encoding="utf_8_sig")
+        df_features = page.get_features()
+        df_features.to_csv("features.csv", encoding="utf_8_sig")
+        print(df_features)
         horse_title = page.get_horse_title()
         print(horse_title)
+        horse_profile = page.get_profile()
+        print(horse_profile)
+    
 
 if __name__ == "__main__":
     unittest.main()

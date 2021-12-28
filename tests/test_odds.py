@@ -25,38 +25,31 @@ class TestOddsPage(unittest.TestCase):
     def test_get_horse_list(self):
         """test get horse info list"""
         print("win")
-        win_list = self.page.get_win()
-        df_win = pd.DataFrame(win_list)
+        df_win = self.page.get_win()
         df_win.to_csv("odds_win.csv", encoding='utf_8_sig')
         
         print("place")
-        place_list = self.page.get_place()
-        df_place = pd.DataFrame(place_list)
+        df_place = self.page.get_place()
         df_place.to_csv("odds_place.csv", encoding='utf_8_sig')
         
         print("exacta")
-        data_list = self.page.get_exacta()
-        df = pd.DataFrame(data_list)
+        df = self.page.get_exacta()
         df.to_csv("odds_exacta.csv", encoding='utf_8_sig')
 
         print("quinella")
-        data_list = self.page.get_quinella()
-        df = pd.DataFrame(data_list)
+        df = self.page.get_quinella()
         df.to_csv("odds_quinella.csv", encoding='utf_8_sig')
 
         print("quinella_place")
-        data_list = self.page.get_quinella_place()
-        df = pd.DataFrame(data_list)
+        df = self.page.get_quinella_place()
         df.to_csv("odds_quinella_place.csv", encoding='utf_8_sig')
 
         print("trifecta")
-        data_list = self.page.get_trifecta()
-        df = pd.DataFrame(data_list)
+        df = self.page.get_trifecta()
         df.to_csv("odds_trifecta.csv", encoding='utf_8_sig')
 
         print("trio")
-        data_list = self.page.get_trio()
-        df = pd.DataFrame(data_list)
+        df = self.page.get_trio()
         df.to_csv("odds_trio.csv", encoding='utf_8_sig')
 
 
