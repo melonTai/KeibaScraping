@@ -21,7 +21,8 @@ class TestResultPage(unittest.TestCase):
         race_info = page.get_race_info()
         title = page.get_title()
         print(corse_info, race_info, title)
-        df_race = pd.DataFrame(result_list)
+        df_race = result_list
+        # print(df_race.columns)
         for key, value in corse_info.items():
             df_race[key] = value
         for key, value in race_info.items():

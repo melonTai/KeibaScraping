@@ -177,11 +177,11 @@ class HorsePage(BasePageRequest):
         df.index.name = "key"
         df.columns = ["value"]
         trainer_element = self.soup.select(HorsePageLocators.PROFILE_TRAINER[1])[0] 
-        df.loc["trainer_id", "prof_value"] = self.__get_id(trainer_element, "trainer/(.*?)/")
+        df.loc["trainer_id", "value"] = self.__get_id(trainer_element, "trainer/(.*?)/")
         owner_element = self.soup.select(HorsePageLocators.PROFILE_OWNER[1])[0]
-        df.loc["owner_id", "prof_value"] = self.__get_id(owner_element, "owner/(.*?)/")
+        df.loc["owner_id", "value"] = self.__get_id(owner_element, "owner/(.*?)/")
         breeder_element  = self.soup.select(HorsePageLocators.PROFILE_BREEDER[1])[0]
-        df.loc["breeder_id", "prof_value"] = self.__get_id(breeder_element, "breeder/(.*?)/")
+        df.loc["breeder_id", "value"] = self.__get_id(breeder_element, "breeder/(.*?)/")
         df = df.astype(str)
         return df
 
@@ -541,7 +541,8 @@ class ShutubaPage(BasePageSelenium):
             values.append(horse_id)
             values.append(jockey_id)
             horse_list.append(dict(zip(heads, values)))
-        return horse_list
+        df = pd.DataFrame(horse_list, dtype=str)
+        return df
 
     def get_title(self):
         title_elements = self.soup.select(ShutubaPageLocators.TITLE[1])

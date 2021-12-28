@@ -82,18 +82,17 @@ def scrape_race(race_id: str):
         dict: {"race_id":str, "data":pd.DataFrame 取得したデータ, "status":bool 取得成功失敗}
     """
     race_page = RacePage(f"https://db.netkeiba.com/race/{race_id}/")
-    race_list = race_page.get_result_list()
-    if race_list:
+    df_race = race_page.get_result_list()
+    if len(df_race) > 0:
         course_info = race_page.get_course_info()
         title = race_page.get_title()
         race_info = race_page.get_race_info()
         info = {}
         # print(title, race_info, course_info)
         info.update(**title, **race_info, **course_info)
-        df = pd.DataFrame(race_list, dtype=str)
-        df["race_id"] = str(race_id)
+        df_race["race_id"] = str(race_id)
         for key, value in info.items():
-            df[key] = str(value)
+            df_race[key] = str(value)
         return {"race_id": race_id, "data": df, "status": True}
     else:
         return {"race_id": race_id, "data": pd.DataFrame(), "status": False}
@@ -129,12 +128,11 @@ def scrape_shutuba(race_id):
     try:
         driver.get(f"https://race.netkeiba.com/race/shutuba.html?race_id={race_id}")
         shutuba_page = ShutubaPage(driver)
-        horse_list = shutuba_page.get_horse_list()
+        df_horse = shutuba_page.get_horse_list()
         title = shutuba_page.get_title()
         date = shutuba_page.get_date()
-        if horse_list:
-            df = pd.DataFrame(horse_list, dtype=str)
-            df["race_id"] = str(race_id)
+        if len(df_horse) > 0:
+            df_horse["race_id"] = str(race_id)
             return {"race_id": race_id, "title": title["title"], "date": date["date"], "data": df, "status": True}
         else:
             return {"race_id": race_id, "title": None, "date": None, "data": pd.DataFrame(), "status": False}
