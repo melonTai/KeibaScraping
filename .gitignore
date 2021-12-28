@@ -1,0 +1,10 @@
+*.csv
+data
+pyvenv.cfg
+Lib
+Scripts
+Include
+__pycache__/
+.vscode
+*.json
+venv
