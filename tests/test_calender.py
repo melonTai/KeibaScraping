@@ -1,9 +1,10 @@
 import unittest
 from selenium import webdriver
-from mypackage.page import calender
+from package.page import CalenderPage
 from pprint import pprint
 import pandas as pd
 import os
+
 class TestCalenderPage(unittest.TestCase):
     """A sample test class to show how page object works"""
 
@@ -15,22 +16,17 @@ class TestCalenderPage(unittest.TestCase):
         """test get horse info list"""
         year = 2020
         month = 7
+        driver = webdriver.Chrome()
+        driver.implicitly_wait(20)
         url = f"https://race.netkeiba.com/top/calendar.html?year={year}&month={month}"
+        driver.get(url)
         #Load the main page. In this case the home page of Python.org.
-        page = calender.CalenderPage(url)
+        page = CalenderPage(driver)
         self.page = page
-        #Checks if the word "Python" is in title
-        assert page.is_url_matches(), "is not calender page."
-        #gets horse information list
         kaisai_date_list = page.get_kaisai_date_list()
         df_race = pd.DataFrame(kaisai_date_list)
         df_race.to_csv("kaisai_date.csv")
-        #Verifies that the horse_list is not empty
-        assert kaisai_date_list, "No kaisai_date found."
-
-    def tearDown(self):
-        self.page.close()
-        #self.driver.close()
+        driver.close()
 
 if __name__ == "__main__":
     unittest.main()

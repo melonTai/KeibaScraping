@@ -36,3 +36,9 @@ class RacePageLocators(object):
 
 class ResultPageLocators(object):
     RACE_ID = (By.CSS_SELECTOR,".RaceList_DataItem a")
+
+class ShutubaPageLocators(object):
+    HEADS = (By.CSS_SELECTOR, ".Header th")
+    HORSE = (By.CSS_SELECTOR, ".HorseList")
+    TITLE = (By.CSS_SELECTOR, ".RaceName")
+    DATE = (By.CSS_SELECTOR, "#RaceList_DateList .Active a")

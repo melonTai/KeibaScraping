@@ -1,7 +1,7 @@
-from numpy import dtype
+from package import const, scrape
+from package.page import RaceListPage, CalenderPage
 from selenium import webdriver
-from mypackage.page import race, race_list, calender
-from mypackage import const, scrape
+from selenium.webdriver.chrome.options import Options
 import pandas as pd
 import os
 import time
@@ -47,18 +47,27 @@ def main():
 
     # レースid生成
     race_id_list = []
-    for year in year_list:
+    for year in tqdm(year_list):
         path = f"{race_id_folder}/race_id_{year}.csv"
         if os.path.exists(path):
             df = pd.read_csv(path, index_col=0, dtype=str)
             race_id_list.extend(df["race_id"].values.tolist())
         else:
-            race_list_page = race_list.RaceListPage(f"https://race.netkeiba.com/top/race_list.html", option="headless")
-            for month in range(1, 13):
-                calender_page = calender.CalenderPage(f"https://race.netkeiba.com/top/calendar.html?year={year}&month={month}", option="headless")
+            options = Options()
+            options.add_argument('--headless')
+            options.add_argument('log-level=2')
+            race_list_driver = webdriver.Chrome(options=options)
+            race_list_driver.implicitly_wait(20)
+            race_list_driver.get(f"https://race.netkeiba.com/top/race_list.html")
+            race_list_page = RaceListPage(race_list_driver)
+            for month in tqdm(range(1, 13)):
+                calender_driver = webdriver.Chrome(options=options)
+                calender_driver.implicitly_wait(20)
+                calender_driver.get(f"https://race.netkeiba.com/top/calendar.html?year={year}&month={month}")
+                calender_page = CalenderPage(calender_driver)
                 kaisai_dates = calender_page.get_kaisai_date_list()
                 calender_page.close()
-                for kaisai_date in kaisai_dates:
+                for kaisai_date in tqdm(kaisai_dates):
                     race_list_page.update_url(f"https://race.netkeiba.com/top/race_list.html?kaisai_date={kaisai_date}")
                     _race_id_list = race_list_page.get_race_id()
                     if os.path.exists(path):
