@@ -1,4 +1,5 @@
 from package import const, scrape
+from package.page import RaceListPage, CalenderPage
 from pprint import pprint
 import pandas as pd
 import os
@@ -6,6 +7,9 @@ import time
 import datetime
 import sys
 import pathlib
+from tqdm import tqdm
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 def main():
     # 入力チェック
@@ -15,7 +19,7 @@ def main():
     # 入力格納 
     year_start = int(sys.argv[1])
     year_end = int(sys.argv[2])
-    place = int(sys.argv[3]) if len(sys.argv) > 3 else None
+    place = sys.argv[3] if len(sys.argv) > 3 else None
 
     # 入力チェック
     now = datetime.datetime.now()
@@ -25,7 +29,7 @@ def main():
         raise Exception("終了年には開始年より大きな値を設定してください")
     elif year_end > now.year:
         raise Exception("未来の年は入力できません")
-    if place is not None and not place in [e.value for e in const.PlaceChuo]+[e.value for e in const.PlaceChiho]:
+    if place is not None and not place in [e.value for e in const.PlaceChuo]+[e.value for e in const.PlaceChiho] + ["chuo", "chiho"]:
         raise Exception("有効なレース場idではありません")
     
     # フォルダ生成
@@ -33,20 +37,66 @@ def main():
     if not os.path.exists(root_path):
         os.makedirs(root_path)
 
+    race_id_folder = "./race_id"
+    if not os.path.exists(race_id_folder):
+        os.makedirs(race_id_folder)
+
+    year_list = list(range(int(year_start), int(year_end+1), 1))
+
+    # place_list
+    place_list = []
+    if place is None:
+        place_list = [e.value for e in const.PlaceChuo] + [e.value for e in const.PlaceChiho]
+    elif place is not None:
+        if place == "chuo":
+            place_list = [e.value for e in const.PlaceChuo]
+        elif place == "chiho":
+            place_list = [e.value for e in const.PlaceChiho]
+        else:
+            place_list =[int(place)]
+
     # レースid生成
     race_id_list = []
-    place_list = [e.value for e in const.PlaceChuo] + [e.value for e in const.PlaceChiho] if place is None else [place]
-    for place in place_list:
-        for year in range(year_start, year_end + 1):
-            for kai in range(1, 11):
-                for day in range(1, 13):
-                    for r in range(1, 13):
-                        race_id = f"{year}{place:02}{kai:02}{day:02}{r:02}"
-                        race_id_list.append(race_id)
+    for year in tqdm(year_list):
+        path = f"{race_id_folder}/race_id_{year}.csv"
+        if os.path.exists(path):
+            df = pd.read_csv(path, index_col=0, dtype=str)
+            race_id_list.extend(df["race_id"].values.tolist())
+        else:
+            options = Options()
+            options.add_argument('--headless')
+            options.add_argument('log-level=2')
+            race_list_driver = webdriver.Chrome(options=options)
+            race_list_driver.implicitly_wait(20)
+            race_list_driver.get(f"https://race.netkeiba.com/top/race_list.html")
+            race_list_page = RaceListPage(race_list_driver)
+            for month in tqdm(range(1, 13)):
+                calender_driver = webdriver.Chrome(options=options)
+                calender_driver.implicitly_wait(20)
+                calender_driver.get(f"https://race.netkeiba.com/top/calendar.html?year={year}&month={month}")
+                calender_page = CalenderPage(calender_driver)
+                kaisai_dates = calender_page.get_kaisai_date_list()
+                calender_page.close()
+                for kaisai_date in tqdm(kaisai_dates):
+                    race_list_page.update_url(f"https://race.netkeiba.com/top/race_list.html?kaisai_date={kaisai_date}")
+                    _race_id_list = race_list_page.get_race_id()
+                    if os.path.exists(path):
+                        df_race_id = pd.read_csv(path, index_col=0)
+                        df = pd.DataFrame(_race_id_list, columns=["race_id"], dtype=str)
+                        df_race_id = df_race_id.append(df)
+                        df_race_id.to_csv(path)
+                    else:
+                        df_race_id = pd.DataFrame(_race_id_list, columns=["race_id"], dtype=str)
+                        df_race_id.to_csv(path)
+                    race_id_list.extend(_race_id_list)
+                    time.sleep(1)
+            race_list_page.close()
+
+    race_id_list = list(filter(lambda race_id : int(const.Race(race_id).place) in place_list, race_id_list))
 
     # スクレイピング
-    for race_id in race_id_list:
-        print(race_id)
+    for race_id in tqdm(race_id_list):
+        # print(race_id)
         # フォルダ生成
         race = const.Race(race_id)
         folder = f"{root_path}/{race.place}"

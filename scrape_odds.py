@@ -32,7 +32,7 @@ def main():
     if place is not None and not place in [e.value for e in const.PlaceChuo]:
         raise Exception("有効なレース場idではありません")
 
-    place_list = [e.value for e in const.PlaceChuo] if place is None else [f"{place:02}"]
+    place_list = [e.value for e in const.PlaceChuo] if place is None else [place]
 
     # フォルダ生成
     root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\odds')
@@ -82,7 +82,7 @@ def main():
                     time.sleep(1)
             race_list_page.close()
 
-    race_id_list = list(filter(lambda race_id : const.Race(race_id).place in place_list, race_id_list))
+    race_id_list = list(filter(lambda race_id : int(const.Race(race_id).place) in place_list, race_id_list))
     # スクレイピング
     for race_id in tqdm(race_id_list):
         try:

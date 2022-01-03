@@ -48,7 +48,7 @@ def scrape_racehistory(horse_id: str):
     """
     horse_page = HorsePage(f"https://db.netkeiba.com/horse/{horse_id}")
     race_history = horse_page.get_race_history()
-    if race_history:
+    if len(race_history) > 0:
         df = race_history
         df["horse_id"] = str(horse_id)
         df["horse_title"] = str(horse_page.get_horse_title())
@@ -93,7 +93,7 @@ def scrape_race(race_id: str):
         df_race["race_id"] = str(race_id)
         for key, value in info.items():
             df_race[key] = str(value)
-        return {"race_id": race_id, "data": df, "status": True}
+        return {"race_id": race_id, "data": df_race, "status": True}
     else:
         return {"race_id": race_id, "data": pd.DataFrame(), "status": False}
 

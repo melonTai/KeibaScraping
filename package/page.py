@@ -382,18 +382,24 @@ class RacePage(BasePageRequest):
         return None
 
     def get_result_list(self):
-        dfs = pd.read_html(str(self.soup), match="馬名")
+        try:
+            dfs = pd.read_html(str(self.soup), match="馬名")
+        except Exception:
+            return pd.DataFrame()
         df = dfs[0]
-        horse_elements = self.soup.select(RacePageLocators.HORSE_NAME[1])
-        jockey_elements = self.soup.select(RacePageLocators.JOCKEY_NAME[1])
-        trainer_elements = self.soup.select(RacePageLocators.TRAINER_NAME[1])
-        owner_elements = self.soup.select(RacePageLocators.OWNER_NAME[1])
-        df["horse_id"] = [self.__get_id(element, "horse/(.*?)/") for element in horse_elements]
-        df["jockey_id"] = [self.__get_id(element, "jockey/(.*?)/") for element in jockey_elements]
-        df["trainer_id"] = [self.__get_id(element, "trainer/(.*?)/") for element in trainer_elements]
-        df["owner_id"] = [self.__get_id(element, "owner/(.*?)/") for element in owner_elements]
-        df = df.astype(str)
-        return df
+        if len(df) > 0:
+            horse_elements = self.soup.select(RacePageLocators.HORSE_NAME[1])
+            jockey_elements = self.soup.select(RacePageLocators.JOCKEY_NAME[1])
+            trainer_elements = self.soup.select(RacePageLocators.TRAINER_NAME[1])
+            owner_elements = self.soup.select(RacePageLocators.OWNER_NAME[1])
+            df["horse_id"] = [self.__get_id(element, "horse/(.*?)/") for element in horse_elements]
+            df["jockey_id"] = [self.__get_id(element, "jockey/(.*?)/") for element in jockey_elements]
+            df["trainer_id"] = [self.__get_id(element, "trainer/(.*?)/") for element in trainer_elements]
+            df["owner_id"] = [self.__get_id(element, "owner/(.*?)/") for element in owner_elements]
+            df = df.astype(str)
+            return df
+        else:
+            return pd.DataFrame()
 
     def get_course_info(self):
         course_elements = self.soup.select(RacePageLocators.RACE_INFO_COURSE[1])
