@@ -55,3 +55,18 @@ class ShutubaPageLocators(object):
     HORSE = (By.CSS_SELECTOR, ".HorseList")
     TITLE = (By.CSS_SELECTOR, ".RaceName")
     DATE = (By.CSS_SELECTOR, "#RaceList_DateList .Active a")
+
+    RACE_FIELD_DIST = (By.CSS_SELECTOR, ".RaceData01 span:nth-of-type(1)")
+    RACE_NUM = (By.CSS_SELECTOR, ".RaceList_Item01 .RaceNum")
+    RACE_NAME = (By.CSS_SELECTOR, ".RaceList_Item02 .RaceName")
+    RACE_CLASS1 = (By.CSS_SELECTOR, ".RaceList_Item02 .RaceName .Icon_GradeType:nth-of-type(1)")
+    RACE_KAI = (By.CSS_SELECTOR, ".RaceData02 span:nth-of-type(1)")
+    RACE_PLACE = (By.CSS_SELECTOR, ".RaceData02 span:nth-of-type(2)")
+    RACE_DAY = (By.CSS_SELECTOR, ".RaceData02 span:nth-of-type(3)")
+    HORSE_TYPE_AGE = (By.CSS_SELECTOR, ".RaceData02 span:nth-of-type(4)")
+    RACE_CLASS2 = (By.CSS_SELECTOR, ".RaceData02 span:nth-of-type(5)")
+    RACE_TYPE1 = (By.CSS_SELECTOR, ".RaceData02 span:nth-of-type(6)")
+    RACE_TYPE2 = (By.CSS_SELECTOR, ".RaceData02 span:nth-of-type(7)")
+    RACE_TYPE3 = (By.CSS_SELECTOR, ".RaceData02 span:nth-of-type(8)")
+    RACE_PRIZE = (By.CSS_SELECTOR, ".RaceData02 span:nth-of-type(9)")
+    

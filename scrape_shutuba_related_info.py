@@ -8,6 +8,9 @@ import pandas as pd
 import pathlib
 import signal
 from selenium.webdriver.chrome.options import Options
+from tqdm import tqdm
+from datetime import datetime
+import re
 
 def scrape_odds_and_save(race_id, folder):
     res = scrape.scrape_odds(race_id)
@@ -43,12 +46,8 @@ def scrape_related_racehistory(race_id):
         else:
             df.to_csv(file_path, encoding="utf_8_sig")
 
-def main():
-    if len(sys.argv) < 2:
-        print("引数が足りません")
-        print("raceid")
-        sys.exit()
-    shutuba_id = sys.argv[1]
+def main(race_id):
+    shutuba_id = race_id
     print("scrape shutuba")
     shutuba_res = scrape.scrape_shutuba(shutuba_id)
     if shutuba_res["status"]:
@@ -58,9 +57,11 @@ def main():
         date = shutuba_res["date"]
         date = date.replace("/","月")
         date = date + "" if "日" in date else date + "日"
+        date = re.sub("\(.*?\)","",date)
+        date_datetime = datetime.strptime(f"{shutuba_id[0:4]}年{date}", '%Y年%m月%d日')
         shutuba_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\shutuba')
         place = utils.place_decoder(race_const.place)
-        root = f"{shutuba_path}/{race_const.year}/{race_const.year}年{date}{place}{race_const.r}R{race_const.kai}回{race_const.day}日目{title}"
+        root = f"{shutuba_path}/{race_const.year}/{race_const.year}{date_datetime.month:02}{date_datetime.day:02}/{place}{race_const.r}R{race_const.kai}回{race_const.day}日目{title}"
         if not os.path.exists(root):
             os.makedirs(root)
         sub_folder = f"{root}/related_histories"
@@ -80,32 +81,35 @@ def main():
         horse_id_list = df["horse_id"].unique()
 
         print("scrape race histories")
-        for res in scrape.scrape_racehistories(horse_id_list):
+        for horse_id in tqdm(horse_id_list):
+            res = scrape.scrape_racehistory(horse_id)
             if not res["status"]:
                 print("race_histories_error")
             else:
                 horse_id = res["horse_id"]
-                print(horse_id)
+                # print(horse_id)
                 df = res["data"]
-                race_info_list = []
+                df["日付"] = pd.to_datetime(df["日付"], format="%Y/%m/%d")
+                df = df[df["日付"] < date_datetime]
+                df = df.sort_values("日付", ascending=False)
                 #レース直前にスクレイプする場合は[0:3]つけたほうが効率よし
                 for race_id in df["race_id"].tolist()[0:4]:
-                    print(f" {race_id}")
+                    # print(f" {race_id}")
                     for r in range(1, 13):
                         race_const = const.Race(race_id)
                         related_race_id = f"{race_const.year}{race_const.place}{race_const.kai}{race_const.day}{r:02}"
-                        print(f"  {related_race_id}")
+                        # print(f"  {related_race_id}")
                         scrape_related_racehistory(related_race_id) 
-                        race_page = RacePage(f"https://db.netkeiba.com/race/{race_id}/")
-                        race_info = race_page.get_race_info()
-                        race_info_list.append(race_info)
                         time.sleep(1)
-                df_race_info = pd.DataFrame(race_info_list, dtype=str)
-                df = pd.concat([df, df_race_info], axis = 1)
                 path = f"{sub_folder}/{horse_id}.csv"
                 df.to_csv(path, encoding="utf_8_sig")
             time.sleep(1)
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal.SIG_DFL)
-    main()
+    if len(sys.argv) < 2:
+        print("引数が足りません")
+        print("raceid")
+        sys.exit()
+    shutuba_id = sys.argv[1]
+    main(shutuba_id)

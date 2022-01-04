@@ -131,9 +131,13 @@ def scrape_shutuba(race_id):
         df_horse = shutuba_page.get_horse_list()
         title = shutuba_page.get_title()
         date = shutuba_page.get_date()
+        race_info = shutuba_page.get_race_info()
+        index_list = race_info.index
+        for ind in index_list:
+            df_horse[ind] = race_info[ind]
         if len(df_horse) > 0:
             df_horse["race_id"] = str(race_id)
-            return {"race_id": race_id, "title": title["title"], "date": date["date"], "data": df, "status": True}
+            return {"race_id": race_id, "title": title["title"], "date": date["date"], "data": df_horse, "status": True}
         else:
             return {"race_id": race_id, "title": None, "date": None, "data": pd.DataFrame(), "status": False}
     finally:

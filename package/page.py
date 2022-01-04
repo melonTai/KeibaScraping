@@ -565,5 +565,35 @@ class ShutubaPage(BasePageSelenium):
             date = re.sub(r"\s", "", date_element.get_text())
             return {"date": date}
         return None
+    
+    def get_race_info(self):
+        race_field_dist_elements = self.soup.select(ShutubaPageLocators.RACE_FIELD_DIST[1])
+        race_num_elements = self.soup.select(ShutubaPageLocators.RACE_NUM[1])
+        race_name_elements = self.soup.select(ShutubaPageLocators.RACE_NAME[1])
+        race_class1_elements = self.soup.select(ShutubaPageLocators.RACE_CLASS1[1])
+        race_kai_elements = self.soup.select(ShutubaPageLocators.RACE_KAI[1])
+        race_place_elements = self.soup.select(ShutubaPageLocators.RACE_PLACE[1])
+        race_day_elements = self.soup.select(ShutubaPageLocators.RACE_DAY[1])
+        horse_type_age_elements = self.soup.select(ShutubaPageLocators.HORSE_TYPE_AGE[1])
+        race_class2_elements = self.soup.select(ShutubaPageLocators.RACE_CLASS2[1])
+        race_type1_elements = self.soup.select(ShutubaPageLocators.RACE_TYPE1[1])
+        race_type2_elements = self.soup.select(ShutubaPageLocators.RACE_TYPE2[1])
+        race_type3_elements = self.soup.select(ShutubaPageLocators.RACE_TYPE3[1])
+        race_prize_elements = self.soup.select(ShutubaPageLocators.RACE_PRIZE[1])
+        element_list = [
+                        race_field_dist_elements, race_num_elements, race_name_elements,race_kai_elements,
+                        race_place_elements, race_day_elements, horse_type_age_elements, race_class2_elements,
+                        race_type1_elements, race_type2_elements, race_type3_elements, race_prize_elements
+                        ]
+        value_list = [re.sub(r"\s", "", element[0].get_text()) if element else None for element in element_list]
+        key_list = ["フィールド_距離", "レースR", "レース名", "第何回", "開催場所", "何日目", "出場馬種類_馬齢", "クラス2", "レースタイプ1", "レースタイプ2", "レースタイプ3", "賞金"]
+        key_list.append("クラス1")
+        class1_values = (race_class1_elements[0]["class"]) if race_class1_elements else []
+        class1_values = [v for v in class1_values if v!="Icon_GradeType"]
+        class1_value = "-".join(class1_values)
+        value_list.append(class1_value)
+        df_race_info = pd.Series(value_list, index=key_list)
+
+        return df_race_info
 
     

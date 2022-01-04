@@ -15,7 +15,7 @@ class TestResultPage(unittest.TestCase):
 
     def test_get_result_list(self):
         """test get horse info list"""
-        page = RacePage("https://db.netkeiba.com/race/202048112701/")
+        page = RacePage("https://db.netkeiba.com/race/202109020712/")
         result_list = page.get_result_list()
         corse_info = page.get_course_info()
         race_info = page.get_race_info()
@@ -29,7 +29,6 @@ class TestResultPage(unittest.TestCase):
             df_race[key] = value
         for key, value in title.items():
             df_race[key] = value
-        df_race["ref_time"] = utils.get_ref_time(202101010101)
         df_race.to_csv("race.csv", encoding="utf_8_sig")
         
         return_list = page.get_return_list()

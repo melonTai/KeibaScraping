@@ -16,13 +16,15 @@ class TestShutubaPage(unittest.TestCase):
     def test_get_horse_list(self):
         """test get horse info list"""
         self.driver.implicitly_wait(20)
-        self.driver.get("https://race.netkeiba.com/race/shutuba.html?race_id=202105030603")
+        self.driver.get("https://race.netkeiba.com/race/shutuba.html?race_id=202106050911")
         page = ShutubaPage(self.driver)
         horse_list = page.get_horse_list()
         date = page.get_date()
         print(date)
         df_shutuba = pd.DataFrame(horse_list)
         df_shutuba.to_csv("shutuba.csv")
+        race_info = page.get_race_info()
+        print(race_info)
 
     def tearDown(self):
         self.driver.close()
