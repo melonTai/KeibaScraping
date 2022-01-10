@@ -1,6 +1,6 @@
 import scrape_shutuba_related_info
-from package import const, scrape
-from package.page import RaceListPage, CalenderPage
+from scrapenetkeiba import const, scrape
+from scrapenetkeiba.page import RaceListPage, CalenderPage
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import pandas as pd
@@ -12,7 +12,7 @@ import pathlib
 import signal
 from tqdm import tqdm
 import re
-from package import utils
+from scrapenetkeiba import utils
 
 def get_kaisai_race(kaisai_date):
     options = Options()

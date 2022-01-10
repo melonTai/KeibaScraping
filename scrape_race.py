@@ -1,5 +1,5 @@
-from package import const, scrape
-from package.page import RaceListPage, CalenderPage
+from scrapenetkeiba import const, scrape
+from scrapenetkeiba.page import RaceListPage, CalenderPage
 import pandas as pd
 import os
 import time

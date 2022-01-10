@@ -1,7 +1,7 @@
 import unittest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from package.page import OddsPage
+from scrapenetkeiba.page import OddsPage
 from pprint import pprint
 import pandas as pd
 import os
