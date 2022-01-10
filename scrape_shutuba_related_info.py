@@ -1,4 +1,4 @@
-from scrapenetkeiba import scrape, const, utils
+from scrapenetkeiba import models, scrape, utils
 from scrapenetkeiba.page import RacePage
 from selenium import webdriver
 import os
@@ -24,7 +24,7 @@ def scrape_related_racehistory(race_id):
     root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\race')
     if not os.path.exists(root_path):
         os.makedirs(root_path)
-    race_const = const.Race(race_id)
+    race_const = models.Race(race_id)
     # フォルダ作成
     folder = f"{root_path}/{race_const.place}"
     if not os.path.exists(folder):
@@ -53,7 +53,7 @@ def main(race_id):
     if shutuba_res["status"]:
         # フォルダ生成
         title = shutuba_res["title"]
-        race_const = const.Race(shutuba_id)
+        race_const = models.Race(shutuba_id)
         date = shutuba_res["date"]
         date = date.replace("/","月")
         date = date + "" if "日" in date else date + "日"
@@ -96,7 +96,7 @@ def main(race_id):
                 for race_id in df["race_id"].tolist()[0:4]:
                     # print(f" {race_id}")
                     for r in range(1, 13):
-                        race_const = const.Race(race_id)
+                        race_const = models.Race(race_id)
                         related_race_id = f"{race_const.year}{race_const.place}{race_const.kai}{race_const.day}{r:02}"
                         # print(f"  {related_race_id}")
                         scrape_related_racehistory(related_race_id) 

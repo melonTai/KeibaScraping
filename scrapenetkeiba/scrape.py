@@ -7,6 +7,14 @@ from selenium import webdriver
 
 
 def scrape_odds(race_id: str):
+    """レースIDに該当するレースの全オッズを取得する．
+
+    Args:
+        race_id (str): レースid
+
+    Returns:
+        pandas.DataFrame: オッズのデータフレーム
+    """
     options = Options()
     options.add_argument('--headless')
     options.add_argument('log-level=2')

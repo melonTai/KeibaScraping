@@ -4,6 +4,8 @@ from scrapenetkeiba.page import CalenderPage
 from pprint import pprint
 import pandas as pd
 import os
+import unittest
+import doctest
 
 class TestCalenderPage(unittest.TestCase):
     """A sample test class to show how page object works"""
