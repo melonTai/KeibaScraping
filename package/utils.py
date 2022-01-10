@@ -65,14 +65,14 @@ def place_decoder(num):
         return "その他"
 def get_ref_time(race_id):
     race_const = const.Race(race_id)
-    ref_result_list = []
+    ref_result_list = pd.DataFrame()
     for i in range(1,4):
         year = int(race_const.year) - i
         past_race_id = f"{year}{race_const.place}{race_const.kai}{race_const.day}{race_const.r}"
         race_page = RacePage(f"https://db.netkeiba.com/race/{past_race_id}/")
         result_list = race_page.get_result_list()
-        ref_result_list.extend(result_list)
-    df = pd.DataFrame(ref_result_list, dtype=str)
+        ref_result_list = ref_result_list.append(result_list)
+    df = ref_result_list
     def convert_time(x:str):
         pattern = "(\d*):(\d{2}.\d{1})"
         match = re.findall(pattern, x)

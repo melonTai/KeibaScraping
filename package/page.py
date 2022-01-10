@@ -19,6 +19,11 @@ import requests
 import time
 import re
 
+# pandas
+import pandas as pd
+
+import numpy as np
+
 # 各ページの各要素にアクセスするためのロケーター(xpathやcssセレクタ等)の定義
 from .locators import CalenderPageLocators
 from .locators import HorsePageLocators
@@ -27,6 +32,7 @@ from .locators import RaceListPageLocators
 from .locators import RacePageLocators
 from .locators import ResultPageLocators
 from .locators import ShutubaPageLocators
+
 
 class BasePageRequest(object):
     """
@@ -84,7 +90,7 @@ class CalenderPage(BasePageSelenium):
     def is_url_matches(self):
         cur_url = self.url
         return "calendar.html" in cur_url
-
+    
     def get_kaisai_date_list(self):
         kaisai_date_elements = self.soup.select(CalenderPageLocators.KAISAI_DATE[1])
         pattern = "race_list.html\?kaisai_date=(\d*)"
@@ -105,69 +111,50 @@ class HorsePage(BasePageRequest):
         cur_url = self.url
         return "horse" in cur_url
     
-    def __get_jockey_id(self, element:bs4.element):
+    def __get_id(self, element:bs4.element, pattern):
         atag_elements = element.select("a")
         if atag_elements:
             atag_element = atag_elements[0]
             url = atag_element.attrs["href"]
-            pattern = "jockey/(\d*)"
             match = re.findall(pattern, url)
             if match:
                 jockey_id = match[0]
                 return jockey_id
         return None
 
-    def __get_race_id(self, element:bs4.element):
-        atag_elements = element.select("a")
-        if atag_elements:
-            atag_element = atag_elements[0]
-            url = atag_element.attrs["href"]
-            pattern = "race/(.*?)/"
-            match = re.findall(pattern, url)
-            if match:
-                race_id = match[0]
-                return race_id
-        return None
 
     def get_race_history(self):
-        # 競争成績の見出しを取得
-        race_history_head_elements = self.soup.select(HorsePageLocators.RACE_HISTORY_HEAD[1])
-        # 見出しWeb要素を文字列に変換
-        race_history_heads = [
-            re.sub(r"\s", "", element.get_text()) for element in race_history_head_elements]
-        race_history_heads.append("race_id")
-        race_history_heads.append("jockey_id")
-        # 競争成績の行リストを取得
-        race_history_row_elements = self.soup.select(HorsePageLocators.RACE_HISTORY_ROW[1])
-        if race_history_row_elements:
-            del race_history_row_elements[0]
-        # 行リストをフォーマット
-        race_history = []
-        for element in race_history_row_elements:
-            data_elements = element.select(HorsePageLocators.RACE_HISTORY_DATA[1])
-            race_id = self.__get_race_id(data_elements[4])
-            jockey_id = self.__get_jockey_id(data_elements[12])
-            race_data = [re.sub(r"\s", "", element.get_text()) for element in data_elements]
-            race_data.append(race_id)
-            race_data.append(jockey_id)
-            race_result = dict(zip(race_history_heads, race_data))
-            race_history.append(race_result)
-        return race_history
+        try:
+            dfs = pd.read_html(str(self.soup), match="レース名")
+            if dfs:
+                df = dfs[0]
+                racename_elements = self.soup.select(HorsePageLocators.RACE_HISTORY_RACENAME[1])
+                jockeyname_elements = self.soup.select(HorsePageLocators.RACE_HISTORY_JOCKEYNAME[1])
+                df["race_id"] = list(map(lambda x:self.__get_id(x, "race/(.*?)/"), racename_elements))
+                df["jockey_id"] = list(map(lambda x:self.__get_id(x, "jockey/(.*?)/"), jockeyname_elements))
+                df = df.astype(str)
+                return df
+            else:
+                return pd.DataFrame()
+        except Exception:
+            return pd.DataFrame()
 
     def get_features(self):
         # 適正の見出しを取得
-        features_head_elements = self.soup.select(HorsePageLocators.FEATURES_HEAD[1])
+        features_key_elements = self.soup.select(HorsePageLocators.FEATURES_HEAD[1])
         # 見出しWeb要素を文字列に変換
-        features_heads = [re.sub(r"\s", "", element.get_text()) for element in features_head_elements]
+        features_key = [re.sub(r"\s", "", element.get_text()) for element in features_key_elements]
         # 適正の行リストを取得
         features_table_element = self.soup.select(HorsePageLocators.FEATURES_TABLE[1])[0]
         # 行リストをフォーマット
-        param_elements = features_table_element.select("td")
-        param_values = [self.get_left_width(element) for element in param_elements]
-        res = dict(zip(features_heads, param_values))
-        return res
+        features_value_elements = features_table_element.select("td")
+        features_value = [self.__get_left_width(element) for element in features_value_elements]
+        df = pd.DataFrame(features_value, index=features_key, columns=["value"])
+        df.index.name = "key"
+        df = df.astype(str)
+        return df
     
-    def get_left_width(self, element: bs4.element):
+    def __get_left_width(self, element: bs4.element):
         """tdの中の左の青画像の幅を取得する
 
         Args:
@@ -188,6 +175,20 @@ class HorsePage(BasePageRequest):
         text = horse_title_element.get_text()
         horse_title = re.sub(r"\s", "", text)
         return horse_title
+    
+    def get_profile(self):
+        dfs = pd.read_html(self.url, match="生年月日", index_col=0)
+        df = dfs[0]
+        df.index.name = "key"
+        df.columns = ["value"]
+        trainer_element = self.soup.select(HorsePageLocators.PROFILE_TRAINER[1])[0] 
+        df.loc["trainer_id", "value"] = self.__get_id(trainer_element, "trainer/(.*?)/")
+        owner_element = self.soup.select(HorsePageLocators.PROFILE_OWNER[1])[0]
+        df.loc["owner_id", "value"] = self.__get_id(owner_element, "owner/(.*?)/")
+        breeder_element  = self.soup.select(HorsePageLocators.PROFILE_BREEDER[1])[0]
+        df.loc["breeder_id", "value"] = self.__get_id(breeder_element, "breeder/(.*?)/")
+        df = df.astype(str)
+        return df
 
 class OddsPage(BasePageSelenium):
     """ページ例：https://race.netkeiba.com/odds/index.html?race_id=202105040211
@@ -227,7 +228,8 @@ class OddsPage(BasePageSelenium):
                 odds = re.sub(r"\s", "", td_elements[5].get_text())
                 values = [num, odds]
                 data.append(dict(zip(header, values)))
-            return data
+            df = pd.DataFrame(data, dtype=str)
+            return df
         return None
 
     def __get_combi_odds(self,type_):
@@ -288,49 +290,50 @@ class OddsPage(BasePageSelenium):
                         odds = re.sub(r"\s", "", td_elements[3].get_text())
                     values = [combi, odds]
                     data.append(dict(zip(header, values)))
-        return data
+        df = pd.DataFrame(data, dtype=str)
+        return df
 
     def get_win(self):
         """単勝
         """
-        res = self.__get_one_odds("b1",True)
-        return res
+        df = self.__get_one_odds("b1",True)
+        return df
     
     def get_place(self):
         """複勝
         """
-        res = self.__get_one_odds("b1",False)
-        return res
+        df = self.__get_one_odds("b1",False)
+        return df
 
     def get_exacta(self):
         """馬単
         """
-        res = self.__get_combi_odds("b6")
-        return res
+        df = self.__get_combi_odds("b6")
+        return df
     
     def get_quinella(self):
         """馬連
         """
-        res = self.__get_combi_odds("b4")
-        return res
+        df = self.__get_combi_odds("b4")
+        return df
     
     def get_quinella_place(self):
         """ワイド
         """
-        res = self.__get_combi_odds("b5")
-        return res
+        df = self.__get_combi_odds("b5")
+        return df
 
     def get_trifecta(self):
         """3連単
         """
-        res = self.__get_combi_odds("b8")
-        return res
+        df = self.__get_combi_odds("b8")
+        return df
     
     def get_trio(self):
         """3連複
         """
-        res = self.__get_combi_odds("b7")
-        return res
+        df = self.__get_combi_odds("b7")
+        return df
 
 class RaceListPage(BasePageSelenium):
     """ページ例：https://race.netkeiba.com/top/race_list.html?kaisai_date=20211024
@@ -359,36 +362,24 @@ class RaceListPage(BasePageSelenium):
     
 class RacePage(BasePageRequest):
     """
-    ページ例："https://race.netkeiba.com/top/race_list.html?kaisai_date=20211024"
+    ページ例："https://db.netkeiba.com/race/202048112701/"
     """
+    def __init__(self,url):
+        super().__init__(url)
+        html = str(self.soup)
+        html = html.replace("</diary_snap_cut>", "")
+        html = html.replace("<diary_snap_cut>", "")
+        self.soup = BeautifulSoup(html, 'html.parser')
+
     def is_url_matches(self):
         cur_url = self.url
         return "race/" in cur_url
 
-    def __get_horse_id(self, element: bs4.element):
-        """馬名が入ったtd要素からhorse_idを抽出する
-
-        Args:
-            element (WebElement): td要素
-        """
+    def __get_id(self, element:bs4.element, pattern):
         atag_elements = element.select("a")
         if atag_elements:
             atag_element = atag_elements[0]
             url = atag_element.attrs["href"]
-            pattern = "horse/(\d*)"
-            match = re.findall(pattern, url)
-            if match:
-                horse_id = match[0]
-                return horse_id
-
-        return None
-        
-    def __get_jockey_id(self, element:bs4.element):
-        atag_elements = element.select("a")
-        if atag_elements:
-            atag_element = atag_elements[0]
-            url = atag_element.attrs["href"]
-            pattern = "jockey/(\d*)"
             match = re.findall(pattern, url)
             if match:
                 jockey_id = match[0]
@@ -396,25 +387,24 @@ class RacePage(BasePageRequest):
         return None
 
     def get_result_list(self):
-        result_row_elements = self.soup.select(RacePageLocators.RESULT_ROW[1])
-        header_elements = self.soup.select(RacePageLocators.HEADER[1])
-
-        header = [element.get_text().replace("\n", "") for element in header_elements]
-        header.append("horse_id")
-        header.append("jockey_id")
-
-        result_list = []
-        for element in result_row_elements[1::]:
-            data_elements = element.select(RacePageLocators.RESULT_DATA[1])
-            if data_elements:
-                datas = [element.get_text().replace("\n", "") for element in data_elements]
-                horse_id = self.__get_horse_id(data_elements[3])
-                jockey_id = self.__get_jockey_id(data_elements[6])
-                datas.append(horse_id)
-                datas.append(jockey_id)
-                row = dict(zip(header, datas))
-                result_list.append(row)
-        return result_list
+        try:
+            dfs = pd.read_html(str(self.soup), match="馬名")
+        except Exception:
+            return pd.DataFrame()
+        df = dfs[0]
+        if len(df) > 0:
+            horse_elements = self.soup.select(RacePageLocators.HORSE_NAME[1])
+            jockey_elements = self.soup.select(RacePageLocators.JOCKEY_NAME[1])
+            trainer_elements = self.soup.select(RacePageLocators.TRAINER_NAME[1])
+            owner_elements = self.soup.select(RacePageLocators.OWNER_NAME[1])
+            df["horse_id"] = [self.__get_id(element, "horse/(.*?)/") for element in horse_elements]
+            df["jockey_id"] = [self.__get_id(element, "jockey/(.*?)/") for element in jockey_elements]
+            df["trainer_id"] = [self.__get_id(element, "trainer/(.*?)/") for element in trainer_elements]
+            df["owner_id"] = [self.__get_id(element, "owner/(.*?)/") for element in owner_elements]
+            df = df.astype(str)
+            return df
+        else:
+            return pd.DataFrame()
 
     def get_course_info(self):
         course_elements = self.soup.select(RacePageLocators.RACE_INFO_COURSE[1])
@@ -422,9 +412,11 @@ class RacePage(BasePageRequest):
             course_element = course_elements[0]
             header = ["field", "turn", "in_out", "dist", "weather", "condition", "start_time"]
             text = course_element.get_text().replace("\n", "")
+            # print(text)
             pattern1 = "(芝|ダ)(.{1,2})(.*?)(\d{3,4})m / 天候 : (.*?) / .*? : (.*?) / 発走 : (\d{2}:\d{2})"
             pattern2 = "(.*?)(\d{4})m / 天候 : (.*?) / (.*?) / 発走 : (\d{2}:\d{2})"
             pattern3 = "(芝|ダ)(.{1,2})(.*?)(\d{3,4})m / 天候 : (.*?) / .*? :(.*?)/"
+            pattern4 = "(芝|ダ)(.{1,2})(.*?)(\d{3,4})m / 天候 : (.*?) / .*?"
             if "障" in text:
                 match = re.findall(pattern2, text)
                 #print(match)
@@ -451,7 +443,8 @@ class RacePage(BasePageRequest):
                     data.append("")
                     info = dict(zip(header, data))
                     return info
-        return None
+                
+        return dict(zip(header, [np.nan]*len(header)))
     # 2018年4月28日 1回新潟1日目 障害4歳以上未勝利  (混)(定量)
     def get_race_info(self):
         race_info_elements = self.soup.select(RacePageLocators.RACE_INFO[1])
@@ -562,7 +555,8 @@ class ShutubaPage(BasePageSelenium):
             values.append(horse_id)
             values.append(jockey_id)
             horse_list.append(dict(zip(heads, values)))
-        return horse_list
+        df = pd.DataFrame(horse_list, dtype=str)
+        return df
 
     def get_title(self):
         title_elements = self.soup.select(ShutubaPageLocators.TITLE[1])
@@ -579,5 +573,35 @@ class ShutubaPage(BasePageSelenium):
             date = re.sub(r"\s", "", date_element.get_text())
             return {"date": date}
         return None
+    
+    def get_race_info(self):
+        race_field_dist_elements = self.soup.select(ShutubaPageLocators.RACE_FIELD_DIST[1])
+        race_num_elements = self.soup.select(ShutubaPageLocators.RACE_NUM[1])
+        race_name_elements = self.soup.select(ShutubaPageLocators.RACE_NAME[1])
+        race_class1_elements = self.soup.select(ShutubaPageLocators.RACE_CLASS1[1])
+        race_kai_elements = self.soup.select(ShutubaPageLocators.RACE_KAI[1])
+        race_place_elements = self.soup.select(ShutubaPageLocators.RACE_PLACE[1])
+        race_day_elements = self.soup.select(ShutubaPageLocators.RACE_DAY[1])
+        horse_type_age_elements = self.soup.select(ShutubaPageLocators.HORSE_TYPE_AGE[1])
+        race_class2_elements = self.soup.select(ShutubaPageLocators.RACE_CLASS2[1])
+        race_type1_elements = self.soup.select(ShutubaPageLocators.RACE_TYPE1[1])
+        race_type2_elements = self.soup.select(ShutubaPageLocators.RACE_TYPE2[1])
+        race_type3_elements = self.soup.select(ShutubaPageLocators.RACE_TYPE3[1])
+        race_prize_elements = self.soup.select(ShutubaPageLocators.RACE_PRIZE[1])
+        element_list = [
+                        race_field_dist_elements, race_num_elements, race_name_elements,race_kai_elements,
+                        race_place_elements, race_day_elements, horse_type_age_elements, race_class2_elements,
+                        race_type1_elements, race_type2_elements, race_type3_elements, race_prize_elements
+                        ]
+        value_list = [re.sub(r"\s", "", element[0].get_text()) if element else None for element in element_list]
+        key_list = ["フィールド_距離", "レースR", "レース名", "第何回", "開催場所", "何日目", "出場馬種類_馬齢", "クラス2", "レースタイプ1", "レースタイプ2", "レースタイプ3", "賞金"]
+        key_list.append("クラス1")
+        class1_values = (race_class1_elements[0]["class"]) if race_class1_elements else []
+        class1_values = [v for v in class1_values if v!="Icon_GradeType"]
+        class1_value = "-".join(class1_values)
+        value_list.append(class1_value)
+        df_race_info = pd.Series(value_list, index=key_list)
+
+        return df_race_info
 
     

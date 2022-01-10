@@ -40,7 +40,7 @@ class Race():
             raise Exception(f"invalid argument of type type:{type(id)},  id = {id}")
         
         self.id = id
-        pattern = "(\d{4})(\w{2})(\w{2})(\d{2})(\d{2})"
+        pattern = "(\d{4})(\w{2})(\w{2})(\w{2})(\d{2})"
         match = re.findall(pattern, id)
         if match:
             year, place, kai, day, r = match[0]
@@ -50,7 +50,7 @@ class Race():
             self.day = day
             self.r = r
         else:
-            raise Exception("invalid race_id")
+            raise Exception(f"invalid race_id {self.id}")
 
 if __name__ == '__main__':
     id = "202005061012"
