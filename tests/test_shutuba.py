@@ -1,6 +1,6 @@
 import unittest
 from selenium import webdriver
-from package.page import ShutubaPage
+from scrapenetkeiba.page import ShutubaPage
 from pprint import pprint
 import pandas as pd
 import os

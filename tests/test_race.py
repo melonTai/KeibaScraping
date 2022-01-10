@@ -1,8 +1,8 @@
 from typing import Counter
 import unittest
 from selenium import webdriver
-from package.page import RacePage
-from package import utils
+from scrapenetkeiba.page import RacePage
+from scrapenetkeiba import utils
 from pprint import pprint
 import pandas as pd
 import os
