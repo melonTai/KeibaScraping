@@ -1,6 +1,6 @@
 import unittest
 from selenium import webdriver
-from package.page import RaceListPage
+from scrapenetkeiba.page import RaceListPage
 from pprint import pprint
 import pandas as pd
 import os

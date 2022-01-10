@@ -1,4 +1,4 @@
-from package import const, scrape
+from scrapenetkeiba import const, scrape
 import pandas as pd
 import os
 import time

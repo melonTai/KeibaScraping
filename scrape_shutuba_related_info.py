@@ -1,5 +1,5 @@
-from package import scrape, const, utils
-from package.page import RacePage
+from scrapenetkeiba import scrape, const, utils
+from scrapenetkeiba.page import RacePage
 from selenium import webdriver
 import os
 import time
