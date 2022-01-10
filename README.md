@@ -1,1 +1,0 @@
-github pages に説明記載
