@@ -1,1 +1,2 @@
-github pages に説明記載
+# ScrapeNetKeiba
+wiki:https://melontai.github.io/ScrapeNetKeiba/

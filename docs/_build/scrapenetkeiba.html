@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scrapenetkeiba package &mdash; scrapenetkeiba v1.0.5 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to scrapenetkeiba’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> scrapenetkeiba
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">scrapenetkeiba package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scrapenetkeiba.locators">scrapenetkeiba.locators module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scrapenetkeiba.models">scrapenetkeiba.models module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scrapenetkeiba.page">scrapenetkeiba.page module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scrapenetkeiba.scrape">scrapenetkeiba.scrape module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scrapenetkeiba-utils-module">scrapenetkeiba.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-scrapenetkeiba">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scrapenetkeiba</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>scrapenetkeiba package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/scrapenetkeiba.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="scrapenetkeiba-package">
+<h1>scrapenetkeiba package<a class="headerlink" href="#scrapenetkeiba-package" title="Permalink to this headline"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-scrapenetkeiba.locators">
+<span id="scrapenetkeiba-locators-module"></span><h2>scrapenetkeiba.locators module<a class="headerlink" href="#module-scrapenetkeiba.locators" title="Permalink to this headline"></a></h2>
+<p>netkeiba.comの抽出したい要素のロケータ</p>
+<p>各ロケータには，抽出したい要素を特定するcssセレクタやXPATHを定義する．
+ロケータは各ページごとにクラスで分類する．
+例えば，CalenderPageLocatorsはpageモジュールのCalenderPageで使用される．</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.CalenderPageLocators">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.locators.</span></span><span class="sig-name descname"><span class="pre">CalenderPageLocators</span></span><a class="headerlink" href="#scrapenetkeiba.locators.CalenderPageLocators" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.CalenderPageLocators.KAISAI_DATE">
+<span class="sig-name descname"><span class="pre">KAISAI_DATE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceCellBox</span> <span class="pre">a')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.CalenderPageLocators.KAISAI_DATE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.HorsePageLocators">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.locators.</span></span><span class="sig-name descname"><span class="pre">HorsePageLocators</span></span><a class="headerlink" href="#scrapenetkeiba.locators.HorsePageLocators" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.HorsePageLocators.FEATURES_HEAD">
+<span class="sig-name descname"><span class="pre">FEATURES_HEAD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.tekisei_table</span> <span class="pre">th')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.HorsePageLocators.FEATURES_HEAD" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.HorsePageLocators.FEATURES_TABLE">
+<span class="sig-name descname"><span class="pre">FEATURES_TABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.tekisei_table')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.HorsePageLocators.FEATURES_TABLE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.HorsePageLocators.HORSE_TITLE">
+<span class="sig-name descname"><span class="pre">HORSE_TITLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.horse_title</span> <span class="pre">h1')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.HorsePageLocators.HORSE_TITLE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.HorsePageLocators.PROFILE_BREEDER">
+<span class="sig-name descname"><span class="pre">PROFILE_BREEDER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.db_prof_table</span> <span class="pre">tr:nth-child(4)</span> <span class="pre">td')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.HorsePageLocators.PROFILE_BREEDER" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.HorsePageLocators.PROFILE_OWNER">
+<span class="sig-name descname"><span class="pre">PROFILE_OWNER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.db_prof_table</span> <span class="pre">tr:nth-child(3)</span> <span class="pre">td')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.HorsePageLocators.PROFILE_OWNER" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.HorsePageLocators.PROFILE_TRAINER">
+<span class="sig-name descname"><span class="pre">PROFILE_TRAINER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.db_prof_table</span> <span class="pre">tr:nth-child(2)</span> <span class="pre">td')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.HorsePageLocators.PROFILE_TRAINER" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.HorsePageLocators.RACE_HISTORY_DATA">
+<span class="sig-name descname"><span class="pre">RACE_HISTORY_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'td')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.HorsePageLocators.RACE_HISTORY_DATA" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.HorsePageLocators.RACE_HISTORY_HEAD">
+<span class="sig-name descname"><span class="pre">RACE_HISTORY_HEAD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.db_main_race</span> <span class="pre">th')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.HorsePageLocators.RACE_HISTORY_HEAD" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.HorsePageLocators.RACE_HISTORY_JOCKEYNAME">
+<span class="sig-name descname"><span class="pre">RACE_HISTORY_JOCKEYNAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.db_main_race</span> <span class="pre">tr</span> <span class="pre">td:nth-child(13)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.HorsePageLocators.RACE_HISTORY_JOCKEYNAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.HorsePageLocators.RACE_HISTORY_RACENAME">
+<span class="sig-name descname"><span class="pre">RACE_HISTORY_RACENAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.db_main_race</span> <span class="pre">tr</span> <span class="pre">td:nth-child(5)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.HorsePageLocators.RACE_HISTORY_RACENAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.HorsePageLocators.RACE_HISTORY_ROW">
+<span class="sig-name descname"><span class="pre">RACE_HISTORY_ROW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.db_main_race</span> <span class="pre">tr')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.HorsePageLocators.RACE_HISTORY_ROW" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.OddsPageLocators">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.locators.</span></span><span class="sig-name descname"><span class="pre">OddsPageLocators</span></span><a class="headerlink" href="#scrapenetkeiba.locators.OddsPageLocators" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.OddsPageLocators.NINKI_SELECT">
+<span class="sig-name descname"><span class="pre">NINKI_SELECT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'select#ninki_select')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.OddsPageLocators.NINKI_SELECT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.OddsPageLocators.NINKI_SELECT_OPTION">
+<span class="sig-name descname"><span class="pre">NINKI_SELECT_OPTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'select#ninki_select</span> <span class="pre">option')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.OddsPageLocators.NINKI_SELECT_OPTION" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.OddsPageLocators.NINKI_TABLE">
+<span class="sig-name descname"><span class="pre">NINKI_TABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceOdds_HorseList_Table.Ninki')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.OddsPageLocators.NINKI_TABLE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.OddsPageLocators.PLACE">
+<span class="sig-name descname"><span class="pre">PLACE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'#odds_fuku_block')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.OddsPageLocators.PLACE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.OddsPageLocators.WIN">
+<span class="sig-name descname"><span class="pre">WIN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'#odds_tan_block')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.OddsPageLocators.WIN" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RaceListPageLocators">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.locators.</span></span><span class="sig-name descname"><span class="pre">RaceListPageLocators</span></span><a class="headerlink" href="#scrapenetkeiba.locators.RaceListPageLocators" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RaceListPageLocators.RACE_ID">
+<span class="sig-name descname"><span class="pre">RACE_ID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceList_DataItem</span> <span class="pre">a')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.RaceListPageLocators.RACE_ID" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RacePageLocators">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.locators.</span></span><span class="sig-name descname"><span class="pre">RacePageLocators</span></span><a class="headerlink" href="#scrapenetkeiba.locators.RacePageLocators" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RacePageLocators.HEADER">
+<span class="sig-name descname"><span class="pre">HEADER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.race_table_01</span> <span class="pre">th')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.RacePageLocators.HEADER" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RacePageLocators.HORSE_NAME">
+<span class="sig-name descname"><span class="pre">HORSE_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.race_table_01</span> <span class="pre">tr</span> <span class="pre">td:nth-of-type(4)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.RacePageLocators.HORSE_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RacePageLocators.JOCKEY_NAME">
+<span class="sig-name descname"><span class="pre">JOCKEY_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.race_table_01</span> <span class="pre">tr</span> <span class="pre">td:nth-of-type(7)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.RacePageLocators.JOCKEY_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RacePageLocators.OWNER_NAME">
+<span class="sig-name descname"><span class="pre">OWNER_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.race_table_01</span> <span class="pre">tr</span> <span class="pre">td:nth-of-type(20)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.RacePageLocators.OWNER_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RacePageLocators.PRIZE_NAME">
+<span class="sig-name descname"><span class="pre">PRIZE_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.race_table_01</span> <span class="pre">tr</span> <span class="pre">td:nth-of-type(21)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.RacePageLocators.PRIZE_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RacePageLocators.RACE_INFO">
+<span class="sig-name descname"><span class="pre">RACE_INFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.data_intro</span> <span class="pre">&gt;</span> <span class="pre">p')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.RacePageLocators.RACE_INFO" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RacePageLocators.RACE_INFO_COURSE">
+<span class="sig-name descname"><span class="pre">RACE_INFO_COURSE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.racedata</span> <span class="pre">dd</span> <span class="pre">p</span> <span class="pre">span')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.RacePageLocators.RACE_INFO_COURSE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RacePageLocators.RACE_INFO_TITLE">
+<span class="sig-name descname"><span class="pre">RACE_INFO_TITLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.racedata</span> <span class="pre">dd</span> <span class="pre">h1')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.RacePageLocators.RACE_INFO_TITLE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RacePageLocators.RESULT_DATA">
+<span class="sig-name descname"><span class="pre">RESULT_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'td')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.RacePageLocators.RESULT_DATA" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RacePageLocators.RESULT_ROW">
+<span class="sig-name descname"><span class="pre">RESULT_ROW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.race_table_01</span> <span class="pre">tr')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.RacePageLocators.RESULT_ROW" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RacePageLocators.RETURN_ROW">
+<span class="sig-name descname"><span class="pre">RETURN_ROW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.pay_table_01</span> <span class="pre">tr')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.RacePageLocators.RETURN_ROW" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RacePageLocators.RETURN_ROW_HEAD">
+<span class="sig-name descname"><span class="pre">RETURN_ROW_HEAD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'th')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.RacePageLocators.RETURN_ROW_HEAD" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RacePageLocators.RETURN_ROW_VALUE">
+<span class="sig-name descname"><span class="pre">RETURN_ROW_VALUE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'td')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.RacePageLocators.RETURN_ROW_VALUE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.RacePageLocators.TRAINER_NAME">
+<span class="sig-name descname"><span class="pre">TRAINER_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.race_table_01</span> <span class="pre">tr</span> <span class="pre">td:nth-of-type(19)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.RacePageLocators.TRAINER_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ResultPageLocators">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.locators.</span></span><span class="sig-name descname"><span class="pre">ResultPageLocators</span></span><a class="headerlink" href="#scrapenetkeiba.locators.ResultPageLocators" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ResultPageLocators.RACE_ID">
+<span class="sig-name descname"><span class="pre">RACE_ID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceList_DataItem</span> <span class="pre">a')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ResultPageLocators.RACE_ID" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.locators.</span></span><span class="sig-name descname"><span class="pre">ShutubaPageLocators</span></span><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.DATE">
+<span class="sig-name descname"><span class="pre">DATE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'#RaceList_DateList</span> <span class="pre">.Active</span> <span class="pre">a')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.DATE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.HEADS">
+<span class="sig-name descname"><span class="pre">HEADS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.Header</span> <span class="pre">th')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.HEADS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.HORSE">
+<span class="sig-name descname"><span class="pre">HORSE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.HorseList')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.HORSE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.HORSE_TYPE_AGE">
+<span class="sig-name descname"><span class="pre">HORSE_TYPE_AGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceData02</span> <span class="pre">span:nth-of-type(4)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.HORSE_TYPE_AGE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.RACE_CLASS1">
+<span class="sig-name descname"><span class="pre">RACE_CLASS1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceList_Item02</span> <span class="pre">.RaceName</span> <span class="pre">.Icon_GradeType:nth-of-type(1)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.RACE_CLASS1" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.RACE_CLASS2">
+<span class="sig-name descname"><span class="pre">RACE_CLASS2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceData02</span> <span class="pre">span:nth-of-type(5)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.RACE_CLASS2" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.RACE_DAY">
+<span class="sig-name descname"><span class="pre">RACE_DAY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceData02</span> <span class="pre">span:nth-of-type(3)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.RACE_DAY" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.RACE_FIELD_DIST">
+<span class="sig-name descname"><span class="pre">RACE_FIELD_DIST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceData01</span> <span class="pre">span:nth-of-type(1)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.RACE_FIELD_DIST" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.RACE_KAI">
+<span class="sig-name descname"><span class="pre">RACE_KAI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceData02</span> <span class="pre">span:nth-of-type(1)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.RACE_KAI" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.RACE_NAME">
+<span class="sig-name descname"><span class="pre">RACE_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceList_Item02</span> <span class="pre">.RaceName')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.RACE_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.RACE_NUM">
+<span class="sig-name descname"><span class="pre">RACE_NUM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceList_Item01</span> <span class="pre">.RaceNum')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.RACE_NUM" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.RACE_PLACE">
+<span class="sig-name descname"><span class="pre">RACE_PLACE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceData02</span> <span class="pre">span:nth-of-type(2)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.RACE_PLACE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.RACE_PRIZE">
+<span class="sig-name descname"><span class="pre">RACE_PRIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceData02</span> <span class="pre">span:nth-of-type(9)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.RACE_PRIZE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.RACE_TYPE1">
+<span class="sig-name descname"><span class="pre">RACE_TYPE1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceData02</span> <span class="pre">span:nth-of-type(6)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.RACE_TYPE1" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.RACE_TYPE2">
+<span class="sig-name descname"><span class="pre">RACE_TYPE2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceData02</span> <span class="pre">span:nth-of-type(7)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.RACE_TYPE2" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.RACE_TYPE3">
+<span class="sig-name descname"><span class="pre">RACE_TYPE3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceData02</span> <span class="pre">span:nth-of-type(8)')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.RACE_TYPE3" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.locators.ShutubaPageLocators.TITLE">
+<span class="sig-name descname"><span class="pre">TITLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('css</span> <span class="pre">selector',</span> <span class="pre">'.RaceName')</span></em><a class="headerlink" href="#scrapenetkeiba.locators.ShutubaPageLocators.TITLE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-scrapenetkeiba.models">
+<span id="scrapenetkeiba-models-module"></span><h2>scrapenetkeiba.models module<a class="headerlink" href="#module-scrapenetkeiba.models" title="Permalink to this headline"></a></h2>
+<p>データ構造系を定義する．</p>
+<p>レース場IDやレースのデータ構造が定義される．</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.models.</span></span><span class="sig-name descname"><span class="pre">PlaceChiho</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>地方競馬レース場のid</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>Enum</strong> (<em>int</em>) – Enum</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho.FUNABASHI">
+<span class="sig-name descname"><span class="pre">FUNABASHI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">43</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho.FUNABASHI" title="Permalink to this definition"></a></dt>
+<dd><p>船橋レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho.HIMEJI">
+<span class="sig-name descname"><span class="pre">HIMEJI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">53</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho.HIMEJI" title="Permalink to this definition"></a></dt>
+<dd><p>姫路レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho.KANAZAWA">
+<span class="sig-name descname"><span class="pre">KANAZAWA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">49</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho.KANAZAWA" title="Permalink to this definition"></a></dt>
+<dd><p>金沢レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho.KASAMATSU">
+<span class="sig-name descname"><span class="pre">KASAMATSU</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">50</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho.KASAMATSU" title="Permalink to this definition"></a></dt>
+<dd><p>笠松レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho.KAWASAKI">
+<span class="sig-name descname"><span class="pre">KAWASAKI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">45</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho.KAWASAKI" title="Permalink to this definition"></a></dt>
+<dd><p>川崎レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho.KOUCHI">
+<span class="sig-name descname"><span class="pre">KOUCHI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">54</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho.KOUCHI" title="Permalink to this definition"></a></dt>
+<dd><p>高知レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho.MIZUZAWA">
+<span class="sig-name descname"><span class="pre">MIZUZAWA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">48</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho.MIZUZAWA" title="Permalink to this definition"></a></dt>
+<dd><p>水川レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho.MONBETSU">
+<span class="sig-name descname"><span class="pre">MONBETSU</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">46</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho.MONBETSU" title="Permalink to this definition"></a></dt>
+<dd><p>門別レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho.MORIOKA">
+<span class="sig-name descname"><span class="pre">MORIOKA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">47</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho.MORIOKA" title="Permalink to this definition"></a></dt>
+<dd><p>盛岡レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho.NAGOYA">
+<span class="sig-name descname"><span class="pre">NAGOYA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">51</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho.NAGOYA" title="Permalink to this definition"></a></dt>
+<dd><p>名古屋レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho.OBIHIROBA">
+<span class="sig-name descname"><span class="pre">OBIHIROBA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">56</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho.OBIHIROBA" title="Permalink to this definition"></a></dt>
+<dd><p>帯広(ば)レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho.OI">
+<span class="sig-name descname"><span class="pre">OI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">44</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho.OI" title="Permalink to this definition"></a></dt>
+<dd><p>大井レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho.SAGA">
+<span class="sig-name descname"><span class="pre">SAGA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">55</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho.SAGA" title="Permalink to this definition"></a></dt>
+<dd><p>佐賀レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho.SONODA">
+<span class="sig-name descname"><span class="pre">SONODA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">52</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho.SONODA" title="Permalink to this definition"></a></dt>
+<dd><p>園田レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChiho.URAWA">
+<span class="sig-name descname"><span class="pre">URAWA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">42</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChiho.URAWA" title="Permalink to this definition"></a></dt>
+<dd><p>浦和レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChuo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.models.</span></span><span class="sig-name descname"><span class="pre">PlaceChuo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.models.PlaceChuo" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>中央競馬レース場のid</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>Enum</strong> (<em>int</em>) – Enum</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChuo.Fukushima">
+<span class="sig-name descname"><span class="pre">Fukushima</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChuo.Fukushima" title="Permalink to this definition"></a></dt>
+<dd><p>福島レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChuo.Hakodate">
+<span class="sig-name descname"><span class="pre">Hakodate</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChuo.Hakodate" title="Permalink to this definition"></a></dt>
+<dd><p>函館レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChuo.Hanshin">
+<span class="sig-name descname"><span class="pre">Hanshin</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChuo.Hanshin" title="Permalink to this definition"></a></dt>
+<dd><p>阪神レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChuo.Kyoto">
+<span class="sig-name descname"><span class="pre">Kyoto</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChuo.Kyoto" title="Permalink to this definition"></a></dt>
+<dd><p>京都レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChuo.Nakayama">
+<span class="sig-name descname"><span class="pre">Nakayama</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChuo.Nakayama" title="Permalink to this definition"></a></dt>
+<dd><p>中山レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChuo.Nigata">
+<span class="sig-name descname"><span class="pre">Nigata</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChuo.Nigata" title="Permalink to this definition"></a></dt>
+<dd><p>新潟レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChuo.Ogura">
+<span class="sig-name descname"><span class="pre">Ogura</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChuo.Ogura" title="Permalink to this definition"></a></dt>
+<dd><p>小倉レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChuo.Sapporo">
+<span class="sig-name descname"><span class="pre">Sapporo</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChuo.Sapporo" title="Permalink to this definition"></a></dt>
+<dd><p>札幌レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChuo.Tokyo">
+<span class="sig-name descname"><span class="pre">Tokyo</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChuo.Tokyo" title="Permalink to this definition"></a></dt>
+<dd><p>東京レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.PlaceChuo.Tyukyo">
+<span class="sig-name descname"><span class="pre">Tyukyo</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#scrapenetkeiba.models.PlaceChuo.Tyukyo" title="Permalink to this definition"></a></dt>
+<dd><p>中京レース場</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.models.Race">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.models.</span></span><span class="sig-name descname"><span class="pre">Race</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.models.Race" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>レースのデータ構造</p>
+</dd></dl>
+
+</section>
+<section id="module-scrapenetkeiba.page">
+<span id="scrapenetkeiba-page-module"></span><h2>scrapenetkeiba.page module<a class="headerlink" href="#module-scrapenetkeiba.page" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.BasePageRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.page.</span></span><span class="sig-name descname"><span class="pre">BasePageRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.BasePageRequest" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>各ページクラスのベース
+特に，UI操作を必要としない(seleniumを使わない)，値を取得するだけのページのベースとして用いる</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.BasePageSelenium">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.page.</span></span><span class="sig-name descname"><span class="pre">BasePageSelenium</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">driver</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">selenium.webdriver.remote.webdriver.WebDriver</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.BasePageSelenium" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>各ページクラスのベース
+特に，UI操作を必要とする(seleniumを使う)，ページのベースとして用いる</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>object</strong> (<em>[</em><em>type</em><em>]</em>) – [description]</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.BasePageSelenium.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.BasePageSelenium.close" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.BasePageSelenium.update_url">
+<span class="sig-name descname"><span class="pre">update_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.BasePageSelenium.update_url" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.CalenderPage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.page.</span></span><span class="sig-name descname"><span class="pre">CalenderPage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">driver</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">selenium.webdriver.remote.webdriver.WebDriver</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.CalenderPage" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scrapenetkeiba.page.BasePageSelenium" title="scrapenetkeiba.page.BasePageSelenium"><code class="xref py py-class docutils literal notranslate"><span class="pre">scrapenetkeiba.page.BasePageSelenium</span></code></a></p>
+<p>ページ例：<a class="reference external" href="https://race.netkeiba.com/top/calendar.html?year=2020&amp;month=7">https://race.netkeiba.com/top/calendar.html?year=2020&amp;month=7</a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.CalenderPage.get_kaisai_date_list">
+<span class="sig-name descname"><span class="pre">get_kaisai_date_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.CalenderPage.get_kaisai_date_list" title="Permalink to this definition"></a></dt>
+<dd><p>ある年のある月において，レースが開催されている日にちを取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>取得した開催年月日のリスト</dt><dd><p>例えば，2020年7月12日に開催レースがあれば，
+リスト中に’20200712’が含まれる</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list of str</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">year</span> <span class="o">=</span> <span class="mi">2020</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">month</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--headless&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;log-level=2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">options</span><span class="o">=</span> <span class="n">options</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://race.netkeiba.com/top/calendar.html?year=</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">&amp;month=</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">CalenderPage</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_kaisai_date_list</span><span class="p">()</span>
+<span class="go">[&#39;20200704&#39;, &#39;20200705&#39;, &#39;20200711&#39;, &#39;20200712&#39;, &#39;20200718&#39;, &#39;20200719&#39;, &#39;20200725&#39;, &#39;20200726&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.CalenderPage.is_url_matches">
+<span class="sig-name descname"><span class="pre">is_url_matches</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.CalenderPage.is_url_matches" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.HorsePage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.page.</span></span><span class="sig-name descname"><span class="pre">HorsePage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.HorsePage" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scrapenetkeiba.page.BasePageRequest" title="scrapenetkeiba.page.BasePageRequest"><code class="xref py py-class docutils literal notranslate"><span class="pre">scrapenetkeiba.page.BasePageRequest</span></code></a></p>
+<p>ページ例：<a class="reference external" href="https://db.netkeiba.com/horse/2019105283/">https://db.netkeiba.com/horse/2019105283/</a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.HorsePage.get_features">
+<span class="sig-name descname"><span class="pre">get_features</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.HorsePage.get_features" title="Permalink to this definition"></a></dt>
+<dd><p>馬の適正レビューの左側のバーの長さを取得する．</p>
+<p>馬の適正レビューのコース適正，距離適性，脚質，成長，重馬場について，
+左側のバーの長さを取得する．バーが短ければ右側の適性があり，長ければ，左側の適性がある．
+例えば，コース適正の場合，バーが短ければ，ダート適正，長ければ芝適正となる．
+<strong>バーの長さは最大116，最小26</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>各適正レビューのデータフレーム</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://db.netkeiba.com/horse/2019105283/&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">HorsePage</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">get_features</span><span class="p">()</span>
+<span class="go">      value</span>
+<span class="go">key</span>
+<span class="go">コース適性   106</span>
+<span class="go">距離適性     58</span>
+<span class="go">脚質       58</span>
+<span class="go">成長       11</span>
+<span class="go">重馬場     104</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.HorsePage.get_horse_title">
+<span class="sig-name descname"><span class="pre">get_horse_title</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.HorsePage.get_horse_title" title="Permalink to this definition"></a></dt>
+<dd><p>馬名を取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>馬名</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://db.netkeiba.com/horse/2019105283/&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">HorsePage</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">get_horse_title</span><span class="p">()</span>
+<span class="go">&#39;ドウデュース&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.HorsePage.get_profile">
+<span class="sig-name descname"><span class="pre">get_profile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.HorsePage.get_profile" title="Permalink to this definition"></a></dt>
+<dd><p>馬のプロフィールを取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>プロフィールのデータフレーム</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://db.netkeiba.com/horse/2019105283/&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">HorsePage</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">get_profile</span><span class="p">()</span>
+<span class="go">                        value</span>
+<span class="go">key</span>
+<span class="go">生年月日                  2019年5月7日</span>
+<span class="go">調教師                   友道康夫 (栗東)</span>
+<span class="go">馬主                       キーファーズ</span>
+<span class="go">生産者                    ノーザンファーム</span>
+<span class="go">産地                          安平町</span>
+<span class="go">セリ取引価格                        -</span>
+<span class="go">獲得賞金               9,527万円 (中央)</span>
+<span class="go">通算成績             3戦3勝 [3-0-0-0]</span>
+<span class="go">主な勝鞍        21&#39;朝日杯フューチュリティS(G1)</span>
+<span class="go">近親馬              フラーレン、ロンズデーライト</span>
+<span class="go">trainer_id                01061</span>
+<span class="go">owner_id                 002803</span>
+<span class="go">breeder_id               373126</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.HorsePage.get_race_history">
+<span class="sig-name descname"><span class="pre">get_race_history</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.HorsePage.get_race_history" title="Permalink to this definition"></a></dt>
+<dd><p>馬の過去戦績を取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>馬の過去戦績のデータフレーム</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://db.netkeiba.com/horse/2019105283/&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">HorsePage</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">get_race_history</span><span class="p">()</span>
+<span class="go">           日付    開催 天気   R            レース名   映像  頭数 枠番  馬番  オッズ 人気 着順  騎手  斤量     距離 馬場 馬場指数     タイム    着差 ﾀｲﾑ指数       通過        ペース    上り       馬体重 厩舎ｺﾒﾝﾄ   備考   勝ち馬(2着馬)      賞金       race_id jockey_id</span>
+<span class="go">0  2021/12/19  6阪神6  晴  11  朝日フューチュリティ(G1)  nan  15  5   9  7.8  3  1  武豊  55  芝1600  良   **  1:33.5  -0.1    **      8-7  34.3-35.2  34.5  496(-10)    nan  nan    (セリフォス)  7110.6  202109060611     00666</span>
+<span class="go">1  2021/10/23  4東京5  晴   9        アイビーS(L)  nan   8  4   4  3.8  2  1  武豊  55  芝1800  良   **  1:49.3   0.0    **    2-4-3  35.9-34.5  34.0  506(+12)    nan  nan   (グランシエロ)  1716.8  202105040509     00666</span>
+<span class="go">2  2021/09/05  4小倉8  曇   5            2歳新馬  nan  13  8  13  1.7  1  1  武豊  54  芝1800  良   **  1:50.2  -0.1    **  6-4-3-2  38.7-34.3  34.1    494(0)    nan  nan  (ガイアフォース)   700.0  202110040805     00666</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.HorsePage.is_url_matches">
+<span class="sig-name descname"><span class="pre">is_url_matches</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.HorsePage.is_url_matches" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.OddsPage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.page.</span></span><span class="sig-name descname"><span class="pre">OddsPage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">driver</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">selenium.webdriver.remote.webdriver.WebDriver</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.OddsPage" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scrapenetkeiba.page.BasePageSelenium" title="scrapenetkeiba.page.BasePageSelenium"><code class="xref py py-class docutils literal notranslate"><span class="pre">scrapenetkeiba.page.BasePageSelenium</span></code></a></p>
+<p>ページ例：<a class="reference external" href="https://race.netkeiba.com/odds/index.html?race_id=202105040211">https://race.netkeiba.com/odds/index.html?race_id=202105040211</a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.OddsPage.change_url">
+<span class="sig-name descname"><span class="pre">change_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.OddsPage.change_url" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.OddsPage.get_exacta">
+<span class="sig-name descname"><span class="pre">get_exacta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.OddsPage.get_exacta" title="Permalink to this definition"></a></dt>
+<dd><p>馬単オッズを取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>馬単オッズのデータフレーム</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--headless&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;log-level=2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">options</span><span class="o">=</span> <span class="n">options</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://race.netkeiba.com/odds/index.html?race_id=202105040211&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">OddsPage</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_exacta</span><span class="p">()</span>
+<span class="go">    組み合わせ    オッズ</span>
+<span class="go">0      1-7    6.7</span>
+<span class="go">1      7-1    6.7</span>
+<span class="go">2      1-5   13.9</span>
+<span class="go">3     1-12   14.6</span>
+<span class="go">4     7-12   17.7</span>
+<span class="go">..     ...    ...</span>
+<span class="go">195    4-5  727.7</span>
+<span class="go">196  11-10  738.2</span>
+<span class="go">197   13-2  754.4</span>
+<span class="go">198   8-13  814.8</span>
+<span class="go">199   4-12  828.5</span>
+
+<span class="go">[200 rows x 2 columns]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.OddsPage.get_place">
+<span class="sig-name descname"><span class="pre">get_place</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.OddsPage.get_place" title="Permalink to this definition"></a></dt>
+<dd><p>複勝オッズを取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>複勝オッズのデータフレーム</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--headless&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;log-level=2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">options</span><span class="o">=</span> <span class="n">options</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://race.netkeiba.com/odds/index.html?race_id=202105040211&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">OddsPage</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_place</span><span class="p">()</span>
+<span class="go">    馬番       オッズ</span>
+<span class="go">0    1   1.2-1.5</span>
+<span class="go">1    2   4.2-7.4</span>
+<span class="go">2    3   5.1-9.1</span>
+<span class="go">3    4  9.3-16.7</span>
+<span class="go">4    5   1.8-2.9</span>
+<span class="go">5    6   3.7-6.5</span>
+<span class="go">6    7   1.2-1.5</span>
+<span class="go">7    8   4.3-7.6</span>
+<span class="go">8    9   4.2-7.4</span>
+<span class="go">9   10   2.7-4.6</span>
+<span class="go">10  11  6.1-10.9</span>
+<span class="go">11  12   1.9-3.0</span>
+<span class="go">12  13  5.9-10.6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.OddsPage.get_quinella">
+<span class="sig-name descname"><span class="pre">get_quinella</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.OddsPage.get_quinella" title="Permalink to this definition"></a></dt>
+<dd><p>馬連オッズを取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>馬連オッズのデータフレーム</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--headless&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;log-level=2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">options</span><span class="o">=</span> <span class="n">options</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://race.netkeiba.com/odds/index.html?race_id=202105040211&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">OddsPage</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_quinella</span><span class="p">()</span>
+<span class="go">組み合わせ    オッズ</span>
+<span class="go">0    1-7    3.5</span>
+<span class="go">1   1-12    9.9</span>
+<span class="go">2    1-5    9.9</span>
+<span class="go">3   7-12   12.7</span>
+<span class="go">4    5-7   13.0</span>
+<span class="go">..   ...    ...</span>
+<span class="go">73  3-11  811.1</span>
+<span class="go">74  4-13  890.4</span>
+<span class="go">75   4-9  900.8</span>
+<span class="go">76   3-4  932.5</span>
+<span class="go">77   4-6  976.6</span>
+
+<span class="go">[78 rows x 2 columns]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.OddsPage.get_quinella_place">
+<span class="sig-name descname"><span class="pre">get_quinella_place</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.OddsPage.get_quinella_place" title="Permalink to this definition"></a></dt>
+<dd><p>ワイドオッズを取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>ワイドオッズのデータフレーム</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--headless&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;log-level=2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">options</span><span class="o">=</span> <span class="n">options</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://race.netkeiba.com/odds/index.html?race_id=202105040211&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">OddsPage</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_quinella_place</span><span class="p">()</span>
+<span class="go">組み合わせ          オッズ</span>
+<span class="go">0    1-7      1.8-2.0</span>
+<span class="go">1    1-5      3.4-4.2</span>
+<span class="go">2   1-12      3.9-4.8</span>
+<span class="go">3    5-7      4.0-5.1</span>
+<span class="go">4   7-12      4.5-5.7</span>
+<span class="go">..   ...          ...</span>
+<span class="go">73   4-8  146.8-150.4</span>
+<span class="go">74  4-13  171.4-175.5</span>
+<span class="go">75   4-6  172.3-177.1</span>
+<span class="go">76   3-4  179.3-183.1</span>
+<span class="go">77   4-9  188.0-192.1</span>
+
+<span class="go">[78 rows x 2 columns]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.OddsPage.get_trifecta">
+<span class="sig-name descname"><span class="pre">get_trifecta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.OddsPage.get_trifecta" title="Permalink to this definition"></a></dt>
+<dd><p>三連単オッズを取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>三連単オズのデータフレーム</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--headless&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;log-level=2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">options</span><span class="o">=</span> <span class="n">options</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://race.netkeiba.com/odds/index.html?race_id=202105040211&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">OddsPage</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_trifecta</span><span class="p">()</span>
+<span class="go">    組み合わせ      オッズ</span>
+<span class="go">0     1-7-12     27.7</span>
+<span class="go">1      1-7-5     28.2</span>
+<span class="go">2      7-1-5     29.9</span>
+<span class="go">3     7-1-12     30.3</span>
+<span class="go">4      1-5-7     44.7</span>
+<span class="gp">... </span>     <span class="o">...</span>      <span class="o">...</span>
+<span class="go">1795  3-13-4  54068.5</span>
+<span class="go">1796  11-3-4  55066.7</span>
+<span class="go">1797   4-6-9  55579.7</span>
+<span class="go">1798   4-9-6  56278.8</span>
+<span class="go">1799   6-9-4  56278.8</span>
+
+<span class="go">[1800 rows x 2 columns]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.OddsPage.get_trio">
+<span class="sig-name descname"><span class="pre">get_trio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.OddsPage.get_trio" title="Permalink to this definition"></a></dt>
+<dd><p>三連複オッズを取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>三連単オッズのデータフレーム</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--headless&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;log-level=2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">options</span><span class="o">=</span> <span class="n">options</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://race.netkeiba.com/odds/index.html?race_id=202105040211&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">OddsPage</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_trio</span><span class="p">()</span>
+<span class="go">    組み合わせ     オッズ</span>
+<span class="go">0      1-5-7     9.1</span>
+<span class="go">1     1-7-12     9.2</span>
+<span class="go">2     1-7-10    15.8</span>
+<span class="go">3     1-5-12    22.1</span>
+<span class="go">4      1-2-7    26.6</span>
+<span class="go">..       ...     ...</span>
+<span class="go">295  3-11-12  1544.2</span>
+<span class="go">296    4-5-8  1581.7</span>
+<span class="go">297   2-4-12  1636.0</span>
+<span class="go">298    3-4-5  1639.7</span>
+<span class="go">299   2-8-13  1710.0</span>
+
+<span class="go">[300 rows x 2 columns]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.OddsPage.get_win">
+<span class="sig-name descname"><span class="pre">get_win</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.OddsPage.get_win" title="Permalink to this definition"></a></dt>
+<dd><p>単勝オッズを取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>単勝オッズのデータフレーム</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--headless&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;log-level=2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">options</span><span class="o">=</span> <span class="n">options</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https://race.netkeiba.com/odds/index.html?race_id=202105040211&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">OddsPage</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_win</span><span class="p">()</span>
+<span class="go">    馬番   オッズ</span>
+<span class="go">0    1   2.6</span>
+<span class="go">1    2  35.9</span>
+<span class="go">2    3  40.0</span>
+<span class="go">3    4  61.5</span>
+<span class="go">4    5   8.7</span>
+<span class="go">5    6  39.4</span>
+<span class="go">6    7   2.7</span>
+<span class="go">7    8  33.7</span>
+<span class="go">8    9  32.6</span>
+<span class="go">9   10  16.6</span>
+<span class="go">10  11  45.0</span>
+<span class="go">11  12   7.8</span>
+<span class="go">12  13  27.7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.OddsPage.is_url_matches">
+<span class="sig-name descname"><span class="pre">is_url_matches</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.OddsPage.is_url_matches" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.OddsPage.update_soup">
+<span class="sig-name descname"><span class="pre">update_soup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.OddsPage.update_soup" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.RaceListPage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.page.</span></span><span class="sig-name descname"><span class="pre">RaceListPage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">driver</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">selenium.webdriver.remote.webdriver.WebDriver</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.RaceListPage" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scrapenetkeiba.page.BasePageSelenium" title="scrapenetkeiba.page.BasePageSelenium"><code class="xref py py-class docutils literal notranslate"><span class="pre">scrapenetkeiba.page.BasePageSelenium</span></code></a></p>
+<p>ページ例：<a class="reference external" href="https://race.netkeiba.com/top/race_list.html?kaisai_date=20211024">https://race.netkeiba.com/top/race_list.html?kaisai_date=20211024</a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.RaceListPage.get_race_id">
+<span class="sig-name descname"><span class="pre">get_race_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.RaceListPage.get_race_id" title="Permalink to this definition"></a></dt>
+<dd><p>ある年月日に開催されている全レースのレースidを取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>レースidリスト</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list of str</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--headless&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;log-level=2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">options</span><span class="o">=</span> <span class="n">options</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">year</span><span class="o">=</span><span class="mi">2021</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">month</span><span class="o">=</span><span class="mi">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">day</span><span class="o">=</span><span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">kaisai_date</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">year</span><span class="si">:</span><span class="s2">04</span><span class="si">}{</span><span class="n">month</span><span class="si">:</span><span class="s2">02</span><span class="si">}{</span><span class="n">day</span><span class="si">:</span><span class="s2">02</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://race.netkeiba.com/top/race_list.html?kaisai_date=</span><span class="si">{</span><span class="n">kaisai_date</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">=</span><span class="n">RaceListPage</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_race_id</span><span class="p">()</span>
+<span class="go">[&#39;202106040901&#39;, &#39;202106040902&#39;, &#39;202106040903&#39;, &#39;202106040904&#39;, &#39;202106040905&#39;, &#39;202106040906&#39;, &#39;202106040907&#39;, &#39;202106040908&#39;, &#39;202106040909&#39;, &#39;202106040910&#39;, &#39;202106040911&#39;, &#39;202106040912&#39;, &#39;202107050901&#39;, &#39;202107050902&#39;, &#39;202107050903&#39;, &#39;202107050904&#39;, &#39;202107050905&#39;, &#39;202107050906&#39;, &#39;202107050907&#39;, &#39;202107050908&#39;, &#39;202107050909&#39;, &#39;202107050910&#39;, &#39;202107050911&#39;, &#39;202107050912&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.RaceListPage.is_url_matches">
+<span class="sig-name descname"><span class="pre">is_url_matches</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.RaceListPage.is_url_matches" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.RacePage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.page.</span></span><span class="sig-name descname"><span class="pre">RacePage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.RacePage" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scrapenetkeiba.page.BasePageRequest" title="scrapenetkeiba.page.BasePageRequest"><code class="xref py py-class docutils literal notranslate"><span class="pre">scrapenetkeiba.page.BasePageRequest</span></code></a></p>
+<p>ページ例：”<a class="reference external" href="https://db.netkeiba.com/race/202048112701/">https://db.netkeiba.com/race/202048112701/</a>”</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.RacePage.get_course_info">
+<span class="sig-name descname"><span class="pre">get_course_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.RacePage.get_course_info" title="Permalink to this definition"></a></dt>
+<dd><p>レースのコース情報を取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>レースのコース情報</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict of str</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">RacePage</span><span class="p">(</span><span class="s2">&quot;https://db.netkeiba.com/race/202048112701/&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_course_info</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.RacePage.get_race_info">
+<span class="sig-name descname"><span class="pre">get_race_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.RacePage.get_race_info" title="Permalink to this definition"></a></dt>
+<dd><p>レース情報を取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>レース情報の辞書</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict of str</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">RacePage</span><span class="p">(</span><span class="s2">&quot;https://db.netkeiba.com/race/202048112701/&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_race_info</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.RacePage.get_result_list">
+<span class="sig-name descname"><span class="pre">get_result_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.RacePage.get_result_list" title="Permalink to this definition"></a></dt>
+<dd><p>過去のレース結果を取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[description]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">RacePage</span><span class="p">(</span><span class="s2">&quot;https://db.netkeiba.com/race/202048112701/&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_result_list</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.RacePage.get_return_list">
+<span class="sig-name descname"><span class="pre">get_return_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.RacePage.get_return_list" title="Permalink to this definition"></a></dt>
+<dd><p>払い戻しを取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>払い戻しの辞書リスト</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list of dict</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">RacePage</span><span class="p">(</span><span class="s2">&quot;https://db.netkeiba.com/race/202048112701/&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_return_list</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.RacePage.get_title">
+<span class="sig-name descname"><span class="pre">get_title</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.RacePage.get_title" title="Permalink to this definition"></a></dt>
+<dd><p>レース名を取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>レース名</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict of str</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">RacePage</span><span class="p">(</span><span class="s2">&quot;https://db.netkeiba.com/race/202048112701/&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_title</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.RacePage.is_url_matches">
+<span class="sig-name descname"><span class="pre">is_url_matches</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.RacePage.is_url_matches" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.ShutubaPage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.page.</span></span><span class="sig-name descname"><span class="pre">ShutubaPage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">driver</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">selenium.webdriver.remote.webdriver.WebDriver</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.ShutubaPage" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#scrapenetkeiba.page.BasePageSelenium" title="scrapenetkeiba.page.BasePageSelenium"><code class="xref py py-class docutils literal notranslate"><span class="pre">scrapenetkeiba.page.BasePageSelenium</span></code></a></p>
+<p>ページ例：<a class="reference external" href="https://race.netkeiba.com/race/shutuba.html?race_id=202106050911">https://race.netkeiba.com/race/shutuba.html?race_id=202106050911</a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.ShutubaPage.get_date">
+<span class="sig-name descname"><span class="pre">get_date</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.ShutubaPage.get_date" title="Permalink to this definition"></a></dt>
+<dd><p>開催日を取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>開催日</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict of str</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">ShutubaPage</span><span class="p">(</span><span class="s2">&quot;https://race.netkeiba.com/race/shutuba.html?race_id=202106050911&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_date</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.ShutubaPage.get_horse_list">
+<span class="sig-name descname"><span class="pre">get_horse_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.ShutubaPage.get_horse_list" title="Permalink to this definition"></a></dt>
+<dd><p>出馬情報を取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>出馬表のデータフレーム</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">ShutubaPage</span><span class="p">(</span><span class="s2">&quot;https://race.netkeiba.com/race/shutuba.html?race_id=202106050911&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_horse_list</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.ShutubaPage.get_race_info">
+<span class="sig-name descname"><span class="pre">get_race_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.ShutubaPage.get_race_info" title="Permalink to this definition"></a></dt>
+<dd><p>レース情報を取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>レース情報のpandas.Series</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pandas.Series</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">ShutubaPage</span><span class="p">(</span><span class="s2">&quot;https://race.netkeiba.com/race/shutuba.html?race_id=202106050911&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_race_info</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.ShutubaPage.get_title">
+<span class="sig-name descname"><span class="pre">get_title</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.ShutubaPage.get_title" title="Permalink to this definition"></a></dt>
+<dd><p>レース名を取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>レース名</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict of str</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">page</span> <span class="o">=</span> <span class="n">ShutubaPage</span><span class="p">(</span><span class="s2">&quot;https://race.netkeiba.com/race/shutuba.html?race_id=202106050911&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">page</span><span class="o">.</span><span class="n">get_title</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scrapenetkeiba.page.ShutubaPage.is_url_matches">
+<span class="sig-name descname"><span class="pre">is_url_matches</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.page.ShutubaPage.is_url_matches" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-scrapenetkeiba.scrape">
+<span id="scrapenetkeiba-scrape-module"></span><h2>scrapenetkeiba.scrape module<a class="headerlink" href="#module-scrapenetkeiba.scrape" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="scrapenetkeiba.scrape.scrape_odds">
+<span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.scrape.</span></span><span class="sig-name descname"><span class="pre">scrape_odds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">race_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.scrape.scrape_odds" title="Permalink to this definition"></a></dt>
+<dd><p>レースIDに該当するレースの全オッズを取得する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>race_id</strong> (<em>str</em>) – レースid</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>オッズのデータフレーム</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scrapenetkeiba.scrape.scrape_race">
+<span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.scrape.</span></span><span class="sig-name descname"><span class="pre">scrape_race</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">race_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.scrape.scrape_race" title="Permalink to this definition"></a></dt>
+<dd><p>race_idに該当するレースの結果を取得する関数</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>race_id</strong> (<em>str</em>) – レースのid</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>{“race_id”:str, “data”:pd.DataFrame 取得したデータ, “status”:bool 取得成功失敗}</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scrapenetkeiba.scrape.scrape_racehistories">
+<span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.scrape.</span></span><span class="sig-name descname"><span class="pre">scrape_racehistories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">horse_id_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.scrape.scrape_racehistories" title="Permalink to this definition"></a></dt>
+<dd><p>horse_id_list中のhorse_idに該当する競走馬のデータを
+スクレイピングしてDataFrame型で返すジェネレータ</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>horse_id_list</strong> (<em>[</em><em>List</em><em>(</em><em>int</em><em>)</em><em>]</em>) – horse_idのリスト</p>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><p><em>[dict]</em> – {“horse_id”:int, “data”:pd.DataFrame, “status”:bool}</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scrapenetkeiba.scrape.scrape_racehistory">
+<span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.scrape.</span></span><span class="sig-name descname"><span class="pre">scrape_racehistory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">horse_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.scrape.scrape_racehistory" title="Permalink to this definition"></a></dt>
+<dd><p>馬の戦歴を取得する関数</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>horse_id</strong> (<em>str</em>) – 馬のid</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>{“horse_id”:int 馬のid, “data”:pd.DataFrame 取得データ, “status”:bool 取得成功失敗}</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scrapenetkeiba.scrape.scrape_races">
+<span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.scrape.</span></span><span class="sig-name descname"><span class="pre">scrape_races</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">race_id_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.scrape.scrape_races" title="Permalink to this definition"></a></dt>
+<dd><p>race_id_list中のrace_idに該当する
+レース情報をスクレイピングしてpd.DataFrame型で返す</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>race_id_list</strong> (<em>list</em>) – race_idのリスト</p>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><p><em>dict</em> – {“race_id”:int, “data”:pd.DataFrame, “status”:bool}</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scrapenetkeiba.scrape.scrape_return">
+<span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.scrape.</span></span><span class="sig-name descname"><span class="pre">scrape_return</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">race_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.scrape.scrape_return" title="Permalink to this definition"></a></dt>
+<dd><p>race_idに該当するレースの配当を取得する関数</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>race_id</strong> (<em>str</em>) – レースのid</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>{“race_id”:int, “data”:pd.DataFrame 取得したデータ, “status”:bool 取得成功失敗}</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scrapenetkeiba.scrape.scrape_returns">
+<span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.scrape.</span></span><span class="sig-name descname"><span class="pre">scrape_returns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">race_id_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.scrape.scrape_returns" title="Permalink to this definition"></a></dt>
+<dd><p>race_id_list中の各race_idに該当するレースの配当を取得するジェネレータ</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>race_id_list</strong> (<em>List</em><em>[</em><em>int</em><em>]</em>) – レースidのリスト</p>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><p><em>dict</em> – {“race_id”:int, “data”:pd.DataFrame 取得したデータ, “status”:bool 取得成功失敗}</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scrapenetkeiba.scrape.scrape_shutuba">
+<span class="sig-prename descclassname"><span class="pre">scrapenetkeiba.scrape.</span></span><span class="sig-name descname"><span class="pre">scrape_shutuba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">race_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#scrapenetkeiba.scrape.scrape_shutuba" title="Permalink to this definition"></a></dt>
+<dd><p>race_idに該当するレースの出場場を取得する関数</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>race_id</strong> (<em>str</em>) – レースのid</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>{“race_id”:str, “data”:pd.DataFrame 取得したデータ, “status”:bool 取得成功失敗}</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="scrapenetkeiba-utils-module">
+<h2>scrapenetkeiba.utils module<a class="headerlink" href="#scrapenetkeiba-utils-module" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-scrapenetkeiba">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-scrapenetkeiba" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to scrapenetkeiba’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, melonTai.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

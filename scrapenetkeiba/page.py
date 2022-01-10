@@ -92,6 +92,27 @@ class CalenderPage(BasePageSelenium):
         return "calendar.html" in cur_url
     
     def get_kaisai_date_list(self):
+        """ある年のある月において，レースが開催されている日にちを取得する．
+
+        Returns:
+            list of str: 取得した開催年月日のリスト
+                例えば，2020年7月12日に開催レースがあれば，
+                リスト中に'20200712'が含まれる
+        Examples:
+            >>> year = 2020
+            >>> month = 7
+            >>> options = Options()
+            >>> options.add_argument('--headless')
+            >>> options.add_argument('log-level=2')
+            >>> driver = webdriver.Chrome(options= options)
+            >>> driver.implicitly_wait(20)
+            >>> url = f"https://race.netkeiba.com/top/calendar.html?year={year}&month={month}"
+            >>> driver.get(url)
+            >>> page = CalenderPage(driver)
+            >>> page.get_kaisai_date_list()
+            ['20200704', '20200705', '20200711', '20200712', '20200718', '20200719', '20200725', '20200726']
+            >>> driver.close()
+        """
         kaisai_date_elements = self.soup.select(CalenderPageLocators.KAISAI_DATE[1])
         pattern = "race_list.html\?kaisai_date=(\d*)"
         kaisai_dates = []
@@ -118,12 +139,25 @@ class HorsePage(BasePageRequest):
             url = atag_element.attrs["href"]
             match = re.findall(pattern, url)
             if match:
-                jockey_id = match[0]
-                return jockey_id
+                id = match[0]
+                return id
         return None
 
 
     def get_race_history(self):
+        """馬の過去戦績を取得する．
+
+        Returns:
+            pd.DataFrame: 馬の過去戦績のデータフレーム
+        
+        Examples:
+            >>> url="https://db.netkeiba.com/horse/2019105283/"
+            >>> HorsePage(url).get_race_history()
+                       日付    開催 天気   R            レース名   映像  頭数 枠番  馬番  オッズ 人気 着順  騎手  斤量     距離 馬場 馬場指数     タイム    着差 ﾀｲﾑ指数       通過        ペース    上り       馬体重 厩舎ｺﾒﾝﾄ   備考   勝ち馬(2着馬)      賞金       race_id jockey_id
+            0  2021/12/19  6阪神6  晴  11  朝日フューチュリティ(G1)  nan  15  5   9  7.8  3  1  武豊  55  芝1600  良   **  1:33.5  -0.1    **      8-7  34.3-35.2  34.5  496(-10)    nan  nan    (セリフォス)  7110.6  202109060611     00666
+            1  2021/10/23  4東京5  晴   9        アイビーS(L)  nan   8  4   4  3.8  2  1  武豊  55  芝1800  良   **  1:49.3   0.0    **    2-4-3  35.9-34.5  34.0  506(+12)    nan  nan   (グランシエロ)  1716.8  202105040509     00666
+            2  2021/09/05  4小倉8  曇   5            2歳新馬  nan  13  8  13  1.7  1  1  武豊  54  芝1800  良   **  1:50.2  -0.1    **  6-4-3-2  38.7-34.3  34.1    494(0)    nan  nan  (ガイアフォース)   700.0  202110040805     00666
+        """
         try:
             dfs = pd.read_html(str(self.soup), match="レース名")
             if dfs:
@@ -140,6 +174,28 @@ class HorsePage(BasePageRequest):
             return pd.DataFrame()
 
     def get_features(self):
+        """馬の適正レビューの左側のバーの長さを取得する．
+
+        馬の適正レビューのコース適正，距離適性，脚質，成長，重馬場について，
+        左側のバーの長さを取得する．バーが短ければ右側の適性があり，長ければ，左側の適性がある．
+        例えば，コース適正の場合，バーが短ければ，ダート適正，長ければ芝適正となる．
+        **バーの長さは最大116，最小26**
+
+        Returns:
+            pandas.DataFrame: 各適正レビューのデータフレーム
+        
+        Examples:
+            >>> url="https://db.netkeiba.com/horse/2019105283/"
+            >>> HorsePage(url).get_features()
+                  value
+            key
+            コース適性   106
+            距離適性     58
+            脚質       58
+            成長       11
+            重馬場     104
+
+        """
         # 適正の見出しを取得
         features_key_elements = self.soup.select(HorsePageLocators.FEATURES_HEAD[1])
         # 見出しWeb要素を文字列に変換
@@ -168,6 +224,16 @@ class HorsePage(BasePageRequest):
         return left_img.attrs["width"]
     
     def get_horse_title(self):
+        """馬名を取得する．
+
+        Returns:
+            str: 馬名
+        
+        Examples:
+            >>> url="https://db.netkeiba.com/horse/2019105283/"
+            >>> HorsePage(url).get_horse_title()
+            'ドウデュース'
+        """
         horse_title_elements = self.soup.select(HorsePageLocators.HORSE_TITLE[1])
         if not horse_title_elements:
             return None
@@ -177,6 +243,30 @@ class HorsePage(BasePageRequest):
         return horse_title
     
     def get_profile(self):
+        """馬のプロフィールを取得する．
+
+        Returns:
+            pandas.DataFrame: プロフィールのデータフレーム
+        
+        Examples:
+            >>> url="https://db.netkeiba.com/horse/2019105283/"
+            >>> HorsePage(url).get_profile()
+                                    value
+            key
+            生年月日                  2019年5月7日
+            調教師                   友道康夫 (栗東)
+            馬主                       キーファーズ
+            生産者                    ノーザンファーム
+            産地                          安平町
+            セリ取引価格                        -
+            獲得賞金               9,527万円 (中央)
+            通算成績             3戦3勝 [3-0-0-0]
+            主な勝鞍        21'朝日杯フューチュリティS(G1)
+            近親馬              フラーレン、ロンズデーライト
+            trainer_id                01061
+            owner_id                 002803
+            breeder_id               373126
+        """
         dfs = pd.read_html(self.url, match="生年月日", index_col=0)
         df = dfs[0]
         df.index.name = "key"
@@ -189,7 +279,7 @@ class HorsePage(BasePageRequest):
         df.loc["breeder_id", "value"] = self.__get_id(breeder_element, "breeder/(.*?)/")
         df = df.astype(str)
         return df
-
+        
 class OddsPage(BasePageSelenium):
     """ページ例：https://race.netkeiba.com/odds/index.html?race_id=202105040211
     """
@@ -294,43 +384,239 @@ class OddsPage(BasePageSelenium):
         return df
 
     def get_win(self):
-        """単勝
+        """単勝オッズを取得する．
+
+        Returns:
+            pandas.DataFrame: 単勝オッズのデータフレーム
+        
+        Examples:
+            >>> options = Options()
+            >>> options.add_argument('--headless')
+            >>> options.add_argument('log-level=2')
+            >>> driver = webdriver.Chrome(options= options)
+            >>> driver.implicitly_wait(20)
+            >>> driver.get("https://race.netkeiba.com/odds/index.html?race_id=202105040211")
+            >>> page = OddsPage(driver)
+            >>> page.get_win()
+                馬番   オッズ
+            0    1   2.6
+            1    2  35.9
+            2    3  40.0
+            3    4  61.5
+            4    5   8.7
+            5    6  39.4
+            6    7   2.7
+            7    8  33.7
+            8    9  32.6
+            9   10  16.6
+            10  11  45.0
+            11  12   7.8
+            12  13  27.7
+            >>> driver.close()
         """
         df = self.__get_one_odds("b1",True)
         return df
     
     def get_place(self):
-        """複勝
+        """複勝オッズを取得する．
+
+        Returns:
+            pandas.DataFrame: 複勝オッズのデータフレーム
+        
+        Examples:
+            >>> options = Options()
+            >>> options.add_argument('--headless')
+            >>> options.add_argument('log-level=2')
+            >>> driver = webdriver.Chrome(options= options)
+            >>> driver.implicitly_wait(20)
+            >>> driver.get("https://race.netkeiba.com/odds/index.html?race_id=202105040211")
+            >>> page = OddsPage(driver)
+            >>> page.get_place()
+                馬番       オッズ
+            0    1   1.2-1.5
+            1    2   4.2-7.4
+            2    3   5.1-9.1
+            3    4  9.3-16.7
+            4    5   1.8-2.9
+            5    6   3.7-6.5
+            6    7   1.2-1.5
+            7    8   4.3-7.6
+            8    9   4.2-7.4
+            9   10   2.7-4.6
+            10  11  6.1-10.9
+            11  12   1.9-3.0
+            12  13  5.9-10.6
+            >>> driver.close()
         """
         df = self.__get_one_odds("b1",False)
         return df
 
     def get_exacta(self):
-        """馬単
+        """馬単オッズを取得する．
+
+        Returns:
+            pandas.DataFrame: 馬単オッズのデータフレーム
+        
+        Examples:
+            >>> options = Options()
+            >>> options.add_argument('--headless')
+            >>> options.add_argument('log-level=2')
+            >>> driver = webdriver.Chrome(options= options)
+            >>> driver.implicitly_wait(20)
+            >>> driver.get("https://race.netkeiba.com/odds/index.html?race_id=202105040211")
+            >>> page = OddsPage(driver)
+            >>> page.get_exacta()
+                組み合わせ    オッズ
+            0      1-7    6.7
+            1      7-1    6.7
+            2      1-5   13.9
+            3     1-12   14.6
+            4     7-12   17.7
+            ..     ...    ...
+            195    4-5  727.7
+            196  11-10  738.2
+            197   13-2  754.4
+            198   8-13  814.8
+            199   4-12  828.5
+            <BLANKLINE>
+            [200 rows x 2 columns]
+            >>> driver.close()
         """
         df = self.__get_combi_odds("b6")
         return df
     
     def get_quinella(self):
-        """馬連
+        """馬連オッズを取得する．
+
+        Returns:
+            pandas.DataFrame: 馬連オッズのデータフレーム
+        
+        Examples:
+            >>> options = Options()
+            >>> options.add_argument('--headless')
+            >>> options.add_argument('log-level=2')
+            >>> driver = webdriver.Chrome(options= options)
+            >>> driver.implicitly_wait(20)
+            >>> driver.get("https://race.netkeiba.com/odds/index.html?race_id=202105040211")
+            >>> page = OddsPage(driver)
+            >>> page.get_quinella()
+            組み合わせ    オッズ
+            0    1-7    3.5
+            1   1-12    9.9
+            2    1-5    9.9
+            3   7-12   12.7
+            4    5-7   13.0
+            ..   ...    ...
+            73  3-11  811.1
+            74  4-13  890.4
+            75   4-9  900.8
+            76   3-4  932.5
+            77   4-6  976.6
+            <BLANKLINE>
+            [78 rows x 2 columns]
+            >>> driver.close()
         """
         df = self.__get_combi_odds("b4")
         return df
     
     def get_quinella_place(self):
-        """ワイド
+        """ワイドオッズを取得する．
+
+        Returns:
+            pandas.DataFrame: ワイドオッズのデータフレーム
+        
+        Examples:
+            >>> options = Options()
+            >>> options.add_argument('--headless')
+            >>> options.add_argument('log-level=2')
+            >>> driver = webdriver.Chrome(options= options)
+            >>> driver.implicitly_wait(20)
+            >>> driver.get("https://race.netkeiba.com/odds/index.html?race_id=202105040211")
+            >>> page = OddsPage(driver)
+            >>> page.get_quinella_place()
+            組み合わせ          オッズ
+            0    1-7      1.8-2.0
+            1    1-5      3.4-4.2
+            2   1-12      3.9-4.8
+            3    5-7      4.0-5.1
+            4   7-12      4.5-5.7
+            ..   ...          ...
+            73   4-8  146.8-150.4
+            74  4-13  171.4-175.5
+            75   4-6  172.3-177.1
+            76   3-4  179.3-183.1
+            77   4-9  188.0-192.1
+            <BLANKLINE>
+            [78 rows x 2 columns]
+            >>> driver.close()
         """
         df = self.__get_combi_odds("b5")
         return df
 
     def get_trifecta(self):
-        """3連単
+        """三連単オッズを取得する．
+
+        Returns:
+            pandas.DataFrame: 三連単オズのデータフレーム
+        
+        Examples:
+            >>> options = Options()
+            >>> options.add_argument('--headless')
+            >>> options.add_argument('log-level=2')
+            >>> driver = webdriver.Chrome(options= options)
+            >>> driver.implicitly_wait(20)
+            >>> driver.get("https://race.netkeiba.com/odds/index.html?race_id=202105040211")
+            >>> page = OddsPage(driver)
+            >>> page.get_trifecta()
+                組み合わせ      オッズ
+            0     1-7-12     27.7
+            1      1-7-5     28.2
+            2      7-1-5     29.9
+            3     7-1-12     30.3
+            4      1-5-7     44.7
+            ...      ...      ...
+            1795  3-13-4  54068.5
+            1796  11-3-4  55066.7
+            1797   4-6-9  55579.7
+            1798   4-9-6  56278.8
+            1799   6-9-4  56278.8
+            <BLANKLINE>
+            [1800 rows x 2 columns]
+            >>> driver.close()
         """
         df = self.__get_combi_odds("b8")
         return df
     
     def get_trio(self):
-        """3連複
+        """三連複オッズを取得する．
+
+        Returns:
+            pandas.DataFrame: 三連単オッズのデータフレーム
+        
+        Examples:
+            >>> options = Options()
+            >>> options.add_argument('--headless')
+            >>> options.add_argument('log-level=2')
+            >>> driver = webdriver.Chrome(options= options)
+            >>> driver.implicitly_wait(20)
+            >>> driver.get("https://race.netkeiba.com/odds/index.html?race_id=202105040211")
+            >>> page = OddsPage(driver)
+            >>> page.get_trio()
+                組み合わせ     オッズ
+            0      1-5-7     9.1
+            1     1-7-12     9.2
+            2     1-7-10    15.8
+            3     1-5-12    22.1
+            4      1-2-7    26.6
+            ..       ...     ...
+            295  3-11-12  1544.2
+            296    4-5-8  1581.7
+            297   2-4-12  1636.0
+            298    3-4-5  1639.7
+            299   2-8-13  1710.0
+            <BLANKLINE>
+            [300 rows x 2 columns]
+            >>> driver.close()
         """
         df = self.__get_combi_odds("b7")
         return df
@@ -344,6 +630,28 @@ class RaceListPage(BasePageSelenium):
         return "race_list.html" in cur_url
 
     def get_race_id(self):
+        """ある年月日に開催されている全レースのレースidを取得する．
+
+        Returns:
+            list of str: レースidリスト
+
+        Examples:
+            >>> options = Options()
+            >>> options.add_argument('--headless')
+            >>> options.add_argument('log-level=2')
+            >>> driver = webdriver.Chrome(options= options)
+            >>> driver.implicitly_wait(20)
+            >>> year=2021
+            >>> month=10
+            >>> day=3
+            >>> kaisai_date=f"{year:04}{month:02}{day:02}"
+            >>> url = f"https://race.netkeiba.com/top/race_list.html?kaisai_date={kaisai_date}"
+            >>> driver.get(url)
+            >>> page=RaceListPage(driver)
+            >>> page.get_race_id()
+            ['202106040901', '202106040902', '202106040903', '202106040904', '202106040905', '202106040906', '202106040907', '202106040908', '202106040909', '202106040910', '202106040911', '202106040912', '202107050901', '202107050902', '202107050903', '202107050904', '202107050905', '202107050906', '202107050907', '202107050908', '202107050909', '202107050910', '202107050911', '202107050912']
+            >>> driver.close()
+        """
         race_id_elements = self.soup.select(RaceListPageLocators.RACE_ID[1])
         pattern1 = "result.html\?race_id=(\d*)"
         pattern2 = "shutuba.html\?race_id=(\d*)"
@@ -387,6 +695,15 @@ class RacePage(BasePageRequest):
         return None
 
     def get_result_list(self):
+        """過去のレース結果を取得する．
+
+        Returns:
+            pandas.DataFrame: [description]
+        
+        Examples:
+            >>> page = RacePage("https://db.netkeiba.com/race/202048112701/")
+            >>> page.get_result_list()
+        """
         try:
             dfs = pd.read_html(str(self.soup), match="馬名")
         except Exception:
@@ -407,6 +724,15 @@ class RacePage(BasePageRequest):
             return pd.DataFrame()
 
     def get_course_info(self):
+        """レースのコース情報を取得する．
+
+        Returns:
+            dict of str: レースのコース情報
+        
+        Examples:
+            >>> page = RacePage("https://db.netkeiba.com/race/202048112701/")
+            >>> page.get_course_info()
+        """
         course_elements = self.soup.select(RacePageLocators.RACE_INFO_COURSE[1])
         if course_elements:
             course_element = course_elements[0]
@@ -447,6 +773,15 @@ class RacePage(BasePageRequest):
         return dict(zip(header, [np.nan]*len(header)))
     # 2018年4月28日 1回新潟1日目 障害4歳以上未勝利  (混)(定量)
     def get_race_info(self):
+        """レース情報を取得する．
+
+        Returns:
+            dict of str: レース情報の辞書
+        
+        Examples:
+            >>> page = RacePage("https://db.netkeiba.com/race/202048112701/")
+            >>> page.get_race_info()
+        """
         race_info_elements = self.soup.select(RacePageLocators.RACE_INFO[1])
         if race_info_elements:
             race_info_element = race_info_elements[0]
@@ -462,6 +797,15 @@ class RacePage(BasePageRequest):
         return None
 
     def get_title(self):
+        """レース名を取得する．
+
+        Returns:
+            dict of str: レース名
+        
+        Examples:
+            >>> page = RacePage("https://db.netkeiba.com/race/202048112701/")
+            >>> page.get_title()
+        """
         title_elements = self.soup.select(RacePageLocators.RACE_INFO_TITLE[1])
         if title_elements:
             title_element = title_elements[0]
@@ -470,6 +814,15 @@ class RacePage(BasePageRequest):
         return None
 
     def get_return_list(self):
+        """払い戻しを取得する．
+
+        Returns:
+            list of dict: 払い戻しの辞書リスト
+        
+        Examples:
+            >>> page = RacePage("https://db.netkeiba.com/race/202048112701/")
+            >>> page.get_return_list()
+        """
         return_row_elements = self.soup.select(RacePageLocators.RETURN_ROW[1])
         return_list = []
         header = ["how", "num", "return", "popularity"]
@@ -482,27 +835,8 @@ class RacePage(BasePageRequest):
             return_list.append(dict(zip(header, value_list)))
         return return_list
 
-class ResultPage(BasePageRequest):
-    """RaceResultPage action methods come here.
-    """
-    def is_url_matches(self):
-        cur_url = self.url
-        return "race_list.html" in cur_url
-
-    def get_race_id(self):
-        race_id_elements = self.soup.select(ResultPageLocators.RACE_ID[1])
-        pattern = "result.html\?race_id=(\d*)"
-        race_id_list = []
-        for element in race_id_elements:
-            url = element.attrs["href"]
-            match = re.findall(pattern, url)
-            if match:
-                race_id = match[0]
-                race_id_list.append(race_id)
-        return race_id_list
-
 class ShutubaPage(BasePageSelenium):
-    """RaceResultPage action methods come here.
+    """ページ例：https://race.netkeiba.com/race/shutuba.html?race_id=202106050911
     """
     def is_url_matches(self):
         cur_url = self.url
@@ -539,6 +873,15 @@ class ShutubaPage(BasePageSelenium):
         return None
 
     def get_horse_list(self):
+        """出馬情報を取得する．
+
+        Returns:
+            pandas.DataFrame: 出馬表のデータフレーム
+        
+        Examples:
+            >>> page = ShutubaPage("https://race.netkeiba.com/race/shutuba.html?race_id=202106050911")
+            >>> page.get_horse_list()
+        """
         head_elements = self.soup.select(ShutubaPageLocators.HEADS[1])
         heads = [re.sub(r"\s", "", element.get_text()) for element in head_elements]
         del heads[11]
@@ -559,6 +902,15 @@ class ShutubaPage(BasePageSelenium):
         return df
 
     def get_title(self):
+        """レース名を取得する．
+
+        Returns:
+            dict of str: レース名
+        
+        Examples:
+            >>> page = ShutubaPage("https://race.netkeiba.com/race/shutuba.html?race_id=202106050911")
+            >>> page.get_title()
+        """
         title_elements = self.soup.select(ShutubaPageLocators.TITLE[1])
         if title_elements:
             title_element = title_elements[0]
@@ -567,6 +919,15 @@ class ShutubaPage(BasePageSelenium):
         return None
     
     def get_date(self):
+        """開催日を取得する．
+
+        Returns:
+            dict of str: 開催日
+        
+        Examples:
+            >>> page = ShutubaPage("https://race.netkeiba.com/race/shutuba.html?race_id=202106050911")
+            >>> page.get_date()
+        """
         date_elements = self.soup.select(ShutubaPageLocators.DATE[1])
         if date_elements:
             date_element = date_elements[0]
@@ -575,6 +936,15 @@ class ShutubaPage(BasePageSelenium):
         return None
     
     def get_race_info(self):
+        """レース情報を取得する．
+
+        Returns:
+            pandas.Series: レース情報のpandas.Series
+        
+        Examples:
+            >>> page = ShutubaPage("https://race.netkeiba.com/race/shutuba.html?race_id=202106050911")
+            >>> page.get_race_info()
+        """
         race_field_dist_elements = self.soup.select(ShutubaPageLocators.RACE_FIELD_DIST[1])
         race_num_elements = self.soup.select(ShutubaPageLocators.RACE_NUM[1])
         race_name_elements = self.soup.select(ShutubaPageLocators.RACE_NAME[1])
@@ -603,5 +973,9 @@ class ShutubaPage(BasePageSelenium):
         df_race_info = pd.Series(value_list, index=key_list)
 
         return df_race_info
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
 
     

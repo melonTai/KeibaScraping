@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+
+"""netkeiba.comの抽出したい要素のロケータ
+
+各ロケータには，抽出したい要素を特定するcssセレクタやXPATHを定義する．
+ロケータは各ページごとにクラスで分類する．
+例えば，CalenderPageLocatorsはpageモジュールのCalenderPageで使用される．
+"""
+
+
 from selenium.webdriver.common.by import By
 
 class CalenderPageLocators(object):
@@ -17,7 +27,7 @@ class HorsePageLocators(object):
 
     PROFILE_TRAINER = (By.CSS_SELECTOR, ".db_prof_table tr:nth-child(2) td")
     PROFILE_OWNER = (By.CSS_SELECTOR, ".db_prof_table tr:nth-child(3) td")
-    PROFILE_BREEDER = (By.CSS_SELECTOR, ".db_prof_table tr:nth-child(5) td")
+    PROFILE_BREEDER = (By.CSS_SELECTOR, ".db_prof_table tr:nth-child(4) td")
 
 class OddsPageLocators(object):
     NINKI_SELECT = (By.CSS_SELECTOR, "select#ninki_select")
@@ -42,7 +52,7 @@ class RacePageLocators(object):
 
     HORSE_NAME = (By.CSS_SELECTOR, ".race_table_01 tr td:nth-of-type(4)")
     JOCKEY_NAME = (By.CSS_SELECTOR, ".race_table_01 tr td:nth-of-type(7)")
-    TRAINER_NAME = (By.CSS_SELECTOR, ".race_table_01 tr td:nth-of-type(19)")#contents_liquid > table > tbody > tr:nth-child(2) > td:nth-child(1)
+    TRAINER_NAME = (By.CSS_SELECTOR, ".race_table_01 tr td:nth-of-type(19)")
     OWNER_NAME = (By.CSS_SELECTOR, ".race_table_01 tr td:nth-of-type(20)")
     PRIZE_NAME = (By.CSS_SELECTOR, ".race_table_01 tr td:nth-of-type(21)")
 
