@@ -22,6 +22,8 @@ import re
 # pandas
 import pandas as pd
 
+import numpy as np
+
 # 各ページの各要素にアクセスするためのロケーター(xpathやcssセレクタ等)の定義
 from .locators import CalenderPageLocators
 from .locators import HorsePageLocators
@@ -122,17 +124,20 @@ class HorsePage(BasePageRequest):
 
 
     def get_race_history(self):
-        dfs = pd.read_html(str(self.soup), match="レース名")
-        if dfs:
-            df = dfs[0]
-            racename_elements = self.soup.select(HorsePageLocators.RACE_HISTORY_RACENAME[1])
-            jockeyname_elements = self.soup.select(HorsePageLocators.RACE_HISTORY_JOCKEYNAME[1])
-            df["race_id"] = list(map(lambda x:self.__get_id(x, "race/(.*?)/"), racename_elements))
-            df["jockey_id"] = list(map(lambda x:self.__get_id(x, "jockey/(.*?)/"), jockeyname_elements))
-            df = df.astype(str)
-            return df
-        else:
-            return []
+        try:
+            dfs = pd.read_html(str(self.soup), match="レース名")
+            if dfs:
+                df = dfs[0]
+                racename_elements = self.soup.select(HorsePageLocators.RACE_HISTORY_RACENAME[1])
+                jockeyname_elements = self.soup.select(HorsePageLocators.RACE_HISTORY_JOCKEYNAME[1])
+                df["race_id"] = list(map(lambda x:self.__get_id(x, "race/(.*?)/"), racename_elements))
+                df["jockey_id"] = list(map(lambda x:self.__get_id(x, "jockey/(.*?)/"), jockeyname_elements))
+                df = df.astype(str)
+                return df
+            else:
+                return pd.DataFrame()
+        except Exception:
+            return pd.DataFrame()
 
     def get_features(self):
         # 適正の見出しを取得
@@ -407,9 +412,11 @@ class RacePage(BasePageRequest):
             course_element = course_elements[0]
             header = ["field", "turn", "in_out", "dist", "weather", "condition", "start_time"]
             text = course_element.get_text().replace("\n", "")
+            # print(text)
             pattern1 = "(芝|ダ)(.{1,2})(.*?)(\d{3,4})m / 天候 : (.*?) / .*? : (.*?) / 発走 : (\d{2}:\d{2})"
             pattern2 = "(.*?)(\d{4})m / 天候 : (.*?) / (.*?) / 発走 : (\d{2}:\d{2})"
             pattern3 = "(芝|ダ)(.{1,2})(.*?)(\d{3,4})m / 天候 : (.*?) / .*? :(.*?)/"
+            pattern4 = "(芝|ダ)(.{1,2})(.*?)(\d{3,4})m / 天候 : (.*?) / .*?"
             if "障" in text:
                 match = re.findall(pattern2, text)
                 #print(match)
@@ -436,7 +443,8 @@ class RacePage(BasePageRequest):
                     data.append("")
                     info = dict(zip(header, data))
                     return info
-        return None
+                
+        return dict(zip(header, [np.nan]*len(header)))
     # 2018年4月28日 1回新潟1日目 障害4歳以上未勝利  (混)(定量)
     def get_race_info(self):
         race_info_elements = self.soup.select(RacePageLocators.RACE_INFO[1])

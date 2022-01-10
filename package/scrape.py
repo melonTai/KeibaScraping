@@ -81,21 +81,25 @@ def scrape_race(race_id: str):
     Returns:
         dict: {"race_id":str, "data":pd.DataFrame 取得したデータ, "status":bool 取得成功失敗}
     """
-    race_page = RacePage(f"https://db.netkeiba.com/race/{race_id}/")
-    df_race = race_page.get_result_list()
-    if len(df_race) > 0:
-        course_info = race_page.get_course_info()
-        title = race_page.get_title()
-        race_info = race_page.get_race_info()
-        info = {}
-        # print(title, race_info, course_info)
-        info.update(**title, **race_info, **course_info)
-        df_race["race_id"] = str(race_id)
-        for key, value in info.items():
-            df_race[key] = str(value)
-        return {"race_id": race_id, "data": df_race, "status": True}
-    else:
-        return {"race_id": race_id, "data": pd.DataFrame(), "status": False}
+    try:
+        race_page = RacePage(f"https://db.netkeiba.com/race/{race_id}/")
+        df_race = race_page.get_result_list()
+        if len(df_race) > 0:
+            course_info = race_page.get_course_info()
+            title = race_page.get_title()
+            race_info = race_page.get_race_info()
+            info = {}
+            # print(title, race_info, course_info)
+            info.update(**title, **race_info, **course_info)
+            df_race["race_id"] = str(race_id)
+            for key, value in info.items():
+                df_race[key] = str(value)
+            return {"race_id": race_id, "data": df_race, "status": True}
+        else:
+            return {"race_id": race_id, "data": pd.DataFrame(), "status": False}
+    except Exception as e:
+        print(race_id)
+        raise Exception(e)
 
 
 def scrape_races(race_id_list: list):

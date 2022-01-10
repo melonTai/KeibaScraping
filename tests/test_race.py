@@ -15,7 +15,7 @@ class TestResultPage(unittest.TestCase):
 
     def test_get_result_list(self):
         """test get horse info list"""
-        page = RacePage("https://db.netkeiba.com/race/202109020712/")
+        page = RacePage("https://db.netkeiba.com/race/2021C8100306/")
         result_list = page.get_result_list()
         corse_info = page.get_course_info()
         race_info = page.get_race_info()
