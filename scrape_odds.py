@@ -1,4 +1,4 @@
-from scrapenetkeiba import const, scrape
+from scrapenetkeiba import models, scrape
 from scrapenetkeiba.page import RaceListPage, CalenderPage
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -29,10 +29,10 @@ def main():
         raise Exception("終了年には開始年より大きな値を設定してください")
     elif year_end > now.year:
         raise Exception("未来の年は入力できません")
-    if place is not None and not place in [e.value for e in const.PlaceChuo]:
+    if place is not None and not place in [e.value for e in models.PlaceChuo]:
         raise Exception("有効なレース場idではありません")
 
-    place_list = [e.value for e in const.PlaceChuo] if place is None else [place]
+    place_list = [e.value for e in models.PlaceChuo] if place is None else [place]
 
     # フォルダ生成
     root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\odds')
@@ -82,21 +82,21 @@ def main():
                     time.sleep(1)
             race_list_page.close()
 
-    race_id_list = list(filter(lambda race_id : int(const.Race(race_id).place) in place_list, race_id_list))
+    race_id_list = list(filter(lambda race_id : int(models.Race(race_id).place) in place_list, race_id_list))
     # スクレイピング
     for race_id in tqdm(race_id_list):
         try:
             print(race_id, type(race_id))
-            race_const = const.Race(race_id)
+            racee_model = models.Race(race_id)
             # フォルダ作成
-            folder = f"{root_path}/{race_const.place}"
+            folder = f"{root_path}/{racee_model.place}"
             if not os.path.exists(folder):
                 os.makedirs(folder)
             # 過去に同様のデータを取得済みの場合はスキップ
             ticket_list = ["単勝", "複勝", "馬単", "馬連", "ワイド", "3連複", "3連単"]
             is_gotten = {}
             for ticket in ticket_list:
-                file_path = f"{folder}/{race_const.year}_{ticket}.csv"
+                file_path = f"{folder}/{racee_model.year}_{ticket}.csv"
                 if os.path.exists(file_path):
                     df_b = pd.read_csv(file_path, index_col=0, dtype=str)
                     if df_b["race_id"].isin([race_id]).any():
@@ -111,7 +111,7 @@ def main():
             if res["status"]:
                 data = res["data"]
                 for ticket, df in data.items():
-                    file_path = f"{folder}/{race_const.year}_{ticket}.csv"
+                    file_path = f"{folder}/{racee_model.year}_{ticket}.csv"
                     df["race_id"] = race_id
                     if os.path.exists(file_path):
                         df_b = pd.read_csv(file_path, index_col=0, dtype=str, encoding='utf_8')

@@ -1,5 +1,5 @@
 import scrape_shutuba_related_info
-from scrapenetkeiba import const, scrape
+from scrapenetkeiba import models, scrape
 from scrapenetkeiba.page import RaceListPage, CalenderPage
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -31,15 +31,15 @@ def update_odds(shutuba_id):
     if shutuba_res["status"]:
         # フォルダ生成
         title = shutuba_res["title"]
-        race_const = const.Race(shutuba_id)
+        racee_model = models.Race(shutuba_id)
         date = shutuba_res["date"]
         date = date.replace("/","月")
         date = date + "" if "日" in date else date + "日"
         date = re.sub("\(.*?\)","",date)
         date_datetime = datetime.strptime(f"{shutuba_id[0:4]}年{date}", '%Y年%m月%d日')
         shutuba_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\shutuba')
-        place = utils.place_decoder(race_const.place)
-        root = f"{shutuba_path}/{race_const.year}/{race_const.year}{date_datetime.month:02}{date_datetime.day:02}/{place}{race_const.r}R{race_const.kai}回{race_const.day}日目{title}"
+        place = utils.place_decoder(racee_model.place)
+        root = f"{shutuba_path}/{racee_model.year}/{racee_model.year}{date_datetime.month:02}{date_datetime.day:02}/{place}{racee_model.r}R{racee_model.kai}回{racee_model.day}日目{title}"
         if not os.path.exists(root):
             os.makedirs(root)
         sub_folder = f"{root}/related_histories"

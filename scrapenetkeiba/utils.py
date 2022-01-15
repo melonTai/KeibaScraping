@@ -1,5 +1,5 @@
 from selenium.webdriver.remote.webdriver import WebDriver
-from . import const
+from . import models
 from .page import RacePage
 import pandas as pd
 import numpy as np
@@ -64,11 +64,11 @@ def place_decoder(num):
     else:
         return "その他"
 def get_ref_time(race_id):
-    race_const = const.Race(race_id)
+    racee_model = models.Race(race_id)
     ref_result_list = pd.DataFrame()
     for i in range(1,4):
-        year = int(race_const.year) - i
-        past_race_id = f"{year}{race_const.place}{race_const.kai}{race_const.day}{race_const.r}"
+        year = int(racee_model.year) - i
+        past_race_id = f"{year}{racee_model.place}{racee_model.kai}{racee_model.day}{racee_model.r}"
         race_page = RacePage(f"https://db.netkeiba.com/race/{past_race_id}/")
         result_list = race_page.get_result_list()
         ref_result_list = ref_result_list.append(result_list)
