@@ -64,11 +64,11 @@ def place_decoder(num):
     else:
         return "その他"
 def get_ref_time(race_id):
-    racee_model = models.Race(race_id)
+    race_model = models.Race(race_id)
     ref_result_list = pd.DataFrame()
     for i in range(1,4):
-        year = int(racee_model.year) - i
-        past_race_id = f"{year}{racee_model.place}{racee_model.kai}{racee_model.day}{racee_model.r}"
+        year = int(race_model.year) - i
+        past_race_id = f"{year}{race_model.place}{race_model.kai}{race_model.day}{race_model.r}"
         race_page = RacePage(f"https://db.netkeiba.com/race/{past_race_id}/")
         result_list = race_page.get_result_list()
         ref_result_list = ref_result_list.append(result_list)

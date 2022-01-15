@@ -87,16 +87,16 @@ def main():
     for race_id in tqdm(race_id_list):
         try:
             print(race_id, type(race_id))
-            racee_model = models.Race(race_id)
+            race_model = models.Race(race_id)
             # フォルダ作成
-            folder = f"{root_path}/{racee_model.place}"
+            folder = f"{root_path}/{race_model.place}"
             if not os.path.exists(folder):
                 os.makedirs(folder)
             # 過去に同様のデータを取得済みの場合はスキップ
             ticket_list = ["単勝", "複勝", "馬単", "馬連", "ワイド", "3連複", "3連単"]
             is_gotten = {}
             for ticket in ticket_list:
-                file_path = f"{folder}/{racee_model.year}_{ticket}.csv"
+                file_path = f"{folder}/{race_model.year}_{ticket}.csv"
                 if os.path.exists(file_path):
                     df_b = pd.read_csv(file_path, index_col=0, dtype=str)
                     if df_b["race_id"].isin([race_id]).any():
@@ -111,7 +111,7 @@ def main():
             if res["status"]:
                 data = res["data"]
                 for ticket, df in data.items():
-                    file_path = f"{folder}/{racee_model.year}_{ticket}.csv"
+                    file_path = f"{folder}/{race_model.year}_{ticket}.csv"
                     df["race_id"] = race_id
                     if os.path.exists(file_path):
                         df_b = pd.read_csv(file_path, index_col=0, dtype=str, encoding='utf_8')
