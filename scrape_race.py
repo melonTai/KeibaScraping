@@ -97,13 +97,13 @@ def main():
     # スクレイピング
     for race_id in tqdm(race_id_list):
         # print(race_id)
-        race_models = models.Race(race_id)
+        racee_model = models.Race(race_id)
         # フォルダ作成
-        folder = f"{root_path}/{race_models.place}"
+        folder = f"{root_path}/{racee_model.place}"
         if not os.path.exists(folder):
             os.makedirs(folder)
         # 過去に同様のデータを取得済みの場合はスキップ
-        file_path = f"{folder}/{race_models.year}_all.csv"
+        file_path = f"{folder}/{racee_model.year}_all.csv"
         if os.path.exists(file_path):
             df_b = pd.read_csv(file_path, index_col=0, dtype=str)
             if df_b["race_id"].isin([race_id]).any():
