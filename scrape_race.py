@@ -1,4 +1,4 @@
-from scrapenetkeiba import const, scrape
+from scrapenetkeiba import models, scrape
 from scrapenetkeiba.page import RaceListPage, CalenderPage
 import pandas as pd
 import os
@@ -29,7 +29,7 @@ def main():
         raise Exception("終了年には開始年より大きな値を設定してください")
     elif year_end > now.year:
         raise Exception("未来の年は入力できません")
-    if place is not None and not place in [e.value for e in const.PlaceChuo]+[e.value for e in const.PlaceChiho] + ["chuo"] + ["chiho"]:
+    if place is not None and not place in [e.value for e in models.PlaceChuo]+[e.value for e in models.PlaceChiho] + ["chuo"] + ["chiho"]:
         raise Exception("有効なレース場idではありません")
     
     # フォルダ生成
@@ -40,12 +40,12 @@ def main():
     # place_list
     place_list = []
     if place is None:
-        place_list = [e.value for e in const.PlaceChuo] + [e.value for e in const.PlaceChiho]
+        place_list = [e.value for e in models.PlaceChuo] + [e.value for e in models.PlaceChiho]
     elif place is not None:
         if place == "chuo":
-            place_list = [e.value for e in const.PlaceChuo]
+            place_list = [e.value for e in models.PlaceChuo]
         elif place == "chiho":
-            place_list = [e.value for e in const.PlaceChiho]
+            place_list = [e.value for e in models.PlaceChiho]
         else:
             place_list =[int(place)]
     
@@ -92,18 +92,18 @@ def main():
                     time.sleep(1)
             race_list_page.close()
 
-    race_id_list = list(filter(lambda race_id : int(const.Race(race_id).place) in place_list, race_id_list))
+    race_id_list = list(filter(lambda race_id : int(models.Race(race_id).place) in place_list, race_id_list))
 
     # スクレイピング
     for race_id in tqdm(race_id_list):
         # print(race_id)
-        race_const = const.Race(race_id)
+        race_models = models.Race(race_id)
         # フォルダ作成
-        folder = f"{root_path}/{race_const.place}"
+        folder = f"{root_path}/{race_models.place}"
         if not os.path.exists(folder):
             os.makedirs(folder)
         # 過去に同様のデータを取得済みの場合はスキップ
-        file_path = f"{folder}/{race_const.year}_all.csv"
+        file_path = f"{folder}/{race_models.year}_all.csv"
         if os.path.exists(file_path):
             df_b = pd.read_csv(file_path, index_col=0, dtype=str)
             if df_b["race_id"].isin([race_id]).any():

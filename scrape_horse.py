@@ -1,4 +1,4 @@
-from scrapenetkeiba import const, scrape
+from scrapenetkeiba import models, scrape
 import pandas as pd
 import os
 import time
@@ -26,7 +26,7 @@ def main():
         raise Exception("終了年には開始年より大きな値を設定してください")
     elif year_end > now.year:
         raise Exception("未来の年は入力できません")
-    if place is not None and not place in [e.value for e in const.PlaceChuo]+[e.value for e in const.PlaceChiho]:
+    if place is not None and not place in [e.value for e in models.PlaceChuo]+[e.value for e in models.PlaceChiho]:
         raise Exception("有効なレース場idではありません")
     
     # フォルダ生成
@@ -36,7 +36,7 @@ def main():
     
     # レースid生成
     race_path_list = []
-    place_list = [e.value for e in const.PlaceChuo] + [e.value for e in const.PlaceChiho] if place is None else [place]
+    place_list = [e.value for e in models.PlaceChuo] + [e.value for e in models.PlaceChiho] if place is None else [place]
     for place in place_list:
         for year in range(year_start, year_end + 1):
             race_path = f"{root_path}/race/{place:02}/{year}_all.csv"
