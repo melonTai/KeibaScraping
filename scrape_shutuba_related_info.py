@@ -24,13 +24,13 @@ def scrape_related_racehistory(race_id):
     root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\race')
     if not os.path.exists(root_path):
         os.makedirs(root_path)
-    racee_model = models.Race(race_id)
+    race_model = models.Race(race_id)
     # フォルダ作成
-    folder = f"{root_path}/{racee_model.place}"
+    folder = f"{root_path}/{race_model.place}"
     if not os.path.exists(folder):
         os.makedirs(folder)
     # 過去に同様のデータを取得済みの場合はスキップ
-    file_path = f"{folder}/{racee_model.year}_all.csv"
+    file_path = f"{folder}/{race_model.year}_all.csv"
     if os.path.exists(file_path):
         df_b = pd.read_csv(file_path, index_col=0, dtype=str)
         if df_b["race_id"].isin([race_id]).any():
@@ -53,15 +53,15 @@ def main(race_id):
     if shutuba_res["status"]:
         # フォルダ生成
         title = shutuba_res["title"]
-        racee_model = models.Race(shutuba_id)
+        race_model = models.Race(shutuba_id)
         date = shutuba_res["date"]
         date = date.replace("/","月")
         date = date + "" if "日" in date else date + "日"
         date = re.sub("\(.*?\)","",date)
         date_datetime = datetime.strptime(f"{shutuba_id[0:4]}年{date}", '%Y年%m月%d日')
         shutuba_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\shutuba')
-        place = utils.place_decoder(racee_model.place)
-        root = f"{shutuba_path}/{racee_model.year}/{racee_model.year}{date_datetime.month:02}{date_datetime.day:02}/{place}{racee_model.r}R{racee_model.kai}回{racee_model.day}日目{title}"
+        place = utils.place_decoder(race_model.place)
+        root = f"{shutuba_path}/{race_model.year}/{race_model.year}{date_datetime.month:02}{date_datetime.day:02}/{place}{race_model.r}R{race_model.kai}回{race_model.day}日目{title}"
         if not os.path.exists(root):
             os.makedirs(root)
         sub_folder = f"{root}/related_histories"
@@ -96,8 +96,8 @@ def main(race_id):
                 for race_id in df["race_id"].tolist()[0:4]:
                     # print(f" {race_id}")
                     for r in range(1, 13):
-                        racee_model = models.Race(race_id)
-                        related_race_id = f"{racee_model.year}{racee_model.place}{racee_model.kai}{racee_model.day}{r:02}"
+                        race_model = models.Race(race_id)
+                        related_race_id = f"{race_model.year}{race_model.place}{race_model.kai}{race_model.day}{r:02}"
                         # print(f"  {related_race_id}")
                         scrape_related_racehistory(related_race_id) 
                         time.sleep(1)
