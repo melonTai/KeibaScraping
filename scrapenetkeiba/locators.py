@@ -66,6 +66,7 @@ class ShutubaPageLocators(object):
     TITLE = (By.CSS_SELECTOR, ".RaceName")
     DATE = (By.CSS_SELECTOR, "#RaceList_DateList .Active a")
 
+    RACE_DATA01 = (By.CSS_SELECTOR, ".RaceData01")
     RACE_FIELD_DIST = (By.CSS_SELECTOR, ".RaceData01 span:nth-of-type(1)")
     RACE_NUM = (By.CSS_SELECTOR, ".RaceList_Item01 .RaceNum")
     RACE_NAME = (By.CSS_SELECTOR, ".RaceList_Item02 .RaceName")
