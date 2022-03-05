@@ -964,7 +964,7 @@ class ShutubaPage(BasePageSelenium):
             レースタイプ3                               15頭
             賞金          本賞金:7000,2800,1800,1100,700万円
             クラス1                      Icon_GradeType1
-            出走時間                                15:25
+            発走時間                                15:25
             dtype: object
         """
         race_field_dist_elements = self.soup.select(ShutubaPageLocators.RACE_FIELD_DIST[1])
@@ -995,7 +995,7 @@ class ShutubaPage(BasePageSelenium):
         class1_value = "-".join(class1_values)
         key_list.append("クラス1")
         value_list.append(class1_value)
-        key_list.append("出走時間")
+        key_list.append("発走時間")
         value_list.append(start_time)
         df_race_info = pd.Series(value_list, index=key_list)
 
