@@ -1,2 +1,2 @@
 # ScrapeNetKeiba
-wiki:https://melontai.github.io/ScrapeNetKeiba/
+wiki:https://melontai.github.io/scrape_netkeiba/
