@@ -35,7 +35,7 @@ def main():
     place_list = [e.value for e in models.PlaceChuo] if place is None else [place]
 
     # フォルダ生成
-    root_path = pathlib.WindowsPath(r'G:\マイドライブ\Keiba\data\odds')
+    root_path = pathlib.WindowsPath(r'D:\Keiba\data\raw\odds')
     if not os.path.exists(root_path):
         os.makedirs(root_path)
     
