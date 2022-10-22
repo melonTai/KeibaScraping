@@ -10,6 +10,8 @@ import sys
 import pathlib
 import signal
 from tqdm import tqdm
+from webdriver_manager.chrome import ChromeDriverManager
+import traceback
 
 def main():
     # 入力チェック
@@ -56,12 +58,12 @@ def main():
             options = Options()
             options.add_argument('--headless')
             options.add_argument('log-level=2')
-            race_list_driver = webdriver.Chrome(options=options)
+            race_list_driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
             race_list_driver.implicitly_wait(20)
             race_list_driver.get(f"https://race.netkeiba.com/top/race_list.html")
             race_list_page = RaceListPage(race_list_driver)
             for month in tqdm(range(1, 13)):
-                calender_driver = webdriver.Chrome(options=options)
+                calender_driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
                 calender_driver.implicitly_wait(20)
                 calender_driver.get(f"https://race.netkeiba.com/top/calendar.html?year={year}&month={month}")
                 calender_page = CalenderPage(calender_driver)
@@ -121,7 +123,9 @@ def main():
                     else:
                         df.to_csv(file_path, encoding="utf_8_sig")
             time.sleep(1)
-        except Exception:
+        except Exception as e:
+            print(e)
+            print(traceback.format_exc())
             time.sleep(1)
 
 if __name__ == "__main__":

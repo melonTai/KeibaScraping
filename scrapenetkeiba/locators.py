@@ -10,6 +10,13 @@
 
 from selenium.webdriver.common.by import By
 
+class JockeySearchResultPageLocators(object):
+    SERIAL_INPUT = ('css_selector', 'form input[name="serial"]')
+    JOCKEY_TD = ('css_selector', 'table.nk_tb_common.race_table_01 tr td:nth-child(1)')
+
+class JockeyResultPageLocators(object):
+    RESULT_NUM = ('css_selector', '#contents_liquid > div:nth-child(2) > div:nth-child(1) > div')
+
 class CalenderPageLocators(object):
     KAISAI_DATE = (By.CSS_SELECTOR, ".RaceCellBox a")
 

@@ -10,6 +10,7 @@ import pathlib
 from tqdm import tqdm
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 
 def main():
     # 入力チェック
@@ -66,12 +67,12 @@ def main():
             options = Options()
             options.add_argument('--headless')
             options.add_argument('log-level=2')
-            race_list_driver = webdriver.Chrome(options=options)
+            race_list_driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
             race_list_driver.implicitly_wait(20)
             race_list_driver.get(f"https://race.netkeiba.com/top/race_list.html")
             race_list_page = RaceListPage(race_list_driver)
             for month in tqdm(range(1, 13)):
-                calender_driver = webdriver.Chrome(options=options)
+                calender_driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
                 calender_driver.implicitly_wait(20)
                 calender_driver.get(f"https://race.netkeiba.com/top/calendar.html?year={year}&month={month}")
                 calender_page = CalenderPage(calender_driver)

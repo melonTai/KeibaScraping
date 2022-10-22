@@ -1,10 +1,49 @@
-from .page import HorsePage, RacePage, ShutubaPage, OddsPage
+from .page import HorsePage, JockeyResultPage, JockeySearchResultPage, RacePage, ShutubaPage, OddsPage, JockeySearchDetailPage, JockeySearchResultPageLocators
 from pprint import pprint
 import pandas as pd
 from selenium.webdriver.chrome.options import Options
 import time
 from selenium import webdriver
+from tqdm import tqdm
+from webdriver_manager.chrome import ChromeDriverManager
 
+def scrape_jockey_race_history(jockey_id, year, field):
+    """jockey_idに指定された騎手のyear年に開催されたfield(芝|ダート)のレース戦績を取得する．
+
+    Args:
+        jockey_id (str): 騎手id
+        year (int): レース開催年
+        field (str): 'te'(芝), 'de'(ダート)
+    """
+    url = f'https://db.netkeiba.com/?pid=jockey_select&id={jockey_id}&year={year}&mode={field}&course=&page=1'
+    jockey_result_page = JockeyResultPage(url)
+    num = jockey_result_page.get_result_num()
+    loop_num = int(num/20)+1
+    df_jockey_rh = pd.DataFrame()
+    for i in range(loop_num):
+        try:
+            url = f'https://db.netkeiba.com/?pid=jockey_select&id={jockey_id}&year={year}&mode={field}&course=&page={i+1}'
+            jockey_result_page = JockeyResultPage(url)
+            df = jockey_result_page.get_result_list()
+            df_jockey_rh = pd.concat([df_jockey_rh, df])
+        except Exception as e:
+            continue
+    return df_jockey_rh
+
+def scrape_jockey_list():
+    url = 'https://db.netkeiba.com/?pid=jockey_search_detail'
+    jockey_search_detail_page = JockeySearchDetailPage(url)
+    jockey_search_result_page = jockey_search_detail_page.move_to_jockey_search_result_page()
+    i=1
+    df_jockey = pd.DataFrame()
+    for i in tqdm(range(30)):
+        df = jockey_search_result_page.get_jockey_list()
+        i+=1
+        jockey_search_result_page = jockey_search_result_page.paging(i)
+        df_jockey = pd.concat([df_jockey, df])
+        if len(df)==0:
+            break
+    return df_jockey
 
 def scrape_odds(race_id: str):
     """レースIDに該当するレースの全オッズを取得する．
@@ -18,7 +57,7 @@ def scrape_odds(race_id: str):
     options = Options()
     options.add_argument('--headless')
     options.add_argument('log-level=2')
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
     driver.implicitly_wait(20)
     driver.get(f"https://race.netkeiba.com/odds/index.html?race_id={race_id}")
     odds_page = OddsPage(driver)
@@ -40,7 +79,8 @@ def scrape_odds(race_id: str):
         data = {"単勝": win, "複勝": place, "馬単": exacta, "馬連": quinella,
                 "ワイド": quinella_place, "3連複": trio, "3連単": trifecta}
         return {"race_id": race_id, "data": data, "status": True}
-    
+    except Exception as e:
+        print(e)
     finally:
         driver.close()
 
@@ -136,7 +176,7 @@ def scrape_shutuba(race_id):
     options = Options()
     options.add_argument('--headless')
     options.add_argument('log-level=2')
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
     try:
         driver.get(f"https://race.netkeiba.com/race/shutuba.html?race_id={race_id}")
         shutuba_page = ShutubaPage(driver)

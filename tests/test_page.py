@@ -1,3 +1,7 @@
+"""
+python test_page.py class.method [-v]
+"""
+
 import unittest
 import doctest
 import sys

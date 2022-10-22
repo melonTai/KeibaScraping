@@ -15,6 +15,8 @@ import bs4
 # request
 import requests
 
+import urllib.parse
+
 # 標準モジュール
 import time
 import re
@@ -32,30 +34,31 @@ from .locators import RaceListPageLocators
 from .locators import RacePageLocators
 from .locators import ResultPageLocators
 from .locators import ShutubaPageLocators
-
+from .locators import JockeySearchResultPageLocators
+from .locators import JockeyResultPageLocators
 
 class BasePageRequest(object):
     """
     各ページクラスのベース
     特に，UI操作を必要としない(seleniumを使わない)，値を取得するだけのページのベースとして用いる
     """                         
-    def __init__(self,url:str):
+    def __init__(self,url:str, header:dict={}, payload:dict={}):
         """request用のベースクラス
 
         Args:
             url (str): url
         """
         self.url = url
+        self.header = header
         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36"
-        header = {
-            'User-Agent': user_agent
-        }
+        self.header['User-Agent'] = user_agent
         try:
-            res = requests.get(self.url, headers=header, timeout=30)
+            res = requests.post(self.url, headers=self.header, timeout=30, data=payload)
         except requests.exceptions.ConnectionError as e:
             time.sleep(30)
-            res = requests.get(self.url, headers=header, timeout=30)
+            res = requests.post(self.url, headers=self.header, timeout=30, data=payload)
         self.soup = BeautifulSoup(res.content.decode("euc-jp", "ignore"), 'html.parser')
+        
 
 class BasePageSelenium(object):
     """
@@ -83,6 +86,200 @@ class BasePageSelenium(object):
 
     def close(self):
         self.driver.close()
+
+class JockeyResultPage(BasePageRequest):
+    """https://db.netkeiba.com/?pid=jockey_select&id=01088&year=2022&mode=te&course=&page=2
+
+    Args:
+        BasePageRequest (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        title = self.soup.find('title')
+        if title is not None:
+            assert "騎手成績" in title.text, title.text
+      
+    def get_result_list(self):
+        """レース結果を取得する．
+
+        Returns:
+            pd.DataFrame: レース結果
+        
+        Examples:
+            >>> url = "https://db.netkeiba.com/?pid=jockey_select&id=01088&year=2022&mode=te&course=&page=2"
+            >>> jockey_result_page = JockeyResultPage(url)
+            >>> jockey_result_page.get_result_list()
+        """
+        try:
+            dfs = pd.read_html(str(self.soup), match='日付')
+            df = dfs[0]
+            return df
+        except Exception as e:
+            return pd.DataFrame()
+
+    def get_result_num(self):
+        """レース結果の件数を取得する
+
+        Returns:
+            int: 件数
+        
+        Examples:
+            >>> url = "https://db.netkeiba.com/?pid=jockey_select&id=01170&year=2022&mode=te&course=&page=1"
+            >>> jockey_result_page = JockeyResultPage(url)
+            >>> jockey_result_page.get_result_num()
+            199
+        """
+        num_elements = self.soup.select(JockeyResultPageLocators.RESULT_NUM[1])
+        if num_elements:
+            text = num_elements[0].text
+            pattern = '(\d*)件中'
+            match = re.findall(pattern, text)
+            if match:
+                num = match[0]
+                return int(num)
+        else:
+            return 0
+    
+
+    
+
+class JockeySearchDetailPage(BasePageRequest):
+    """ページ:https://db.netkeiba.com/?pid=jockey_search_detail
+
+    Args:
+        BasePageRequest (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        title = self.soup.find('title').text
+        assert "騎手詳細検索" in title, title
+
+    def move_to_jockey_search_result_page(
+        self,
+        word="",
+        miura=True,
+        rittou=True,
+        chihou=True,
+        kaigai=True,
+        sort_='win',
+        list_='100',
+        active=True,
+        retired=True):
+        """騎手検索結果ページに遷移する．
+
+        Args:
+            word (str, optional): 騎手名検索単語. Defaults to "".
+            miura (bool, optional): 美浦所属フィルタ. Defaults to True.
+            rittou (bool, optional): 栗東所属フィルタ. Defaults to True.
+            chihou (bool, optional): 地方所属フィルタ. Defaults to True.
+            kaigai (bool, optional): 海外所属フィルタ. Defaults to True.
+            sort (str, optional): 表示順，win(リーディング), birthday(年齢), access(人気順). Defaults to 'win'.
+            list_ (str, optional): 表示件数，Defaults to 100
+            active (bool, optional): 現役フィルタ. Defaults to True.
+            retired (bool, optional): 引退フィルタ. Defaults to True.
+
+        Returns:
+            JockeySearchResultPage: 検索結果ページオブジェクト
+        
+        Examples:
+            >>> url = 'https://db.netkeiba.com/?pid=jockey_search_detail'
+            >>> jockey_search_detail_page = JockeySearchDetailPage(url)
+            >>> jockey_search_result_page = jockey_search_detail_page.move_to_jockey_search_result_page()
+            >>> print(jockey_search_result_page.soup.find('title').text)
+            所属[美浦、栗東、地方、海外]、現役、引退の騎手検索結果｜競馬データベース - netkeiba.com
+        """
+        payload_list = [
+            ('pid', 'jockey_list'),
+            ('word', word),
+            ('sort', sort_),
+            ('list', list_),
+        ]
+
+        if miura:
+            payload_list.append(('bel[]', '1'))
+        if rittou:
+            payload_list.append(('bel[]', '2'))
+        if chihou:
+            payload_list.append(('bel[]', '3'))
+        if kaigai:
+            payload_list.append(('bel[]', '4'))
+        if active:
+            payload_list.append(('act[]', '0'))
+        if retired:
+            payload_list.append(('act[]', '1'))
+        
+        header = {
+            'content-type' : 'application/x-www-form-urlencoded'
+        }
+        payload_url = urllib.parse.urlencode(payload_list)
+        # print(payload_url)
+        return JockeySearchResultPage('https://db.netkeiba.com', header, payload_url, sort_=sort_)
+
+class JockeySearchResultPage(BasePageRequest):
+    def __init__(self, url, header, payload, sort_, **kwargs):
+        super().__init__(url, header, payload, **kwargs)
+        title = self.soup.find('title').text
+        assert "騎手検索結果" in title, title
+        self.sort_ = sort_
+
+    def __get_jockey_id(self, element:bs4.element):
+        atag_elements = element.select("a")
+        if atag_elements:
+            atag_element = atag_elements[0]
+            url = atag_element.attrs["href"]
+            pattern = "jockey/result/recent/(\w*)"
+            match = re.findall(pattern, url)
+            if match:
+                jockey_id = match[0]
+                return jockey_id
+        return None
+
+    def paging(self, num):
+        # serial_input = self.soup.select('form input[name="serial"]')[0]
+        # serial = serial_input['value']
+        serial_url = "a%3A10%3A%7Bs%3A3%3A%22pid%22%3Bs%3A11%3A%22jockey_list%22%3Bs%3A4%3A%22word%22%3Bs%3A0%3A%22%22%3Bs%3A3%3A%22bel%22%3Ba%3A4%3A%7Bi%3A0%3Bs%3A1%3A%221%22%3Bi%3A1%3Bs%3A1%3A%222%22%3Bi%3A2%3Bs%3A1%3A%223%22%3Bi%3A3%3Bs%3A1%3A%224%22%3B%7Ds%3A4%3A%22sort%22%3Bs%3A3%3A%22win%22%3Bs%3A4%3A%22list%22%3Bs%3A3%3A%22100%22%3Bs%3A3%3A%22act%22%3Ba%3A2%3A%7Bi%3A0%3Bs%3A1%3A%220%22%3Bi%3A1%3Bs%3A1%3A%221%22%3B%7Ds%3A9%3A%22style_dir%22%3Bs%3A17%3A%22style%2Fnetkeiba.ja%22%3Bs%3A13%3A%22template_file%22%3Bs%3A16%3A%22jockey_list.html%22%3Bs%3A9%3A%22style_url%22%3Bs%3A18%3A%22%2Fstyle%2Fnetkeiba.ja%22%3Bs%3A6%3A%22search%22%3Bs%3A40%3A%22%BD%EA%C2%B0%5B%C8%FE%B1%BA%A1%A2%B7%AA%C5%EC%A1%A2%C3%CF%CA%FD%A1%A2%B3%A4%B3%B0%5D%A1%A2%B8%BD%CC%F2%A1%A2%B0%FA%C2%E0%22%3B%7D"
+        payload_list = [
+            ('sort_key', self.sort_),
+            ('sort_type','desc'),
+            ('page', str(num)),
+            ('serial', serial_url),
+            ('pid', 'jockey_list')
+        ]
+        payload_url = '&'.join('='.join(p) for p in payload_list)
+        # print(payload_url)
+        header = {
+            'content-type' : 'application/x-www-form-urlencoded',
+            'path' : '/',
+        }
+        # print(payload_url)
+        return JockeySearchResultPage('https://db.netkeiba.com', header, payload_url, sort_=self.sort_)
+    
+    def get_jockey_list(self):
+        """騎手一覧を取得する
+
+        Returns:
+            pd.DataFrame: 取得した騎手一覧
+        
+        Examples:
+            >>> url = 'https://db.netkeiba.com/?pid=jockey_search_detail'
+            >>> jockey_search_detail_page = JockeySearchDetailPage(url)
+            >>> jockey_search_result_page = jockey_search_detail_page.move_to_jockey_search_result_page()
+            >>> jockey_search_result_page.get_jockey_list() # doctest: +SKIP
+            >>> jockey_search_result_page = jockey_search_result_page.paging(5)
+            >>> jockey_search_result_page.get_jockey_list()
+        """
+        jockey_name_elements = self.soup.select(JockeySearchResultPageLocators.JOCKEY_TD[1])
+        jockey_id_list = [self.__get_jockey_id(jid) for jid in jockey_name_elements]
+        dfs = pd.read_html(str(self.soup), match='騎手名')
+        df = dfs[0]
+        df['jockey_id'] = jockey_id_list
+        return df
 
 class CalenderPage(BasePageSelenium):
     """ページ例：https://race.netkeiba.com/top/calendar.html?year=2020&month=7
@@ -295,7 +492,7 @@ class OddsPage(BasePageSelenium):
         self.driver.get(url)
         time.sleep(2)
         self.update_soup()
-    
+
     def __get_one_odds(self,type_,tan):
         """馬単，複勝で使う．馬番と対応するオッズを取得
 
@@ -382,7 +579,7 @@ class OddsPage(BasePageSelenium):
                     data.append(dict(zip(header, values)))
         df = pd.DataFrame(data, dtype=str)
         return df
-
+    
     def get_win(self):
         """単勝オッズを取得する．
 
